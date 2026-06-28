@@ -13,6 +13,7 @@
 | Development | Working Increment |
 | QA | QA Report |
 | Release | Release Notes |
+| Design Strategy | design-strategy.md |
 
 Если обязательный артефакт отсутствует — переход к следующей стадии запрещён.
 
