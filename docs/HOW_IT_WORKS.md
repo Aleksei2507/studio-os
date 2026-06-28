@@ -103,11 +103,18 @@ docs/project-brief.md
 
 ## Следующая стадия
 
-Planning
+Обычно после Briefing начинается Planning.
+
+Однако Studio OS может рекомендовать дополнительные стадии:
+
+- Research
+- Design Strategy
+
+Если они действительно помогут проекту. В противном случае проект сразу переходит к Planning.
 
 ---
 
-# 5. Design Strategy
+# Optional Stage — Design Strategy
 
 ## Цель
 
@@ -135,7 +142,7 @@ Planning
 
 ---
 
-# 6. Planning
+# 5. Planning
 
 ## Цель
 
@@ -153,7 +160,7 @@ Architecture
 
 ---
 
-# 7. Architecture
+# 6. Architecture
 
 ## Цель
 
@@ -181,7 +188,7 @@ Development
 
 ---
 
-# 8. Development
+# 7. Development
 
 ## Цель
 
@@ -201,7 +208,7 @@ QA
 
 ---
 
-# 9. QA
+# 8. QA
 
 ## Цель
 
@@ -225,7 +232,7 @@ Release
 
 ---
 
-# 10. Release
+# 9. Release
 
 ## Цель
 
@@ -246,7 +253,7 @@ Maintenance
 
 ---
 
-# 11. Maintenance
+# 10. Maintenance
 
 ## Цель
 
@@ -260,7 +267,7 @@ Maintenance
 
 ---
 
-# 12. Evolution
+# 11. Evolution
 
 ## Цель
 
@@ -301,3 +308,28 @@ Studio OS развивается только через проверенные 
 Главная цель Studio OS остаётся неизменной:
 
 > Провести пользователя от идеи до качественного работающего продукта.
+
+
+---
+
+# Optional Stages
+
+Некоторые стадии выполняются только тогда, когда Studio OS считает их полезными.
+
+## Research
+
+Проводится для анализа рынка, конкурентов, лучших практик и вариантов монетизации.
+
+Артефакт:
+
+`docs/research-summary.md`
+
+## Design Strategy
+
+Проводится для выбора UX-направления продукта.
+
+Артефакт:
+
+`docs/design-strategy.md`
+
+Studio OS сначала предлагает рекомендуемую стратегию, а пользователь принимает окончательное решение.
