@@ -1,7 +1,7 @@
 # Studio OS Skill
 
-🚧 Work in progress.
+Main entry point:
 
-В следующих версиях здесь появится основной вход для AI.
+- skill/LOADER.md
 
-Пока репозиторий содержит только фундамент продукта.
+Before doing any work, read `skill/LOADER.md` and follow it.

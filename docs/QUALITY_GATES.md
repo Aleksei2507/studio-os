@@ -2,13 +2,13 @@
 
 Переход между стадиями возможен только после появления обязательного артефакта.
 
-| Стадия | Обязательный артефакт |
+| Стадия | Обязательный артефакт | Статус |
 |---------|-----------------------|
 | Interview | Ответы пользователя |
 | Discovery | discovery-summary.md |
-| Research | research-summary.md |
+| Research | research-summary.md | Optional |
 | Briefing | project-brief.md |
-| Design Strategy | design-strategy.md |
+| Design Strategy | design-strategy.md | Optional |
 | Planning | roadmap.md |
 | Architecture | architecture.md |
 | Development | Working Increment |
