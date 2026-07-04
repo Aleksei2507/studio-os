@@ -1,181 +1,150 @@
 # Studio OS Principles
 
-> Эти принципы определяют философию Studio OS.
-> Любое новое правило, стадия, агент или модуль должны соответствовать этим принципам.
+> These principles define how Studio OS behaves. Every Runtime, stage, template, or future module must follow them.
 
 ---
 
-# Principle 1
+# Principle 1 — Working Product > Generated Code
 
-## Working Product > Generated Code
+Studio OS exists to move a user from an idea to a high-quality working product.
 
-Studio OS существует не для генерации кода.
-
-Studio OS существует для того, чтобы довести пользователя до качественного работающего продукта.
-
-Главный результат работы Studio OS — не количество написанного кода, а готовый продукт.
+The main result is not generated code. The main result is a product that works and matches the user’s intent.
 
 ---
 
-# Principle 2
+# Principle 2 — Process > Prompts
 
-## Process > Prompts
+Prompts may change.
 
-Промпты могут меняться.
+The process must remain stable.
 
-Процесс должен оставаться стабильным.
-
-Studio OS описывает процесс разработки, а не набор магических промптов.
+Studio OS describes a repeatable product development process, not a collection of magic prompts.
 
 ---
 
-# Principle 3
+# Principle 3 — AI Is Replaceable
 
-## AI Is Replaceable
+Any AI model is an implementation detail.
 
-Любая AI-модель — это инструмент.
-
-Codex.
-
-Claude.
-
-Mimo.
-
-Cursor.
-
-Любой другой AI.
-
-Studio OS не должна зависеть ни от одной конкретной модели.
+Studio OS must work with different AI tools and must not depend on one vendor, product, model, IDE, or chat interface.
 
 ---
 
-# Principle 4
+# Principle 4 — Every Question Must Change The Next Artifact
 
-## Questions Before Solutions
+Do not ask questions just because they are interesting.
 
-Если информации недостаточно —
+Before asking a question, AI must decide whether the answer will change the next required artifact.
 
-сначала задаются вопросы,
-
-потом принимаются решения.
-
-Нельзя строить архитектуру или писать код на основе догадок.
+If the answer will not change the artifact, do not ask the question.
 
 ---
 
-# Principle 5
+# Principle 5 — Build Understanding Before Asking Questions
 
-## Every Stage Produces an Artifact
+Before asking questions, AI should first use the information already available.
 
-Каждая стадия должна завершаться законченным артефактом.
+The normal pattern is:
 
-Например:
+1. Read the available context.
+2. Build an initial understanding.
+3. Show the understanding to the user.
+4. Ask only the missing question that matters.
 
-- Discovery → Discovery Summary
-- Briefing → Project Brief
-- Planning → Roadmap
-- Architecture → Architecture Document
-- Development → Working Increment
-- QA → QA Report
-- Release → Release Notes
+This prevents Studio OS from becoming a questionnaire.
 
 ---
 
-# Principle 6
+# Principle 6 — Questions Before Solutions
 
-## No Hidden Decisions
+If information is genuinely missing, ask before deciding.
 
-Все важные продуктовые и архитектурные решения должны быть явно зафиксированы.
+Do not build architecture, roadmap, or code from guesses.
 
-Studio OS не должна полагаться на скрытый контекст.
-
----
-
-# Principle 7
-
-## Small Stable Steps
-
-Лучше десять маленьких законченных шагов,
-
-чем один огромный незавершённый.
-
-Каждая итерация должна приносить измеримую ценность.
+But if the answer is already present in Project Memory, do not ask again.
 
 ---
 
-# Principle 8
+# Principle 7 — Every Stage Produces an Artifact
 
-## Human Owns The Product
+Every major stage ends with a concrete artifact.
 
-AI помогает принимать решения.
+Examples:
 
-Но владельцем продукта всегда остаётся человек.
-
-Studio OS никогда не принимает необратимых продуктовых решений самостоятельно.
-
----
-
-# Principle 9
-
-## Controlled Evolution
-
-Studio OS развивается только через практику.
-
-Любое улучшение проходит путь:
-
-Feedback
-↓
-
-Discussion
-
-↓
-
-RFC
-
-↓
-
-Approval
-
-↓
-
-Release
-
-Studio OS не изменяет собственные правила автоматически.
+- Interview → Project Memory update
+- Discovery → `docs/discovery-summary.md`
+- Briefing → `docs/project-brief.md`
+- Planning → `docs/roadmap.md`
+- Architecture → `docs/architecture.md` and ADRs
+- Development → working increment
+- Validation → validation report
+- QA → QA report
+- Release → release notes
+- Retrospective → `.studio/runtime-retrospective.md`
 
 ---
 
-# Principle 10
+# Principle 8 — No Hidden Decisions
 
-## From Idea To Working Product
+Important product and architecture decisions must be explicitly recorded.
 
-Это главный принцип Studio OS.
-
-Любая стадия,
-
-любой агент,
-
-любой модуль,
-
-любое новое правило
-
-должны отвечать на один вопрос:
-
-> Помогает ли это быстрее провести пользователя от идеи до качественного работающего продукта?
-
-Если нет —
-
-значит это не относится к Studio OS.
+Studio OS must not rely on hidden chat context or model memory.
 
 ---
 
-# Principle 11
+# Principle 9 — Small Stable Steps
 
-## Project Memory Is The Source Of Truth
+Prefer several small finished steps over one large unfinished step.
 
-Studio OS должна хранить знания о проекте внутри самого проекта.
+Every iteration should reduce uncertainty or produce user-visible value.
 
-После любого изменения должны обновляться проектные артефакты.
+---
 
-Контекст проекта хранится не в истории чата и не в памяти модели, а в документах проекта.
+# Principle 10 — Human Owns The Product
 
-Project Memory всегда отражает актуальное состояние продукта.
+AI helps clarify, challenge, and propose.
+
+The human owns the product.
+
+Studio OS must not make irreversible product decisions without confirmation.
+
+---
+
+# Principle 11 — Protect Product Coherence
+
+Studio OS should not accept every new idea automatically.
+
+When a new request changes the scope, roadmap, or product direction, Studio OS must ask what problem the change solves and whether it belongs to the current lifecycle, a Work Item, or a separate project.
+
+---
+
+# Principle 12 — Project Memory Is The Source Of Truth
+
+Studio OS stores project knowledge inside the project.
+
+The source of truth is not the chat history and not the model memory.
+
+Project Memory must reflect the current state and point to the latest artifacts.
+
+---
+
+# Principle 13 — Controlled Evolution
+
+Studio OS evolves through practice.
+
+Retrospective captures experience.
+
+Evolution analyzes retrospectives and creates local proposals.
+
+Studio OS must not rewrite its own Runtime automatically.
+
+
+---
+
+# Principle 14 — One Project, One Language
+
+Studio OS must keep each project in one working language.
+
+The conversation, `docs/` artifacts, `.studio/` project memory, summaries, roadmaps, retrospectives, and handoffs should use the same language unless the user explicitly asks to change it.
+
+The project language must be stored in Project Memory and reused across all stages.

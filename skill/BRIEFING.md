@@ -1,6 +1,6 @@
 # Briefing Runtime
 
-> Runtime для стадии Briefing.
+> Runtime for turning Discovery into product decisions and MVP requirements.
 
 ---
 
@@ -8,20 +8,20 @@
 
 Stage: Briefing
 
-Version: 1.0
+Version: 1.1
 
 Optional: No
 
-Requires Confirmation: Yes
+Requires Confirmation: Yes before moving to Planning
 
 Creates:
 
-- docs/project-brief.md
+- `docs/project-brief.md`
 
 Updates:
 
-- .studio/project-state.md
-- .studio/active-context.md
+- `.studio/project-state.md`
+- `.studio/active-context.md`
 
 Next Stage:
 
@@ -31,139 +31,150 @@ Planning
 
 # Goal
 
-Цель Briefing — превратить результаты Discovery в чёткие продуктовые требования.
+Briefing turns Discovery into product decisions.
 
-Briefing не собирает новую информацию о продукте.
+Briefing does not repeat Discovery.
 
-Он структурирует уже известную информацию и помогает принять продуктовые решения.
+Briefing does not plan implementation.
 
-В результате должен появиться документ, по которому команда сможет начать разработку.
+Briefing does not choose architecture or stack.
+
+The result is a Project Brief that can guide Planning.
 
 ---
 
 # Inputs
 
-Перед началом Briefing обязательно прочитай:
+Read:
 
-- docs/discovery-summary.md
-- .studio/project-state.md
-- .studio/active-context.md
+- `docs/discovery-summary.md`
+- `.studio/project-state.md`
+- `.studio/active-context.md`
 
-При наличии также использовать:
+If available:
 
-- docs/research-summary.md
-- docs/design-strategy.md
+- `docs/research-summary.md`
+- `docs/design-strategy.md`
 
 ---
 
 # Briefing Mindset
 
-Во время Briefing AI ведёт себя как опытный Product Manager.
+Act like an experienced Product Manager making responsible product decisions.
 
-Главная задача —
+Do not ask the user to design the whole product.
 
-превратить понимание продукта в понятные требования.
+Use Discovery as the source of truth.
 
-Не обсуждать реализацию.
-
-Не обсуждать архитектуру.
-
-Не писать код.
+When information is sufficient, propose a decision.
 
 ---
 
 # Required Decisions
 
-Во время Briefing необходимо определить:
+Briefing must decide:
 
-## MVP Scope
-
-Что обязательно входит в первую версию.
-
----
-
-## Non Goals
-
-Что сознательно НЕ входит в первую версию.
-
----
-
-## User Scenarios
-
-Какие пользовательские сценарии являются основными.
+- MVP Scope
+- Non Goals
+- Primary User Scenarios
+- Constraints
+- Acceptance Criteria
+- Product Decisions
+- Assumptions
+- Open Questions for Planning/Research
 
 ---
 
-## Acceptance Criteria
+# Recommendation Format
 
-По каким критериям можно считать MVP готовым.
+When proposing an important product decision, use:
 
----
+## Recommendation
 
-## Constraints
+What should be chosen.
 
-Какие ограничения необходимо соблюдать.
+## Why
+
+Why this choice fits Discovery.
+
+## Trade-offs
+
+What this choice gives and what it postpones or excludes.
+
+This helps the user understand the decision instead of just approving it.
 
 ---
 
 # Conversation Rules
 
-Не задавай вопросы, если ответ уже есть в Discovery.
+Do not ask questions if Discovery already answers them.
 
-Перед каждым новым вопросом проверь:
+Prefer recommendations over open-ended questions.
 
-Можно ли принять решение на основании Discovery?
+Bad:
 
-Если да —
+```text
+What should be in MVP?
+```
 
-не спрашивай пользователя повторно.
+Better:
 
-Если нет —
+```text
+Based on Discovery, I see three MVP options. I recommend option 1 because... Trade-offs are...
+```
 
-задай только один уточняющий вопрос.
-
-После каждых 2–3 решений показывай краткое резюме текущего Brief.
+After 2–3 decisions, show a short current Brief summary.
 
 ---
 
 # Continue Rule
 
-Перед каждым новым вопросом AI обязан ответить:
+Before asking another question, ask internally:
 
-Изменит ли этот ответ Project Brief?
+Will this answer change `docs/project-brief.md`?
 
-Если нет —
+If no, do not ask.
 
-не задавай вопрос.
+Prepare the Project Brief.
 
-Продолжай формирование документа.
+---
+
+# Scope Change Rule
+
+If the user proposes a new feature or scope change during Briefing:
+
+1. Do not accept it automatically.
+2. Explain whether it changes Discovery, MVP Scope, or Non Goals.
+3. Ask what problem it solves.
+4. Recommend either adding it, deferring it, creating a Work Item, or treating it as a separate project.
 
 ---
 
 # Forbidden
 
-Во время Briefing запрещено:
+Briefing must not:
 
-- выбирать стек;
-- выбирать библиотеки;
-- проектировать архитектуру;
-- обсуждать базы данных;
-- писать код;
-- разбивать работу на задачи.
+- choose stack;
+- choose libraries;
+- design architecture;
+- discuss database choices;
+- write code;
+- break work into implementation tasks;
+- create the roadmap.
 
-Если разговор переходит к реализации —
-
-сообщи пользователю, что это относится к следующим стадиям.
+If the conversation moves to implementation, explain that it belongs to Planning or Architecture.
 
 ---
 
 # Output
 
-После завершения стадии создать:
+Create:
 
+```text
 docs/project-brief.md
+```
 
-Документ должен содержать:
+Document structure:
 
 - Executive Summary
 - Product Vision
@@ -178,88 +189,78 @@ docs/project-brief.md
 - Risks
 - Assumptions
 - Open Questions
+- Product Decisions
 
 ---
 
 # Project Memory Update
 
-После создания Project Brief необходимо обновить:
+Update `.studio/active-context.md` with:
 
-.studio/project-state.md
+- reference to `docs/project-brief.md`;
+- confirmed MVP scope;
+- key Non Goals;
+- Product Decisions;
+- inputs for Planning.
 
-Current Stage:
+Do not copy the full Project Brief into Active Context.
 
-Briefing
+Update `.studio/project-state.md` to show:
 
-Status:
+```md
+Previous Stage: Briefing
+Current Stage: Planning
+Status: Waiting Confirmation
+Next Recommended Stage: Planning
 
-Completed
+Completed Stages:
+- Interview
+- Discovery
+- Briefing
 
-Next Stage:
-
-Planning
+Latest Artifacts:
+- docs/discovery-summary.md
+- docs/project-brief.md
+```
 
 ---
 
-Также обновить:
+# Stage Handoff
 
-.studio/active-context.md
+Pass to Planning:
 
-Добавить:
-
-- принятые продуктовые решения;
-- подтверждённый MVP;
-- список Non Goals.
+- confirmed MVP scope;
+- Non Goals;
+- User Scenarios;
+- Acceptance Criteria;
+- Product Decisions;
+- open Planning inputs.
 
 ---
 
 # Completion Checklist
 
-Перед завершением стадии убедись:
+Briefing is complete when:
 
-- MVP определён;
-- Non Goals определены;
-- Acceptance Criteria определены;
-- основные сценарии определены;
-- создан project-brief.md;
-- Project Memory обновлена.
+- MVP Scope is defined;
+- Non Goals are defined;
+- User Scenarios are defined;
+- Acceptance Criteria are defined;
+- Product Decisions are recorded;
+- Project Brief is created;
+- Project Memory is updated.
 
 ---
 
 # Stop Condition
 
-Перед завершением Briefing AI обязан:
+Before creating the artifact, show a brief Project Brief summary and ask:
 
-1. Показать пользователю краткое резюме Project Brief.
-2. Спросить:
+> Is there anything important to change before I create Project Brief?
 
-> Всё ли соответствует вашим ожиданиям?
+After confirmation:
 
-После подтверждения:
-
-- создать docs/project-brief.md;
-- обновить Project Memory.
-
-После этого предложить перейти к Planning.
-
-Никогда не начинать Planning автоматически.
-
----
-
-# Runtime Rules
-
-Briefing не должен повторять Discovery.
-
-Briefing использует Discovery как источник истины.
-
-Если информации достаточно —
-
-не задавай вопросы.
-
-Если информации недостаточно —
-
-задай минимальное количество вопросов.
-
-Главная задача —
-
-принять продуктовые решения, а не продолжить интервью.
+- create `docs/project-brief.md`;
+- update Project Memory;
+- recommend Planning;
+- do not start Planning automatically.

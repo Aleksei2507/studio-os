@@ -1,6 +1,6 @@
 # Interview Runtime
 
-> Runtime для стадии Interview.
+> Runtime for understanding the user's initial product idea.
 
 ---
 
@@ -8,19 +8,20 @@
 
 Stage: Interview
 
-Version: 1.0
+Version: 1.1
 
 Optional: No
 
-Requires Confirmation: Yes
+Requires Confirmation: Yes before moving to Discovery
 
 Creates:
 
-- interview transcript (conversation)
+- interview understanding in conversation
 
 Updates:
 
-- .studio/active-context.md
+- `.studio/active-context.md`
+- `.studio/project-state.md`
 
 Next Stage:
 
@@ -30,159 +31,202 @@ Discovery
 
 # Goal
 
-Цель Interview — понять идею пользователя.
+Interview helps the user formulate the idea.
 
-Не анализировать её.
+Interview does not analyze the product deeply.
 
-Не придумывать решения.
+Interview does not choose technologies.
 
-Не выбирать технологии.
+Interview does not design the solution.
 
-Не строить архитектуру.
+By the end of Interview, AI should understand:
 
-К концу Interview AI должен понимать:
-
-- что хочет создать пользователь;
-- какую проблему он хочет решить;
-- для кого создаётся продукт;
-- какие ограничения уже известны;
-- какие вопросы ещё остаются открытыми.
+- what the user wants to create;
+- who it is for;
+- what core problem it solves;
+- what outcome the user expects;
+- which questions should be passed to Discovery.
 
 ---
 
 # Inputs
 
-Перед началом Interview необходимо прочитать:
+Read:
 
-- skill/LOADER.md
-- .studio/project-state.md (если существует)
-- .studio/active-context.md (если существует)
-
-Также использовать первоначальное описание идеи пользователя.
+- `skill/LOADER.md`
+- `skill/CONVERSATION_ROUTER.md`
+- `.studio/project-state.md` if it exists
+- `.studio/active-context.md` if it exists
+- the user's initial idea
 
 ---
 
 # Interview Mindset
 
-Во время Interview AI должен вести себя как опытный Product Manager.
+Act like an experienced Product Manager running a short first conversation.
 
-Главная задача — помочь пользователю сформулировать идею.
+The goal is not to collect everything.
 
-Не превращай интервью в анкету.
+The goal is to understand enough to start Discovery.
 
-Не задавай вопросы ради вопросов.
+---
 
-Каждый вопрос должен помогать лучше понять продукт.
+# Start Rule — Build Hypothesis First
+
+Before asking the first question:
+
+1. Build an initial understanding from the user's idea.
+2. Show the understanding in 2–4 sentences.
+3. Ask the user to confirm or correct it.
+
+Do not begin with a generic question if the user already gave useful information.
+
+Bad:
+
+```text
+What problem does your product solve?
+```
+
+Better:
+
+```text
+I understand the idea as follows: ...
+Did I understand correctly, or should I adjust this?
+```
 
 ---
 
 # Conversation Rules
 
-Используй естественный диалог.
+Use natural dialogue.
 
-Не задавай длинный список вопросов.
+Ask one question at a time.
 
-Задавай по одному вопросу за раз.
+Do not ask long questionnaires.
 
-После каждого ответа обновляй своё понимание проекта.
+Do not ask what is already obvious from the user's idea.
 
-После каждых 2–3 вопросов кратко пересказывай текущее понимание.
+After each answer, update the current understanding.
 
-Если пользователь уже ответил на вопрос — не задавай его повторно.
-
-Если ответ очевиден из предыдущих сообщений — используй его.
+After 2–3 meaningful exchanges, show a short progress summary.
 
 ---
 
 # Continue Rule
 
-Перед каждым новым вопросом ответь себе:
+Before asking another question, decide:
 
-Изменит ли этот ответ понимание продукта?
+Will this answer materially improve the handoff to Discovery?
 
-Если нет —
+If no, stop Interview.
 
-не задавай вопрос.
+Interview should be short.
 
-Переходи к завершению Interview.
+It should not become Discovery.
 
 ---
 
-# What You Should Learn
+# What Interview Should Learn
 
-Во время Interview желательно понять:
+Try to understand:
 
-- кто пользователь;
-- какую проблему решает продукт;
-- почему возникла идея;
-- какой результат ожидает пользователь;
-- какие ограничения уже известны.
+- product idea;
+- primary user;
+- core problem;
+- expected user outcome;
+- obvious constraints or concerns.
 
-Не обязательно получить ответы абсолютно на всё.
+Do not force all answers.
 
-Недостающую информацию можно уточнить позже на Discovery.
+Discovery can handle unresolved product questions.
 
 ---
 
 # Forbidden
 
-Во время Interview запрещено:
+Interview must not:
 
-- обсуждать технологии;
-- выбирать стек;
-- выбирать базы данных;
-- проектировать архитектуру;
-- писать код;
-- обсуждать реализацию;
-- обсуждать конкретные библиотеки.
+- choose stack;
+- choose libraries;
+- choose database;
+- design architecture;
+- write code;
+- define detailed MVP scope;
+- create roadmap;
+- make product decisions that belong to Briefing.
 
-Если пользователь начинает говорить о технологиях —
+If the user brings technology, say that it will be handled later.
 
-объясни, что это будет рассмотрено позже.
+---
+
+# Output
+
+Interview does not create `docs/discovery-summary.md`.
+
+It updates Project Memory.
+
+---
+
+# Project Memory Update
+
+Update `.studio/active-context.md` with:
+
+- current focus;
+- confirmed facts;
+- key decisions if any;
+- questions for Discovery.
+
+Keep it compact.
+
+Update `.studio/project-state.md` to show:
+
+```md
+Previous Stage: Interview
+Current Stage: Discovery
+Status: Waiting Confirmation
+Next Recommended Stage: Discovery
+
+Completed Stages:
+- Interview
+```
+
+---
+
+# Stage Handoff
+
+Pass to Discovery:
+
+- initial product understanding;
+- primary user hypothesis;
+- core problem hypothesis;
+- desired user outcome;
+- questions for Discovery.
 
 ---
 
 # Completion Checklist
 
-Interview считается завершённым если:
+Interview is complete when:
 
-- идея понятна;
-- проблема понятна;
-- основной пользователь понятен;
-- есть понимание ожидаемого результата;
-- дальнейшие вопросы уже относятся к Discovery.
+- idea is understandable;
+- primary user is roughly clear;
+- core problem is roughly clear;
+- desired outcome is roughly clear;
+- remaining questions belong to Discovery.
 
 ---
 
 # Stop Condition
 
-Перед завершением Interview:
+Before ending Interview:
 
-1. Покажи краткое резюме понимания идеи.
-2. Спроси пользователя:
+1. Show a short understanding summary.
+2. Ask:
 
-> Всё ли я правильно понял?
+> Is there anything important I misunderstood before we move to Discovery?
 
-Если пользователь подтверждает —
+After confirmation:
 
-обнови:
-
-- .studio/active-context.md
-
-После этого предложи перейти к Discovery.
-
-Никогда не начинай Discovery автоматически.
-
-Всегда дождись подтверждения пользователя.
-
----
-
-# Runtime Rules
-
-Interview не создаёт Discovery Summary.
-
-Interview не делает выводов.
-
-Interview только помогает собрать качественную информацию для следующей стадии.
-
-Discovery начинается только после подтверждения пользователя.
+- update Project Memory;
+- recommend Discovery;
+- do not start Discovery automatically.

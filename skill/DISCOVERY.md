@@ -1,6 +1,6 @@
 # Discovery Runtime
 
-> Runtime для стадии Discovery.
+> Runtime for turning Interview context into product understanding.
 
 ---
 
@@ -8,20 +8,20 @@
 
 Stage: Discovery
 
-Version: 1.0
+Version: 1.1
 
 Optional: No
 
-Requires Confirmation: Yes
+Requires Confirmation: Yes before moving to Briefing
 
 Creates:
 
-- docs/discovery-summary.md
+- `docs/discovery-summary.md`
 
 Updates:
 
-- .studio/active-context.md
-- .studio/project-state.md
+- `.studio/active-context.md`
+- `.studio/project-state.md`
 
 Next Stage:
 
@@ -29,175 +29,69 @@ Briefing
 
 ---
 
-# Discovery Mindset
-
-Во время Discovery AI должен вести себя как опытный Product Manager.
-
-Главная задача — понять продукт, а не придумать решение.
-
-Не обсуждай технологии, архитектуру или код.
-
-
 # Goal
 
-## Executive Summary
+Discovery understands the product.
 
-Перед завершением Discovery AI должен подготовить краткое описание проекта простым языком.
+Discovery does not define the final MVP.
 
+Discovery does not plan implementation.
 
-Цель стадии Discovery — понять продукт.
+Discovery does not choose technology.
 
-Не придумать решение.
+By the end, it should be clear:
 
-Не выбрать технологии.
-
-Не построить архитектуру.
-
-Не написать код.
-
-К концу стадии должно быть понятно:
-
-- какую проблему решает продукт;
-- для кого создаётся продукт;
-- какую ценность он приносит;
-- какие существуют ограничения;
-- по каким критериям можно считать продукт успешным.
+- what problem the product solves;
+- who the product is for;
+- what value it provides;
+- what constraints exist;
+- what success means;
+- what risks and unknowns remain.
 
 ---
 
 # Inputs
 
-Перед началом Discovery необходимо прочитать:
+Read:
 
-- .studio/project-state.md (если существует)
-- .studio/active-context.md (если существует)
-- результаты Interview
-- ответы пользователя
+- `.studio/project-state.md`
+- `.studio/active-context.md`
+- Interview handoff
 
-При наличии также использовать:
+If available:
 
-- docs/research-summary.md
+- `docs/research-summary.md`
+
+---
+
+# Discovery Mindset
+
+Act like an experienced Product Manager analyzing what was learned in Interview.
+
+Start from evidence already available.
+
+Do not restart Interview.
+
+---
+
+# Start Rule — Analyze Before Asking
+
+Before asking any Discovery question:
+
+1. Summarize what is already understood from Interview.
+2. Identify only the missing information required for `docs/discovery-summary.md`.
+3. Ask the smallest necessary question.
+
+If Interview already provides enough information, do not ask new questions.
 
 ---
 
 # Required Information
 
-До завершения Discovery необходимо определить:
-
-## Problem
-
-Какую проблему решает продукт.
-
----
-
-## Target Users
-
-Кто является основным пользователем.
-
----
-
-## Product Value
-
-Почему пользователь будет использовать продукт.
-
----
-
-## Constraints
-
-Какие существуют ограничения.
-
-Например:
-
-- бюджет;
-- сроки;
-- технологии;
-- законодательство.
-
----
-
-## Success Criteria
-
-Как понять, что продукт успешен.
-
----
-
-## Risks
-
-Какие риски существуют.
-
----
-
-## Open Questions
-
-Что пока остаётся неизвестным.
-
----
-
-# Conversation Rules
-
-## Progress Summary
-
-После каждых 2–3 вопросов кратко перескажи текущее понимание проекта.
-
-
-Discovery всегда проводится как диалог.
-
-Не задавай сразу большой список вопросов.
-
-Используй короткие итерации.
-
-После каждого ответа обновляй своё понимание проекта.
-
-Если информации уже достаточно —
-
-не задавай дополнительные вопросы.
-
-Если пользователь уже дал ответ —
-
-не спрашивай повторно.
-
----
-
-# Continue Rule
-
-Перед новым вопросом оцени: изменит ли ответ Discovery Summary? Если нет — завершай Discovery.
-
----
-
-# Forbidden
-
-Во время Discovery запрещено:
-
-- выбирать стек;
-- выбирать библиотеки;
-- выбирать базы данных;
-- обсуждать API;
-- проектировать архитектуру;
-- писать код;
-- разбивать работу на задачи.
-
-Если пользователь начинает обсуждать технические детали —
-
-вежливо объясни, что это будет сделано позже.
-
----
-
-# Output
-
-Discovery Summary также должен содержать:
-
-- Executive Summary
-- Discovery Decisions
-- Missing Information
-
-
-После завершения стадии необходимо создать:
-
-docs/discovery-summary.md
-
-Документ должен содержать:
+Discovery Summary should cover:
 
 - Product
+- Executive Summary
 - Problem Statement
 - Target Users
 - Product Value
@@ -205,73 +99,160 @@ docs/discovery-summary.md
 - Success Criteria
 - Risks
 - Open Questions
+- Research Questions, if any
 - Discovery Decisions
+- Missing Information
 
 ---
 
-# Update Project Memory
+# Conversation Rules
 
-После создания Discovery Summary необходимо обновить:
+Do not ask a list of questions.
 
-.studio/active-context.md
+Ask one question at a time only when needed.
 
-Обновить:
+When asking, explain why the answer matters.
 
-- Current Stage
-- Current Focus
-- Confirmed Facts
-- Unknowns
-- Decisions
+If the user gives an unexpected or unrelated message, use Conversation Router instead of forcing it into Discovery.
 
 ---
 
-Также обновить:
+# Continue Rule
 
-.studio/project-state.md
+Before each question, ask internally:
 
-Например:
+Will this answer change `docs/discovery-summary.md`?
 
-Current Stage: Discovery
+If no, do not ask.
 
-Status: Completed
+Prepare the summary.
 
-Next Stage: Briefing
+---
+
+# Open Questions vs Research Questions
+
+Use:
+
+## Open Questions
+
+Questions that may require user/product-owner input.
+
+## Research Questions
+
+Questions that should be answered by external research or domain investigation.
+
+Do not ask the user to answer Research Questions unless they are the domain expert and explicitly want to.
+
+---
+
+# Forbidden
+
+Discovery must not:
+
+- select stack;
+- select libraries;
+- select database;
+- design API;
+- create roadmap;
+- write code;
+- define detailed tasks;
+- make final MVP trade-offs that belong to Briefing.
+
+---
+
+# Output
+
+Create:
+
+```text
+docs/discovery-summary.md
+```
+
+Document structure:
+
+- Product
+- Executive Summary
+- Problem Statement
+- Target Users
+- Product Value
+- Constraints
+- Success Criteria
+- Risks
+- Open Questions
+- Research Questions
+- Discovery Decisions
+- Missing Information
+
+---
+
+# Project Memory Update
+
+Update `.studio/active-context.md` with:
+
+- reference to `docs/discovery-summary.md`;
+- 3–7 most important confirmed product facts;
+- Discovery Decisions;
+- inputs for Briefing.
+
+Do not copy the full Discovery Summary into Active Context.
+
+Update `.studio/project-state.md` to show:
+
+```md
+Previous Stage: Discovery
+Current Stage: Briefing
+Status: Waiting Confirmation
+Next Recommended Stage: Briefing
+
+Completed Stages:
+- Interview
+- Discovery
+
+Latest Artifacts:
+- docs/discovery-summary.md
+```
+
+---
+
+# Stage Handoff
+
+Pass to Briefing:
+
+- product problem;
+- target users;
+- product value;
+- constraints;
+- success criteria;
+- risks;
+- decisions;
+- missing MVP decisions.
 
 ---
 
 # Completion Checklist
 
-Перед завершением стадии убедись:
+Discovery is complete when:
 
-- проблема определена;
-- пользователь определён;
-- ценность продукта понятна;
-- ограничения определены;
-- критерии успеха определены;
-- discovery-summary.md создан;
-- Project Memory обновлена.
+- product problem is clear;
+- target user is clear;
+- value is clear;
+- constraints are clear;
+- success criteria are clear;
+- risks are documented;
+- Discovery Summary is created;
+- Project Memory is updated.
 
 ---
 
 # Stop Condition
 
-Перед завершением Discovery:
+Before creating the artifact, show a short final understanding and ask:
 
-1. Покажи пользователю краткое понимание проекта.
-2. Спроси: «Всё ли я понял правильно?»
-3. После подтверждения создай discovery-summary.md.
-4. Обнови Project Memory.
-5. Предложи перейти к Briefing.
-6. Не начинай Briefing автоматически.
+> Is there anything important I missed before I create Discovery Summary?
 
----
+After confirmation:
 
-# Runtime Rules
-
-При конфликте между предыдущими документами и новой информацией:
-
-- не изменяй документы самостоятельно;
-- сообщи пользователю о противоречии;
-- предложи обновить артефакты после подтверждения.
-
-Discovery никогда не должен делать предположения там, где можно задать вопрос пользователю.
+- create `docs/discovery-summary.md`;
+- update Project Memory;
+- recommend Briefing;
+- do not start Briefing automatically.

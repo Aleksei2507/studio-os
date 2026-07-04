@@ -1,181 +1,155 @@
 # Studio Navigator
 
-Studio Navigator — единая точка входа в Studio OS.
+Studio Navigator is the user-facing entry point to Studio OS.
 
-Пользователь не обязан знать стадии, агентов или внутреннее устройство Studio OS.
+The user should not need to know internal stages or Runtime files.
 
-Для начала работы достаточно написать:
+---
 
+# Main Commands
+
+## Start or continue a project
+
+```text
 /studio:start
+```
 
-Studio OS самостоятельно определяет состояние проекта, выбирает режим работы и предлагает следующий шаг.
+or natural language:
 
----
+```text
+Use Studio OS.
 
-Главная задача
+I want to build...
+```
 
-Studio Navigator не реализует проект.
+## Run Evolution
 
-Он отвечает на вопросы:
+```text
+/studio:evolve
 
-* Где сейчас находится проект?
-* Какой режим работы нужен?
-* Какая стадия следующая?
-* Какие артефакты отсутствуют?
-* Какие действия рекомендуются дальше?
+Use:
+- ~/Projects/project-a/
+- ~/Projects/project-b/
+```
 
----
-
-Режимы работы
-
-🟢 Greenfield
-
-Используется, когда существует только идея нового продукта.
-
-Например:
-
-Хочу сделать сервис поиска топлива.
-
-Studio OS запускает полный жизненный цикл:
-
-Idea
-↓
-Interview
-↓
-Discovery
-↓
-Research
-↓
-Briefing
-↓
-Design Strategy
-↓
-Planning
-↓
-Architecture
-↓
-Development
-↓
-QA
-↓
-Release
+If paths are missing, Studio OS must show the example and ask for project paths.
 
 ---
 
-🟡 Brownfield
+# Navigator Responsibilities
 
-Используется, когда Studio OS добавляется в уже существующий проект.
+Navigator answers:
 
-Studio OS сначала проводит анализ проекта.
-
-Она изучает:
-
-* структуру проекта;
-* README;
-* документацию;
-* package/config файлы;
-* исходный код;
-* существующие тесты;
-* существующие проектные артефакты.
-
-После анализа Studio OS:
-
-* восстанавливает понимание проекта;
-* задаёт недостающие вопросы;
-* создаёт недостающие артефакты;
-* переводит проект под управление Studio OS.
+- What project mode is this?
+- What stage is current?
+- Which Runtime should handle the next message?
+- Which artifact is missing?
+- Which Quality Gate applies?
+- Is the user's message part of the current stage or a new intent?
 
 ---
 
-🔵 Work Item
+# Modes
 
-Используется, если проект уже использует Studio OS.
+## Greenfield
 
-Например:
+A new product idea.
 
-* добавить новую функцию;
-* исправить ошибку;
-* выполнить рефакторинг;
-* провести исследование;
-* улучшить производительность.
+Flow starts with Interview.
 
-Studio OS не начинает проект заново.
-
-Она создаёт новый Work Item и проходит только необходимые стадии жизненного цикла.
-
-После завершения Work Item автоматически обновляется Project Memory.
+If the user already gave an idea, Interview starts without asking "Should I begin?".
 
 ---
 
-Алгоритм работы
+## Brownfield
 
-После запуска /studio:start Studio Navigator выполняет следующие действия:
+Existing code without Studio OS Project Memory.
 
-1. Проверяет, используется ли Studio OS в проекте.
-2. Определяет режим работы:
-    * Greenfield;
-    * Brownfield;
-    * Work Item.
-3. Проверяет существующие артефакты.
-4. Определяет текущую стадию проекта.
-5. Проверяет Quality Gates.
-6. Определяет следующий рекомендуемый шаг.
-7. Запрашивает подтверждение пользователя.
+Studio OS should analyze the project before creating missing artifacts.
 
 ---
 
-Что Navigator никогда не делает
+## Work Item
 
-Studio Navigator никогда не должен:
+A change to an existing Studio OS project.
 
-* автоматически переходить к следующей стадии;
-* писать код;
-* изменять архитектуру;
-* перескакивать через стадии;
-* принимать продуктовые решения за пользователя.
+Examples:
 
----
+- add a feature;
+- fix a bug;
+- refactor;
+- research something;
+- improve performance.
 
-Главная цель
+Studio OS should not restart the whole project.
 
-Studio Navigator — диспетчер Studio OS.
-
-Он не строит продукт.
-
-Он помогает проекту двигаться по правильному жизненному циклу.
+It should create or route to a Work Item lifecycle.
 
 ---
 
-Будущее развитие
+## Evolution
 
-На текущем этапе основной точкой входа является команда:
+A separate Studio OS maintenance workflow.
 
-/studio:start
+Evolution is not part of a product lifecycle.
 
-В будущих версиях Studio OS должна самостоятельно определять намерение пользователя по естественному языку.
-
-Например:
-
-“Хочу сделать сервис поиска топлива.”
-
-↓
-
-Greenfield
+It analyzes retrospectives from explicitly provided projects and creates local proposals.
 
 ---
 
-“Вот существующий проект.”
+# Conversation Routing
 
-↓
+Before handling a message, Studio OS should classify intent:
 
-Brownfield
+- answer to current stage;
+- clarification;
+- scope change;
+- new feature;
+- new project;
+- unrelated question;
+- pause/stop/resume;
+- Evolution request.
+
+If unclear, ask one clarification question.
 
 ---
 
-“Добавь избранное.”
+# Project Completion
 
-↓
+After Release, Studio Navigator recommends Retrospective.
 
-Work Item
+Retrospective stores experience in:
 
-Без необходимости явно использовать команды.
+```text
+.studio/runtime-retrospective.md
+```
+
+After Retrospective, the project is complete.
+
+Evolution may be run later, manually.
+
+---
+
+# What Navigator Must Not Do
+
+Navigator must not:
+
+- write code;
+- create product artifacts itself;
+- make product decisions;
+- skip quality gates;
+- silently change scope;
+- start a new stage after an artifact is completed without confirmation.
+
+---
+
+# Future Direction
+
+The long-term goal is that a user can simply say:
+
+```text
+Use Studio OS.
+I want to build...
+```
+
+Studio OS should infer the correct mode and start the correct Runtime.

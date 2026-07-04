@@ -16,7 +16,7 @@ Requires Confirmation: Yes
 
 Creates:
 
-- docs/runtime-retrospective.md
+- .studio/runtime-retrospective.md
 
 Updates:
 
@@ -127,7 +127,7 @@ Retrospective должна задавать минимум вопросов.
 
 Создай:
 
-docs/runtime-retrospective.md
+.studio/runtime-retrospective.md
 
 Документ должен содержать:
 
@@ -199,7 +199,7 @@ Retrospective считается завершённой, если:
 
 - объективные наблюдения собраны;
 - пользовательский фидбек собран или явно пропущен;
-- docs/runtime-retrospective.md создан;
+- .studio/runtime-retrospective.md создан;
 - Candidate Improvements зафиксированы;
 - Project Memory обновлена.
 

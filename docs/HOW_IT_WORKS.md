@@ -2,334 +2,367 @@
 
 > From Idea To Working Product.
 
-Studio OS проводит проект через последовательные стадии разработки.
+Studio OS moves a project through explicit stages.
 
-Каждая стадия имеет:
+Each stage has:
 
-- цель;
-- результат;
-- обязательный артефакт;
-- критерий завершения.
+- a goal;
+- required inputs;
+- an artifact or memory update;
+- a completion checklist;
+- a stop condition.
 
-Переход к следующей стадии возможен только после успешного завершения текущей.
+The user owns the product. Studio OS guides the process.
+
+---
+
+# Message Flow
+
+Before a message reaches a stage Runtime, Studio OS should classify the user's intent.
+
+```text
+User Message
+↓
+Conversation Router
+↓
+Loader / Current Runtime
+```
+
+This prevents accidental topic changes from corrupting the current stage.
+
+---
+
+# Project Lifecycle
+
+```text
+Idea
+↓
+Interview
+↓
+Discovery
+↓
+Briefing
+↓
+Planning
+↓
+Architecture
+↓
+Development
+↓
+Validation
+↓
+QA
+↓
+Release
+↓
+Retrospective
+↓
+Project Done
+```
+
+Optional stages can be inserted when useful:
+
+```text
+Research
+Design Strategy
+```
+
+Evolution is separate and is not part of the project lifecycle.
 
 ---
 
 # 1. Idea
 
-## Цель
+## Goal
 
-Получить первоначальную идею продукта.
+Capture the initial product idea.
 
-На этой стадии идея может быть очень сырой.
+The idea may be rough.
 
-Например:
+Example:
 
-> Хочу сделать сервис для поиска бензина.
+> I want to build a service that helps dacha owners understand water filtration.
 
-или
+## Result
 
-> Хочу SaaS для планирования питания.
-
-## Результат
-
-Есть идея, с которой можно начать работу.
+There is enough initial direction to start Interview.
 
 ---
 
 # 2. Interview
 
-## Цель
+## Goal
 
-Понять замысел автора.
+Understand the user's intent.
 
-Interview Agent ведёт диалог и задаёт только необходимые вопросы.
+Interview collects enough context to start Discovery.
 
-Он не обсуждает технологии.
+It does not analyze the product deeply and does not choose technologies.
 
-Он помогает понять:
+## Result
 
-- какую проблему решает продукт;
-- для кого;
-- что важно;
-- что пока неизвестно.
+Project Memory contains the first understanding of:
 
-## Результат
-
-Ответы пользователя.
-
-Подтверждённые гипотезы.
+- product idea;
+- user;
+- problem;
+- expected outcome;
+- questions for Discovery.
 
 ---
 
 # 3. Discovery
 
-## Цель
+## Goal
 
-Преобразовать интервью в понимание продукта.
+Turn Interview into product understanding.
 
-Discovery Agent анализирует ответы пользователя.
+Discovery defines:
 
-Он формирует:
+- problem;
+- users;
+- value;
+- constraints;
+- risks;
+- success criteria.
 
-- проблему;
-- пользователей;
-- ценность;
-- ограничения;
-- риски;
-- критерии успеха.
+## Artifact
 
-## Артефакт
-
+```text
 docs/discovery-summary.md
-
-## Следующая стадия
-
-Briefing
+```
 
 ---
 
 # 4. Briefing
 
-## Цель
+## Goal
 
-Преобразовать Discovery в требования к продукту.
+Turn Discovery into product decisions and MVP requirements.
 
-На этой стадии появляется первый Project Brief.
+Briefing defines:
 
-## Артефакт
+- MVP scope;
+- Non Goals;
+- User Scenarios;
+- Constraints;
+- Acceptance Criteria;
+- Product Decisions.
 
+## Artifact
+
+```text
 docs/project-brief.md
+```
 
-## Следующая стадия
+---
 
-Обычно после Briefing начинается Planning.
+# Optional Stage — Research
 
-Однако Studio OS может рекомендовать дополнительные стадии:
+Research is used when external information may materially change product decisions.
 
-- Research
-- Design Strategy
+Examples:
 
-Если они действительно помогут проекту. В противном случае проект сразу переходит к Planning.
+- market and competitors;
+- domain standards;
+- legal constraints;
+- pricing or monetization assumptions.
+
+## Artifact
+
+```text
+docs/research-summary.md
+```
 
 ---
 
 # Optional Stage — Design Strategy
 
-## Цель
+Design Strategy defines UX direction before detailed planning and development.
 
-Определить пользовательский опыт и визуальное направление продукта до планирования и разработки.
+It should be recommended when visual direction, user trust, or interaction model matters.
 
-Studio OS не спрашивает пользователя “какой дизайн выбрать?” как у дизайнера.
+## Artifact
 
-Studio OS анализирует:
-
-- продукт;
-- целевую аудиторию;
-- контекст использования;
-- конкурентов, если Research уже проводился;
-- ограничения MVP.
-
-После этого Studio OS предлагает рекомендуемую дизайн-стратегию и объясняет почему.
-
-## Артефакт
-
+```text
 docs/design-strategy.md
-
-## Следующая стадия
-
-Planning
+```
 
 ---
 
 # 5. Planning
 
-## Цель
+## Goal
 
-Разбить проект на небольшие независимые итерации.
+Split confirmed product decisions into small valuable iterations.
 
-Каждая итерация должна завершаться работающим результатом.
+Each iteration should produce user-visible value, a working increment, or reduce critical uncertainty.
 
-## Артефакт
+## Artifact
 
+```text
 docs/roadmap.md
-
-## Следующая стадия
-
-Architecture
+```
 
 ---
 
 # 6. Architecture
 
-## Цель
+## Goal
 
-Спроектировать систему.
+Design the system needed to deliver the roadmap.
 
-На этой стадии выбираются:
+Architecture chooses:
 
-- архитектура;
-- стек;
-- базы данных;
-- интеграции;
-- основные решения.
+- application architecture;
+- stack;
+- data model;
+- integrations;
+- important technical decisions.
 
-Все важные решения фиксируются через ADR.
+Important decisions are recorded through ADRs.
 
-## Артефакты
+## Artifacts
 
+```text
 docs/architecture.md
-
 docs/adr/
-
-## Следующая стадия
-
-Development
+```
 
 ---
 
 # 7. Development
 
-## Цель
+## Goal
 
-Реализовать функциональность.
+Build working increments according to the roadmap and architecture.
 
-Разработка ведётся небольшими итерациями.
+Development should not silently change product scope or architecture.
 
-Каждая итерация должна давать работающий результат.
+## Artifact
 
-## Артефакт
-
-Работающий инкремент продукта.
-
-## Следующая стадия
-
-QA
+Working product increment.
 
 ---
 
-# 8. QA
+# 8. Validation
 
-## Цель
+## Goal
 
-Проверить качество результата.
+Collect objective technical facts.
 
-Проверяются:
+Examples:
 
-- Acceptance Criteria;
-- пользовательские сценарии;
-- ошибки;
-- сборка проекта;
-- стабильность.
+- install;
+- lint;
+- typecheck;
+- tests;
+- build;
+- smoke run.
 
-## Артефакт
+## Artifact
 
-QA Report
-
-## Следующая стадия
-
-Release
-
----
-
-# 9. Release
-
-## Цель
-
-Подготовить продукт к передаче пользователю.
-
-Release Manager принимает решение:
-
-- можно выпускать;
-- нужно доработать.
-
-## Артефакт
-
-Release Notes
-
-## Следующая стадия
-
-Maintenance
+```text
+.studio/telemetry/validation-report.md
+```
 
 ---
 
-# 10. Maintenance
+# 9. QA
 
-## Цель
+## Goal
 
-Поддерживать продукт после релиза.
+Check the product against acceptance criteria and user scenarios.
 
-Исправлять ошибки.
+QA is product validation, not only technical validation.
 
-Развивать функциональность.
+## Artifact
 
-Поддерживать документацию.
-
----
-
-# 11. Evolution
-
-## Цель
-
-Улучшать Studio OS.
-
-После каждого проекта собирается обратная связь.
-
-Предложения проходят путь:
-
-Feedback
-
-↓
-
-Discussion
-
-↓
-
-RFC
-
-↓
-
-Approval
-
-↓
-
-Новая версия Studio OS
-
-Studio OS развивается только через проверенные практикой изменения.
+```text
+docs/qa-report.md
+```
 
 ---
 
-# Главное правило Studio OS
+# 10. Release
 
-Нельзя перепрыгивать через стадии.
+## Goal
 
-Каждая стадия существует для того, чтобы уменьшить количество ошибок на следующей стадии.
+Prepare the product for handoff or deployment.
 
-Главная цель Studio OS остаётся неизменной:
+## Artifact
 
-> Провести пользователя от идеи до качественного работающего продукта.
-
+```text
+docs/release-notes.md
+```
 
 ---
 
-# Optional Stages
+# 11. Retrospective
 
-Некоторые стадии выполняются только тогда, когда Studio OS считает их полезными.
+## Goal
 
-## Research
+Capture experience from using Studio OS on the project.
 
-Проводится для анализа рынка, конкурентов, лучших практик и вариантов монетизации.
+Retrospective does not improve Studio OS directly.
 
-Артефакт:
+It creates input for optional Evolution.
 
-`docs/research-summary.md`
+## Artifact
 
-## Design Strategy
+```text
+.studio/runtime-retrospective.md
+```
 
-Проводится для выбора UX-направления продукта.
+---
 
-Артефакт:
+# Project Done
 
-`docs/design-strategy.md`
+After Retrospective, the project lifecycle is complete.
 
-Studio OS сначала предлагает рекомендуемую стратегию, а пользователь принимает окончательное решение.
+Future changes should be handled as Work Items.
+
+---
+
+# Evolution
+
+Evolution is an optional Studio OS maintenance workflow.
+
+It is started manually:
+
+```text
+/studio:evolve
+
+Use:
+- ~/Projects/project-a/
+- ~/Projects/project-b/
+```
+
+Evolution reads `.studio/runtime-retrospective.md` from explicitly provided projects and creates local proposals.
+
+It does not automatically change Studio OS.
+
+---
+
+# Main Rule
+
+Do not skip stages unless Studio OS explicitly explains why a stage is unnecessary.
+
+Each stage exists to reduce errors in the next stage.
+
+The goal remains:
+
+> Move the user from idea to high-quality working product.
+
+---
+
+## Project Language
+
+Studio OS ведёт проект на языке пользователя.
+
+Если пользователь общается на русском, артефакты в `docs/` и файлы памяти в `.studio/` тоже создаются на русском.
+
+Язык проекта фиксируется в `.studio/project-state.md` и сохраняется между стадиями.
+
+Смена языка проекта возможна только по явному запросу пользователя.
+

@@ -1,21 +1,98 @@
 # Studio OS
 
-> From Idea To Working Product.
+Studio OS is a lightweight Runtime system that helps an AI assistant guide a project from idea to working product.
 
-Studio OS — файловый AI Skill и методология разработки продуктов с помощью AI.
+It is not tied to one AI model, editor, or vendor.
 
-Studio OS превращает AI из генератора кода в небольшую продуктовую студию.
+---
 
-## Главная цель
+# Basic Use
 
-Провести пользователя от идеи продукта до качественного работающего MVP.
+```text
+Use Studio OS.
 
-AI — это инструмент.
+I want to build...
+```
 
-Studio OS — это процесс.
+Studio OS detects the project mode and routes the conversation through the correct Runtime.
 
-## Статус
+---
 
-🚧 0.1.0-alpha
+# Project Lifecycle
 
-Подробности в `docs/`.
+```text
+Interview
+↓
+Discovery
+↓
+Briefing
+↓
+Planning
+↓
+Architecture
+↓
+Development
+↓
+Validation
+↓
+QA
+↓
+Release
+↓
+Retrospective
+```
+
+---
+
+# Runtime Files
+
+Runtime behavior lives in:
+
+```text
+skill/
+```
+
+Important files:
+
+- `LOADER.md`
+- `CONVERSATION_ROUTER.md`
+- `INTERVIEW.md`
+- `DISCOVERY.md`
+- `BRIEFING.md`
+- `PLANNING.md`
+- `RETROSPECTIVE.md`
+- `EVOLUTION.md`
+
+---
+
+# Project Memory
+
+Project state lives inside the project:
+
+```text
+.studio/
+  active-context.md
+  project-state.md
+```
+
+Project artifacts live in:
+
+```text
+docs/
+```
+
+---
+
+# Evolution
+
+Evolution is optional and explicit.
+
+```text
+/studio:evolve
+
+Use:
+- ~/Projects/project-a/
+- ~/Projects/project-b/
+```
+
+Evolution reads `.studio/runtime-retrospective.md` from provided projects and creates local proposals.
