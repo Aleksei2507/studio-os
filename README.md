@@ -18,6 +18,79 @@ Studio OS detects the project mode and routes the conversation through the corre
 
 ---
 
+# Project Types
+
+Studio OS supports two project entry points.
+
+## Greenfield
+
+```text
+Greenfield
+↓
+Interview
+↓
+Discovery
+↓
+Briefing
+↓
+Planning
+↓
+Architecture
+↓
+Development
+↓
+Validation
+↓
+QA
+↓
+Release
+↓
+Retrospective
+```
+
+Start with an idea.
+
+Greenfield is used for new products.
+
+## Brownfield
+
+```text
+Brownfield
+↓
+Brownfield Onboarding
+↓
+Briefing
+↓
+Planning
+↓
+Architecture
+↓
+Development
+↓
+Validation
+↓
+QA
+↓
+Release
+↓
+Retrospective
+```
+
+Start with an existing codebase.
+
+Brownfield is used for existing codebases.
+
+Studio OS automatically detects the correct mode.
+
+Studio OS automatically detects:
+
+- Existing Studio OS projects
+- Brownfield projects
+- Greenfield projects
+- Project Language
+
+---
+
 # Project Lifecycle
 
 ```text

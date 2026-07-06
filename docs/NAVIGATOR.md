@@ -65,7 +65,17 @@ If the user already gave an idea, Interview starts without asking "Should I begi
 
 Existing code without Studio OS Project Memory.
 
-Studio OS should analyze the project before creating missing artifacts.
+Flow starts with Brownfield Onboarding.
+
+Brownfield Onboarding analyzes the existing project and creates initial Project Memory:
+
+- `.studio/project-state.md`
+- `.studio/active-context.md`
+- `docs/discovery-summary.md`
+
+Brownfield does not develop, refactor, plan, or write architecture.
+
+After Brownfield Onboarding, Studio OS recommends Briefing and waits for confirmation.
 
 ---
 

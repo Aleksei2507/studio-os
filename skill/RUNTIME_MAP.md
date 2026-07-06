@@ -38,6 +38,16 @@ RETROSPECTIVE
 PROJECT DONE
 ```
 
+Brownfield entry:
+
+```text
+LOADER
+    ↓
+BROWNFIELD
+    ↓
+BRIEFING
+```
+
 Optional stages may be inserted only when useful:
 
 ```text

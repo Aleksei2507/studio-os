@@ -16,6 +16,36 @@ The user owns the product. Studio OS guides the process.
 
 ---
 
+# Entry Paths
+
+## Greenfield
+
+```text
+Idea
+↓
+Interview
+↓
+Discovery
+↓
+Briefing
+```
+
+## Brownfield
+
+```text
+Existing Project
+↓
+Brownfield Onboarding
+↓
+Briefing
+```
+
+Brownfield Onboarding creates initial Project Memory for an existing project.
+
+It does not develop, refactor, plan, or write architecture.
+
+---
+
 # Message Flow
 
 Before a message reaches a stage Runtime, Studio OS should classify the user's intent.
@@ -59,6 +89,10 @@ Retrospective
 ↓
 Project Done
 ```
+
+Existing projects without `.studio/` do not start at Interview.
+
+They enter through Brownfield Onboarding and then continue to Briefing after user confirmation.
 
 Optional stages can be inserted when useful:
 
@@ -365,4 +399,3 @@ Studio OS ведёт проект на языке пользователя.
 Язык проекта фиксируется в `.studio/project-state.md` и сохраняется между стадиями.
 
 Смена языка проекта возможна только по явному запросу пользователя.
-

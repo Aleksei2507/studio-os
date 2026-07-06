@@ -54,6 +54,48 @@ Read:
 
 Detect:
 
+# Mode Detection Algorithm
+
+1.
+
+Does `.studio` exist?
+
+↓
+
+YES
+
+↓
+
+Continue Existing Project
+
+↓
+
+NO
+
+2.
+
+Does an existing codebase exist?
+
+↓
+
+YES
+
+↓
+
+Brownfield Runtime
+
+↓
+
+NO
+
+↓
+
+Greenfield Runtime
+
+The first matching rule wins.
+
+---
+
 ## Greenfield
 
 No `.studio/`, no product artifacts, no meaningful source code.
@@ -70,9 +112,17 @@ Start Interview directly.
 
 Existing source code but no `.studio/` Project Memory.
 
-Start Runtime: Project Analysis / Brownfield onboarding.
+Start Runtime: `skill/BROWNFIELD.md`.
 
-If no Brownfield Runtime exists yet, explain that Brownfield support is not implemented and ask whether to create Project Memory manually.
+If there is no `.studio/` directory but there is existing meaningful source code, set:
+
+```text
+Mode: Brownfield
+```
+
+Then start Brownfield Runtime, not Interview.
+
+Brownfield Runtime creates the initial Project Memory and then recommends Briefing.
 
 ---
 
@@ -166,6 +216,7 @@ After mode and stage are known, open the appropriate Runtime file.
 Examples:
 
 - Greenfield → `skill/INTERVIEW.md`
+- Brownfield → `skill/BROWNFIELD.md`
 - Interview completed → `skill/DISCOVERY.md`
 - Discovery completed → `skill/BRIEFING.md`
 - Briefing completed → `skill/PLANNING.md`
