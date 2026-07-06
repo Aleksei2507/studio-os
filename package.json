@@ -1,0 +1,16 @@
+{
+  "name": "studio-os",
+  "version": "0.3.1-alpha",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:runtime": "tsx scripts/run-runtime-tests.ts",
+    "test:runtime:dry": "tsx scripts/run-runtime-tests.ts --dry",
+    "test:runner": "node --import tsx --test tests/runner/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

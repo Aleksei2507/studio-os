@@ -60,6 +60,12 @@ pnpm-debug.log*
 yarn-error.log*
 
 # ===========================
+# Test output
+# ===========================
+
+test-results/
+
+# ===========================
 # Python
 # ===========================
 
@@ -70,6 +76,7 @@ __pycache__/
 # Studio OS generated files
 # ===========================
 
+.codebase-memory/
 *.bak
 *.orig
 
