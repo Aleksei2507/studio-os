@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
@@ -19,6 +19,7 @@ interface TestResult {
   filePath: string;
   id: string;
   title: string;
+  stage: string;
   status: TestStatus;
   details: string[];
 }
@@ -245,6 +246,7 @@ function loadRuntimeTests(testsDir: string): TestResult[] {
         filePath: testsDir,
         id: "runtime-tests-discovery",
         title: "Runtime tests directory discovery",
+        stage: "runtime",
         status: "PARTIAL",
         details: [`No markdown tests found in ${testsDir}`],
       },
@@ -258,6 +260,7 @@ function loadRuntimeTests(testsDir: string): TestResult[] {
         filePath,
         id: test.id,
         title: test.title,
+        stage: test.stage,
         status: "PASS",
         details: [`${test.expect.length} expectation(s), stage: ${test.stage}`],
       };
@@ -266,6 +269,7 @@ function loadRuntimeTests(testsDir: string): TestResult[] {
         filePath,
         id: path.basename(filePath),
         title: "Invalid runtime test",
+        stage: "unknown",
         status: "FAIL",
         details: [error instanceof Error ? error.message : String(error)],
       };
@@ -294,6 +298,7 @@ function loadValidRuntimeTests(testsDir: string): { tests: RuntimeTest[]; result
         filePath,
         id: path.basename(filePath),
         title: "Invalid runtime test",
+        stage: "unknown",
         status: "FAIL",
         details: [error instanceof Error ? error.message : String(error)],
       });
@@ -309,6 +314,7 @@ class TodoRuntimeJudge implements RuntimeJudge {
       filePath: test.filePath,
       id: test.id,
       title: test.title,
+      stage: test.stage,
       status: "PARTIAL",
       details: [
         `${test.expect.length} expectation(s), stage: ${test.stage}`,
@@ -343,6 +349,69 @@ function summarize(results: TestResult[]): TestStatus {
   return "PASS";
 }
 
+function countStatuses(results: TestResult[]): Record<TestStatus, number> {
+  return {
+    PASS: results.filter((result) => result.status === "PASS").length,
+    FAIL: results.filter((result) => result.status === "FAIL").length,
+    PARTIAL: results.filter((result) => result.status === "PARTIAL").length,
+  };
+}
+
+function buildResultsJson(results: TestResult[]): object {
+  const counts = countStatuses(results);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    summary: {
+      status: summarize(results),
+      total: results.length,
+      pass: counts.PASS,
+      fail: counts.FAIL,
+      partial: counts.PARTIAL,
+    },
+    tests: results.map((result) => ({
+      id: result.id,
+      title: result.title,
+      stage: result.stage,
+      status: result.status,
+      filePath: result.filePath,
+      details: result.details,
+    })),
+  };
+}
+
+function buildSummaryMarkdown(results: TestResult[]): string {
+  const counts = countStatuses(results);
+  const lines = [
+    "# Runtime Test Summary",
+    "",
+    `- Total tests: ${results.length}`,
+    `- Pass: ${counts.PASS}`,
+    `- Fail: ${counts.FAIL}`,
+    `- Partial: ${counts.PARTIAL}`,
+    "",
+    "| ID | Title | Stage | Status |",
+    "| --- | --- | --- | --- |",
+    ...results.map(
+      (result) =>
+        `| ${escapeMarkdownTable(result.id)} | ${escapeMarkdownTable(result.title)} | ${escapeMarkdownTable(result.stage)} | ${result.status} |`,
+    ),
+    "",
+  ];
+
+  return lines.join("\n");
+}
+
+function escapeMarkdownTable(value: string): string {
+  return value.replaceAll("|", "\\|").replaceAll("\n", " ");
+}
+
+function writeResultArtifacts(results: TestResult[], outputDir = "test-results/latest"): void {
+  mkdirSync(outputDir, { recursive: true });
+  writeFileSync(path.join(outputDir, "summary.md"), buildSummaryMarkdown(results));
+  writeFileSync(path.join(outputDir, "results.json"), `${JSON.stringify(buildResultsJson(results), null, 2)}\n`);
+}
+
 function printResults(results: TestResult[]): void {
   const summary = summarize(results);
 
@@ -365,6 +434,7 @@ async function main(): Promise<void> {
       : await runLlmJudgedTests(options.testsDir);
 
     printResults(results);
+    writeResultArtifacts(results);
 
     const summary = summarize(results);
     process.exitCode = summary === "FAIL" ? 1 : 0;
@@ -380,6 +450,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 export {
   findMarkdownFiles,
+  buildResultsJson,
+  buildSummaryMarkdown,
   loadRuntimeTests,
   parseFrontmatter,
   parseMinimalYaml,
@@ -387,4 +459,5 @@ export {
   summarize,
   TodoRuntimeJudge,
   validateRuntimeTest,
+  writeResultArtifacts,
 };

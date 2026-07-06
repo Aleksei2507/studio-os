@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -10,6 +10,7 @@ import {
   parseFrontmatter,
   runLlmJudgedTests,
   summarize,
+  writeResultArtifacts,
 } from "../../scripts/run-runtime-tests.ts";
 
 describe("runtime regression runner", () => {
@@ -129,5 +130,48 @@ User asks to build a product.
 
     assert.equal(results[0].status, "PARTIAL");
     assert.equal(summarize(results), "PARTIAL");
+  });
+
+  it("writes latest markdown summary and machine-readable JSON results", () => {
+    const directory = mkdtempSync(path.join(tmpdir(), "studio-runtime-results-"));
+    const outputDir = path.join(directory, "test-results", "latest");
+
+    writeResultArtifacts(
+      [
+        {
+          filePath: "tests/runtime/loader/001-greenfield-start.md",
+          id: "loader-001-greenfield-start",
+          title: "Greenfield start",
+          stage: "Loader",
+          status: "PASS",
+          details: ["2 expectation(s), stage: Loader"],
+        },
+        {
+          filePath: "tests/runtime/planning/invalid.md",
+          id: "invalid.md",
+          title: "Invalid runtime test",
+          stage: "unknown",
+          status: "FAIL",
+          details: ["Missing required field: prompt"],
+        },
+      ],
+      outputDir,
+    );
+
+    const summaryPath = path.join(outputDir, "summary.md");
+    const resultsPath = path.join(outputDir, "results.json");
+    const summary = readFileSync(summaryPath, "utf8");
+    const results = JSON.parse(readFileSync(resultsPath, "utf8"));
+
+    assert.equal(existsSync(summaryPath), true);
+    assert.equal(existsSync(resultsPath), true);
+    assert.match(summary, /Total tests: 2/);
+    assert.match(summary, /Pass: 1/);
+    assert.match(summary, /Fail: 1/);
+    assert.match(summary, /loader-001-greenfield-start/);
+    assert.equal(results.summary.total, 2);
+    assert.equal(results.summary.pass, 1);
+    assert.equal(results.summary.fail, 1);
+    assert.equal(results.tests[0].stage, "Loader");
   });
 });
