@@ -47,6 +47,7 @@ Read:
 7. `docs/PROJECT_MEMORY.md`
 8. `skill/RUNTIME_MAP.md`
 9. `skill/CONVERSATION_ROUTER.md`
+10. `skill/INTERACTION.md`
 
 ---
 
@@ -173,7 +174,25 @@ If the user speaks Russian, create `docs/discovery-summary.md`, `docs/project-br
 
 ---
 
-# Step 3 — Read Project Memory
+# Step 3 — Infer Initial Interaction Strategy
+
+Before starting the first Runtime:
+
+1. Load `skill/INTERACTION.md`.
+2. Infer the initial interaction strategy from observable user behavior.
+3. Pass the interaction strategy to the active Runtime.
+
+Examples:
+
+- User delegates decisions -> Advisor
+- User challenges a recommendation -> Collaborator
+- User gives a concrete bounded instruction -> Executor
+
+Loader must not ask the user to choose an interaction mode.
+
+---
+
+# Step 4 — Read Project Memory
 
 If available, read:
 
@@ -184,7 +203,7 @@ Use them before inspecting source code.
 
 ---
 
-# Step 4 — Read Existing Artifacts
+# Step 5 — Read Existing Artifacts
 
 If available, read:
 
@@ -199,9 +218,11 @@ If available, read:
 
 ---
 
-# Step 5 — Use Conversation Router
+# Step 6 — Use Conversation Router
 
 Before processing any user message inside an active project, classify the message with `skill/CONVERSATION_ROUTER.md`.
+
+Before routing, consider whether the message changes the interaction strategy.
 
 Do not assume every message belongs to the current stage.
 
@@ -209,7 +230,7 @@ If the message is ambiguous, ask one clarification question.
 
 ---
 
-# Step 6 — Route To Runtime
+# Step 7 — Route To Runtime
 
 After mode and stage are known, open the appropriate Runtime file.
 

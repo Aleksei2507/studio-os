@@ -20,6 +20,11 @@ The user owns the product. Studio OS guides the process.
 
 ## Greenfield
 
+Goal:
+Define a new product.
+
+Greenfield creates a product.
+
 ```text
 Idea
 ↓
@@ -32,6 +37,11 @@ Briefing
 
 ## Brownfield
 
+Goal:
+Understand and stabilize an existing product before planning further development.
+
+Brownfield understands and evolves an existing product.
+
 ```text
 Existing Project
 ↓
@@ -43,6 +53,18 @@ Briefing
 Brownfield Onboarding creates initial Project Memory for an existing project.
 
 It does not develop, refactor, plan, or write architecture.
+
+Greenfield Planning:
+
+```text
+Product Roadmap
+```
+
+Brownfield Planning:
+
+```text
+Development Roadmap
+```
 
 ---
 
@@ -59,6 +81,22 @@ Loader / Current Runtime
 ```
 
 This prevents accidental topic changes from corrupting the current stage.
+
+---
+
+# Interaction Layer
+
+Studio OS adapts to how the user works.
+
+Strategies:
+
+- Advisor
+- Collaborator
+- Executor
+
+The user does not need to configure this manually.
+
+The strategy is inferred from observable behavior and can change during the project.
 
 ---
 

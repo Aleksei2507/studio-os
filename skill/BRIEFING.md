@@ -70,6 +70,47 @@ When information is sufficient, propose a decision.
 
 ---
 
+# Brownfield Briefing
+
+Greenfield Briefing:
+
+```text
+defines MVP.
+```
+
+Brownfield Briefing:
+
+```text
+documents the existing product.
+```
+
+It must fix:
+
+- Current Product Scope;
+- Stable Areas;
+- Legacy Areas;
+- Product Boundaries;
+- Technical Boundaries;
+- Product Decisions.
+
+Brownfield Briefing must not invent the product again.
+
+Use `Current Product Scope` instead of `MVP Scope` when the project is already a working product.
+
+Do not change Greenfield behavior.
+
+Acceptance Criteria for Brownfield should describe user value, not internal implementation details.
+
+Good:
+
+- user receives a notification.
+
+Bad:
+
+- worker starts;
+
+---
+
 # Required Decisions
 
 Briefing must decide:

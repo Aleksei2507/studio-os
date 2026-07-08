@@ -97,6 +97,50 @@ The goal is onboarding memory, not a full audit.
 
 ---
 
+# Brownfield Product Principles
+
+Do not assume that an existing project is in an MVP stage.
+
+If the project is already a working product, use:
+
+```text
+Current Product Scope
+```
+
+instead of:
+
+```text
+MVP Scope
+```
+
+Brownfield Briefing fixes the current product core.
+
+It does not try to define MVP again.
+
+Acceptance Criteria for Brownfield must describe product value from the user's point of view, not internal implementation.
+
+Good:
+
+- user receives a notification.
+
+Bad:
+
+- worker starts;
+
+After Brownfield Briefing, Planning automatically enters:
+
+```text
+Development Planning
+```
+
+not:
+
+```text
+Product Planning
+```
+
+---
+
 # Required Understanding
 
 Before creating artifacts, identify:

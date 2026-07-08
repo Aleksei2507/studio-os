@@ -46,6 +46,15 @@ Examples:
 
 ---
 
+# Interaction Layer
+
+Before running any Runtime, read `skill/INTERACTION.md`.
+
+Every Runtime must adapt its communication style using the Interaction Layer.
+
+Interaction Layer is language-agnostic.
+
+It uses observable behavior, not fixed phrases.
 
 ---
 

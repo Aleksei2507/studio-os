@@ -35,10 +35,31 @@ Conversation Router protects the current stage from accidental topic changes, ra
 Before classifying a message, use:
 
 - current user message;
+- current interaction strategy, if one has been inferred;
 - `.studio/project-state.md` if available;
 - `.studio/active-context.md` if available;
 - current stage Runtime;
 - recent stage question, if one exists.
+
+---
+
+# Interaction Strategy Check
+
+Before routing a message, consider whether the message changes the interaction strategy.
+
+Use `skill/INTERACTION.md` to infer strategy from observable user behavior, not fixed phrases.
+
+Examples:
+
+- User delegates decisions -> Advisor
+- User challenges a recommendation -> Collaborator
+- User gives a concrete bounded instruction -> Executor
+
+The strategy can change during a project.
+
+Do not use language-specific phrase matching.
+
+Do not ask the user to choose an interaction mode.
 
 ---
 

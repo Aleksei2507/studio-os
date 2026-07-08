@@ -73,6 +73,60 @@ Create a roadmap that can guide Architecture and Development.
 
 ---
 
+# Brownfield Planning
+
+Planning for Brownfield does not create a Product Roadmap.
+
+It creates:
+
+```text
+Development Roadmap
+```
+
+The goal is to plan development of an existing product.
+
+For Brownfield, Planning uses:
+
+```text
+Development Epics
+```
+
+instead of:
+
+```text
+Product Iterations
+```
+
+Each Development Epic must increase the value of the existing product.
+
+Do not create a new product.
+
+Each Development Epic must answer:
+
+> What new value or risk reduction does the existing product get after this Epic is complete?
+
+Each Development Epic must include:
+
+- Goal
+- Business Value
+- Scope
+- Output
+- Acceptance Criteria
+- Dependencies
+- Handoff To Architecture
+
+Do not use implementation details.
+
+Brownfield Planning should preserve:
+
+- Current Product Scope;
+- Stable Areas;
+- Legacy Areas;
+- Product Boundaries;
+- Technical Boundaries.
+
+---
+
 # Required Decisions
 
 Planning must determine:
