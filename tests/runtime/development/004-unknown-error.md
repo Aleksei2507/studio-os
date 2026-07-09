@@ -2,10 +2,10 @@
 id: "development-004-unknown-error"
 title: "unknown error"
 stage: "Development"
-prompt: "Пофикси ошибку."
+prompt: "Fix the error."
 expect:
-  - "Studio OS должна читать ошибку, делать минимальный фикс, запускать validation повторно и фиксировать попытки."
-  - "Should not: Не делать слепые большие изменения."
+  - "Studio OS should read the error, make a minimal fix, rerun validation, and record attempts."
+  - "Should not: Make blind large changes."
 tags: ["development", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Development внёс изменения, build упал.
+Development made changes and the build failed.
 
 ## User Message
 
 ```text
-Пофикси ошибку.
+Fix the error.
 ```
 
 ## Expected Behavior
 
-Studio OS должна читать ошибку, делать минимальный фикс, запускать validation повторно и фиксировать попытки.
+Studio OS should read the error, make a minimal fix, rerun validation, and record attempts.
 
 ## Should Not
 
-Не делать слепые большие изменения.
+Do not make blind large changes.
 
 ## Notes
 
-Проверяет debugging discipline.
+Verifies debugging discipline.

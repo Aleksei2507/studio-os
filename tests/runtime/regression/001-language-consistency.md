@@ -2,10 +2,10 @@
 id: "regression-001-language-consistency"
 title: "language consistency"
 stage: "All"
-prompt: "Создай roadmap."
+prompt: "Create the roadmap."
 expect:
-  - "All artifacts in docs and .studio must be written in Russian."
-  - "Should not: Не смешивать английские заголовки без причины."
+  - "Studio OS should use Project Language consistently across generated artifacts."
+  - "Should not: Mix English headings without a reason."
 tags: ["regression", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Project Language: ru-RU.
+Project Language is set.
 
 ## User Message
 
 ```text
-Создай roadmap.
+Create the roadmap.
 ```
 
 ## Expected Behavior
 
-All artifacts in docs and .studio must be written in Russian.
+Studio OS should use Project Language consistently across generated artifacts.
 
 ## Should Not
 
-Не смешивать английские заголовки без причины.
+Do not mix headings from another language without a reason.
 
 ## Notes
 
-Проверяет локализацию.
+Verifies localization.

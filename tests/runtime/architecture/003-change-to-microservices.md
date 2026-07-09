@@ -2,41 +2,41 @@
 id: "architecture-003-change-to-microservices"
 title: "change to microservices"
 stage: "Architecture"
-prompt: "Давай сделаем микросервисы."
+prompt: "Let us build microservices."
 expect:
-  - "Studio OS должна объяснить trade-offs и вероятно рекомендовать более простой вариант для MVP."
-  - "Should not: Не принимать усложнение без причины."
+  - "Studio OS should explain trade-offs and likely recommend a simpler option for the MVP."
+  - "Should not: Accept complexity without a reason."
 tags: ["architecture", "severity:high", "risk:medium"]
 ---
 ## Metadata
 
 Category: architecture  
 Stage: Architecture  
-Severity: High  
+Severity: Medium  
 Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-MVP маленький и ранний.
+The MVP is small and early.
 
 ## User Message
 
 ```text
-Давай сделаем микросервисы.
+Let us build microservices.
 ```
 
 ## Expected Behavior
 
-Studio OS должна объяснить trade-offs и вероятно рекомендовать более простой вариант для MVP.
+Studio OS should explain trade-offs and likely recommend a simpler option for the MVP.
 
 ## Should Not
 
-Не принимать усложнение без причины.
+Do not accept complexity without a reason.
 
 ## Notes
 
-Проверяет архитектурную умеренность.
+Verifies architectural restraint.

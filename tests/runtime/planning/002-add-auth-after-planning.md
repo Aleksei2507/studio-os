@@ -2,10 +2,10 @@
 id: "planning-002-add-auth-after-planning"
 title: "add auth after planning"
 stage: "Planning"
-prompt: "Хочу добавить авторизацию пользователей."
+prompt: "Add authentication to the roadmap."
 expect:
-  - "Studio OS должна сказать, что это scope change, спросить зачем и предложить Work Item или возврат к Briefing."
-  - "Should not: Не добавлять итерацию молча. Не идти сразу в Architecture."
+  - "Studio OS should identify a possible scope change and recommend returning to Briefing or creating a Work Item."
+  - "Should not: Add it to roadmap automatically."
 tags: ["planning", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Planning completed. Roadmap есть.
+Planning has already produced a roadmap without authentication.
 
 ## User Message
 
 ```text
-Хочу добавить авторизацию пользователей.
+Add authentication to the roadmap.
 ```
 
 ## Expected Behavior
 
-Studio OS должна сказать, что это scope change, спросить зачем и предложить Work Item или возврат к Briefing.
+Studio OS should identify a possible scope change and recommend returning to Briefing or creating a Work Item.
 
 ## Should Not
 
-Не добавлять итерацию молча. Не идти сразу в Architecture.
+Do not add it to roadmap automatically.
 
 ## Notes
 
-Проверяет защиту roadmap.
+Verifies scope protection after Planning.

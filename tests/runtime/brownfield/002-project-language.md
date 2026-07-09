@@ -2,10 +2,10 @@
 id: "brownfield-002-project-language"
 title: "project language from memory"
 stage: "Brownfield Onboarding"
-prompt: "Continue Brownfield onboarding."
+prompt: "Analyze this existing project."
 expect:
-  - "Brownfield Runtime должен использовать Project Language из Project Memory для создаваемых и обновляемых артефактов."
-  - "Should not: Не менять Project Language автоматически из-за языка текущего сообщения или языка исходного кода."
+  - "Brownfield Runtime should use Project Language from Project Memory for created and updated artifacts."
+  - "Should not: Change Project Language automatically because of the current message language or source code language."
 tags: ["brownfield", "language", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,35 +17,34 @@ Regression Risk: High
 
 ## Goal
 
-Проверить, что Brownfield сохраняет язык проекта из Project Memory.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-В `.studio/project-state.md` уже указано:
+`.studio/project-state.md` already contains:
 
 ```text
-Project Language: Russian
-Onboarding Status: Bootstrapped
+Project Language: ru-RU
 ```
 
-Пользователь пишет на английском, а исходный код и README могут быть на другом языке.
+The user writes in English, while source code and README may be in another language.
 
 ## User Message
 
 ```text
-Continue Brownfield onboarding.
+Analyze this existing project.
 ```
 
 ## Expected Behavior
 
-Brownfield Runtime должен продолжить работу на языке, указанном в Project Memory.
+Brownfield Runtime should continue working in the language specified by Project Memory.
 
-`Project Language` не должен изменяться автоматически.
+`Project Language` should not change automatically.
 
 ## Should Not
 
-Не менять язык проекта по языку текущего сообщения. Не менять язык проекта по языку README или исходного кода. Не переписывать существующие артефакты на другой язык.
+Do not change project language based on the current message language. Do not change project language based on README or source code language. Do not rewrite existing artifacts in another language.
 
 ## Notes
 
-Проверяет стабильность Project Language после Brownfield bootstrap.
+Verifies Project Language stability after Brownfield bootstrap.

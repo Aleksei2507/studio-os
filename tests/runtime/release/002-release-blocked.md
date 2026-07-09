@@ -2,10 +2,10 @@
 id: "release-002-release-blocked"
 title: "release blocked"
 stage: "Release"
-prompt: "Релизим всё равно."
+prompt: "Release anyway."
 expect:
-  - "Studio OS должна предупредить о блокерах и запросить явное подтверждение риска или вернуть на доработку."
-  - "Should not: Не релизить молча."
+  - "Studio OS should warn about blockers and request explicit risk confirmation or return to rework."
+  - "Should not: Release silently."
 tags: ["release", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-QA имеет blocking issues.
+QA has blocking issues.
 
 ## User Message
 
 ```text
-Релизим всё равно.
+Release anyway.
 ```
 
 ## Expected Behavior
 
-Studio OS должна предупредить о блокерах и запросить явное подтверждение риска или вернуть на доработку.
+Studio OS should warn about blockers and request explicit risk confirmation or return to rework.
 
 ## Should Not
 
-Не релизить молча.
+Do not release silently.
 
 ## Notes
 
-Проверяет release gate.
+Verifies the release gate.

@@ -2,10 +2,10 @@
 id: "discovery-001-start-from-analysis"
 title: "start from analysis"
 stage: "Discovery"
-prompt: "Переходим к Discovery."
+prompt: "Move to Discovery."
 expect:
-  - "Discovery должен сначала показать понимание на основе Interview, затем задать только действительно нужные вопросы."
-  - "Should not: Не начинать с вопроса без анализа. Не повторять Interview."
+  - "Discovery should first show understanding based on Interview, then ask only truly necessary questions."
+  - "Should not: Start with a question without analysis. Repeat Interview."
 tags: ["discovery", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Interview completed. Есть active-context.md.
+Interview completed. active-context.md exists.
 
 ## User Message
 
 ```text
-Переходим к Discovery.
+Move to Discovery.
 ```
 
 ## Expected Behavior
 
-Discovery должен сначала показать понимание на основе Interview, затем задать только действительно нужные вопросы.
+Discovery should first show understanding based on Interview, then ask only truly necessary questions.
 
 ## Should Not
 
-Не начинать с вопроса без анализа. Не повторять Interview.
+Do not start with a question without analysis. Do not repeat Interview.
 
 ## Notes
 
-Проверяет границу Interview/Discovery.
+Verifies the Interview/Discovery boundary.

@@ -2,10 +2,10 @@
 id: "retrospective-002-minimal-feedback"
 title: "minimal feedback"
 stage: "Retrospective"
-prompt: "Всё норм."
+prompt: "All good."
 expect:
-  - "Studio OS должна принять краткий feedback, не давить и зафиксировать, что feedback minimal."
-  - "Should not: Не заставлять отвечать подробно."
+  - "Studio OS should accept brief feedback, avoid pressure, and record that feedback is minimal."
+  - "Should not: Force detailed answers."
 tags: ["retrospective", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Retrospective asks feedback.
+Retrospective asks for user feedback.
 
 ## User Message
 
 ```text
-Всё норм.
+All good.
 ```
 
 ## Expected Behavior
 
-Studio OS должна принять краткий feedback, не давить и зафиксировать, что feedback minimal.
+Studio OS should accept brief feedback, avoid pressure, and record that feedback is minimal.
 
 ## Should Not
 
-Не заставлять отвечать подробно.
+Do not force detailed answers.
 
 ## Notes
 
-Проверяет мягкий UX.
+Verifies gentle UX.

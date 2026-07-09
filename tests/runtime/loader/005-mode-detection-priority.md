@@ -2,10 +2,10 @@
 id: "loader-005-mode-detection-priority"
 title: "mode detection priority"
 stage: "Loader"
-prompt: "Use Studio OS for this existing project."
+prompt: "Continue Studio OS."
 expect:
-  - "Loader должен применить первый совпавший приоритет: если `.studio` существует, это Continue Existing Project, даже если в проекте есть исходный код."
-  - "Should not: Не запускать Brownfield Runtime для проекта с существующей `.studio`."
+  - "Loader should prioritize existing .studio/ Project Memory over source-code detection."
+  - "Should not: Restart Brownfield onboarding when .studio/ already exists."
 tags: ["loader", "brownfield", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,28 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить приоритет определения режима.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-В проекте есть `.studio/project-state.md`, а также существующий исходный код и проектные файлы.
+.studio/ exists in a repository with source code.
 
 ## User Message
 
 ```text
-Use Studio OS for this existing project.
+Continue Studio OS.
 ```
 
 ## Expected Behavior
 
-Loader должен выбрать Continue Existing Project, прочитать Project Memory и передать управление текущему Runtime.
-
-Existing Studio OS Project всегда имеет больший приоритет, чем Brownfield.
+Loader should prioritize existing .studio/ Project Memory over source-code detection.
 
 ## Should Not
 
-Не запускать Brownfield Runtime. Не создавать новую Project Memory поверх существующей. Не запускать Interview.
+Do not restart Brownfield onboarding when .studio/ already exists.
 
 ## Notes
 
-Проверяет правило first matching rule wins.
+Verifies detection priority.

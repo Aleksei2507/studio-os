@@ -2,10 +2,10 @@
 id: "planning-006-brownfield-development-roadmap"
 title: "brownfield development roadmap"
 stage: "Planning"
-prompt: "PriceBot уже production. Составь Planning после Brownfield Briefing."
+prompt: "PriceBot is already in production. Create Planning after Brownfield Briefing."
 expect:
-  - "Brownfield Planning должен создать Development Roadmap для развития существующего продукта."
-  - "Should not: Не создавать Product Roadmap и не планировать новый продукт."
+  - "Brownfield Planning should create a Development Roadmap for evolving an existing product."
+  - "Should not: Create a Product Roadmap or plan a new product."
 tags: ["planning", "brownfield", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,28 +17,28 @@ Regression Risk: High
 
 ## Goal
 
-Проверить, что Brownfield Planning создает Development Roadmap.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Существующий проект PriceBot уже работает в production.
+The existing PriceBot project is already running in production.
 
-Brownfield Briefing завершен и зафиксировал Current Product Scope.
+Brownfield Briefing is completed and captured Current Product Scope.
 
 ## User Message
 
 ```text
-PriceBot уже production. Составь Planning после Brownfield Briefing.
+PriceBot is already in production. Create Planning after Brownfield Briefing.
 ```
 
 ## Expected Behavior
 
-Planning должен создать Development Roadmap, направленный на развитие существующего продукта.
+Planning should create a Development Roadmap aimed at evolving the existing product.
 
 ## Should Not
 
-Не создавать Product Roadmap. Не планировать новый продукт. Не использовать Greenfield-лексику как основную.
+Do not create a Product Roadmap. Do not plan a new product. Do not use Greenfield terminology as the primary language.
 
 ## Notes
 
-Проверяет различие Product Roadmap и Development Roadmap.
+Verifies the difference between Product Roadmap and Development Roadmap.

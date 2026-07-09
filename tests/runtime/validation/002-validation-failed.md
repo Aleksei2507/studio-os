@@ -2,10 +2,10 @@
 id: "validation-002-validation-failed"
 title: "validation failed"
 stage: "Validation"
-prompt: "Что дальше?"
+prompt: "What next?"
 expect:
-  - "Studio OS должна зафиксировать failure, показать краткую причину и вернуть задачу в Development."
-  - "Should not: Не переходить в QA/Release."
+  - "Studio OS should record failure, show a brief reason, and return the task to Development."
+  - "Should not: Move to QA/Release."
 tags: ["validation", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Typecheck failed.
+Validation failed.
 
 ## User Message
 
 ```text
-Что дальше?
+What next?
 ```
 
 ## Expected Behavior
 
-Studio OS должна зафиксировать failure, показать краткую причину и вернуть задачу в Development.
+Studio OS should record failure, show a brief reason, and return the task to Development.
 
 ## Should Not
 
-Не переходить в QA/Release.
+Do not move to QA/Release.
 
 ## Notes
 
-Проверяет gatekeeping.
+Verifies gatekeeping.

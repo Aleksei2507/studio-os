@@ -2,10 +2,10 @@
 id: "briefing-002-add-auth"
 title: "add auth"
 stage: "Briefing"
-prompt: "Хочу добавить авторизацию пользователей."
+prompt: "I want to add user authentication."
 expect:
-  - "Studio OS должна определить scope change и спросить, какую проблему решает авторизация, до включения в MVP."
-  - "Should not: Не добавлять авторизацию автоматически. Не уходить в реализацию."
+  - "Studio OS should identify a scope change and ask what problem authentication solves before including it in the MVP."
+  - "Should not: Add authentication automatically. Move into implementation."
 tags: ["briefing", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Briefing обсуждает MVP без авторизации.
+Briefing is discussing an MVP without authentication.
 
 ## User Message
 
 ```text
-Хочу добавить авторизацию пользователей.
+I want to add user authentication.
 ```
 
 ## Expected Behavior
 
-Studio OS должна определить scope change и спросить, какую проблему решает авторизация, до включения в MVP.
+Studio OS should identify a scope change and ask what problem authentication solves before including it in the MVP.
 
 ## Should Not
 
-Не добавлять авторизацию автоматически. Не уходить в реализацию.
+Do not add authentication automatically. Do not move into implementation.
 
 ## Notes
 
-Проверяет защиту MVP.
+Verifies MVP protection.

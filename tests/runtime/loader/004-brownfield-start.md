@@ -4,8 +4,8 @@ title: "brownfield start"
 stage: "Loader"
 prompt: "Use Studio OS for this existing project."
 expect:
-  - "Loader должен определить Brownfield, если .studio отсутствует, но есть существующий код."
-  - "Should not: Не запускать Interview для существующего проекта без Project Memory."
+  - "Loader should choose Brownfield when existing source code is present and no .studio/ exists."
+  - "Should not: Treat the project as Greenfield."
 tags: ["loader", "brownfield", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,11 +17,11 @@ Regression Risk: High
 
 ## Goal
 
-Проверить Brownfield routing в Loader.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-В проекте нет `.studio/`, но есть существующий исходный код и проектные файлы.
+Existing source code is present and .studio/ is missing.
 
 ## User Message
 
@@ -31,12 +31,12 @@ Use Studio OS for this existing project.
 
 ## Expected Behavior
 
-Loader должен определить Mode = Brownfield и запустить `skill/BROWNFIELD.md`.
+Loader should choose Brownfield when existing source code is present and no .studio/ exists.
 
 ## Should Not
 
-Не запускать Interview. Не задавать greenfield-вопросы. Не начинать разработку.
+Do not treat the project as Greenfield.
 
 ## Notes
 
-Проверяет новый вход для существующих проектов.
+Verifies mode detection.

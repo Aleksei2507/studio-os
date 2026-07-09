@@ -2,10 +2,10 @@
 id: "planning-007-development-epics"
 title: "brownfield development epics"
 stage: "Planning"
-prompt: "Разбей развитие PriceBot на этапы после Brownfield Briefing."
+prompt: "Break PriceBot development into stages after Brownfield Briefing."
 expect:
-  - "Brownfield Planning должен использовать Development Epics вместо Product Iterations."
-  - "Should not: Не использовать Product Iterations и не описывать epics через implementation details."
+  - "Brownfield Planning should use Development Epics instead of Product Iterations."
+  - "Should not: Use Product Iterations or describe epics through implementation details."
 tags: ["planning", "brownfield", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,32 +17,32 @@ Regression Risk: High
 
 ## Goal
 
-Проверить, что Brownfield Planning мыслит Development Epics.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Существующий production-проект прошел Brownfield Briefing.
+An existing production project has completed Brownfield Briefing.
 
-Есть Current Product Scope, Stable Areas, Legacy Areas, Product Boundaries и Technical Boundaries.
+Current Product Scope, Stable Areas, Legacy Areas, Product Boundaries, and Technical Boundaries exist.
 
 ## User Message
 
 ```text
-Разбей развитие PriceBot на этапы после Brownfield Briefing.
+Break PriceBot development into stages after Brownfield Briefing.
 ```
 
 ## Expected Behavior
 
-Planning должен использовать Development Epics.
+Planning should use Development Epics.
 
-Каждый Epic должен содержать Goal, Business Value, Scope, Output, Acceptance Criteria, Dependencies и Handoff To Architecture.
+Each Epic should contain Goal, Business Value, Scope, Output, Acceptance Criteria, Dependencies, and Handoff To Architecture.
 
-Каждый Epic должен отвечать, какую новую ценность или снижение риска получает существующий продукт.
+Each Epic should explain what new value or risk reduction the existing product gets.
 
 ## Should Not
 
-Не использовать Product Iterations. Не создавать новый продукт. Не описывать внутреннюю реализацию как acceptance criteria.
+Do not use Product Iterations. Do not create a new product. Do not describe internal implementation as acceptance criteria.
 
 ## Notes
 
-Проверяет терминологию и структуру Brownfield Planning.
+Verifies Brownfield Planning terminology and structure.

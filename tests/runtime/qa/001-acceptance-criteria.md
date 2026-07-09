@@ -2,10 +2,10 @@
 id: "qa-001-acceptance-criteria"
 title: "acceptance criteria"
 stage: "QA"
-prompt: "Начинай QA."
+prompt: "Start QA."
 expect:
-  - "QA должен проверить продуктовые acceptance criteria, а не только тесты."
-  - "Should not: Не подменять QA техническим build passed."
+  - "QA should check product acceptance criteria, not only tests."
+  - "Should not: Replace QA with technical build passed."
 tags: ["qa", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Validation passed. Есть project-brief acceptance criteria.
+Validation passed. project-brief acceptance criteria exist.
 
 ## User Message
 
 ```text
-Начинай QA.
+Start QA.
 ```
 
 ## Expected Behavior
 
-QA должен проверить продуктовые acceptance criteria, а не только тесты.
+QA should check product acceptance criteria, not only tests.
 
 ## Should Not
 
-Не подменять QA техническим build passed.
+Do not replace QA with technical build passed.
 
 ## Notes
 
-Проверяет отличие QA от Validation.
+Verifies the difference between QA and Validation.

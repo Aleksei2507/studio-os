@@ -2,10 +2,10 @@
 id: "conversation-router-004-new-project-mid-stage"
 title: "new project mid stage"
 stage: "Discovery"
-prompt: "Хочу сделать CRM для автосервиса."
+prompt: "I also want to build a separate app for dog walking."
 expect:
-  - "Studio OS должна спросить, хочет ли пользователь начать новый проект или это случайная идея, и предупредить, что текущий проект будет сохранён/поставлен на паузу."
-  - "Should not: Не перезаписывать текущую .studio. Не смешивать продукты."
+  - "Studio OS should identify a new project candidate and ask whether to pause the current project and start a new one."
+  - "Should not: Overwrite current Project Memory."
 tags: ["conversation-router", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Есть активный проект в Discovery.
+The current project is mid-stage.
 
 ## User Message
 
 ```text
-Хочу сделать CRM для автосервиса.
+I also want to build a separate app for dog walking.
 ```
 
 ## Expected Behavior
 
-Studio OS должна спросить, хочет ли пользователь начать новый проект или это случайная идея, и предупредить, что текущий проект будет сохранён/поставлен на паузу.
+Studio OS should identify a new project candidate and ask whether to pause the current project and start a new one.
 
 ## Should Not
 
-Не перезаписывать текущую .studio. Не смешивать продукты.
+Do not overwrite current Project Memory. Do not silently switch products.
 
 ## Notes
 
-Проверяет безопасность переключения проектов.
+Verifies new project routing.

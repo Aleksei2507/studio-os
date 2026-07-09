@@ -2,10 +2,10 @@
 id: "brownfield-003-current-product-scope"
 title: "current product scope for production projects"
 stage: "Briefing"
-prompt: "PriceBot уже работает в production. Проведи Brownfield Briefing."
+prompt: "PriceBot is already running in production. Run Brownfield Briefing."
 expect:
-  - "Brownfield Briefing должен использовать Current Product Scope для production-проекта."
-  - "Should not: Не использовать MVP Scope и не пытаться заново придумать продукт."
+  - "Brownfield Briefing should use Current Product Scope for a production project."
+  - "Should not: Use MVP Scope or try to invent the product again."
 tags: ["brownfield", "briefing", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,30 +17,30 @@ Regression Risk: High
 
 ## Goal
 
-Проверить, что Brownfield Briefing использует лексику существующего production-продукта.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Существующий проект PriceBot уже работает в production.
+The existing PriceBot project is already running in production.
 
-Brownfield Onboarding завершён, Project Memory создана.
+Brownfield Onboarding is completed and Project Memory has been created.
 
 ## User Message
 
 ```text
-PriceBot уже работает в production. Проведи Brownfield Briefing.
+PriceBot is already running in production. Run Brownfield Briefing.
 ```
 
 ## Expected Behavior
 
-Briefing должен фиксировать Current Product Scope, Stable Areas, Legacy Areas, Product Boundaries, Technical Boundaries и Product Decisions.
+Briefing should capture Current Product Scope, Stable Areas, Legacy Areas, Product Boundaries, Technical Boundaries, and Product Decisions.
 
-Acceptance Criteria должны описывать пользовательскую ценность.
+Acceptance Criteria should describe user value.
 
 ## Should Not
 
-Не использовать MVP Scope. Не переопределять MVP. Не описывать acceptance criteria через внутреннюю реализацию вроде "worker запускается".
+Do not use MVP Scope. Do not redefine the MVP. Do not describe acceptance criteria through internal implementation details such as "the worker runs".
 
 ## Notes
 
-Проверяет разделение Greenfield и Brownfield продуктовой лексики.
+Verifies the separation between Greenfield and Brownfield product terminology.

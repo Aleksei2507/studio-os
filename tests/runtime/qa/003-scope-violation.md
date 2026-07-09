@@ -2,10 +2,10 @@
 id: "qa-003-scope-violation"
 title: "scope violation"
 stage: "QA"
-prompt: "Проведи QA."
+prompt: "Run QA."
 expect:
-  - "QA должен зафиксировать violation и вернуть в Development/Briefing depending on issue."
-  - "Should not: Не пропустить нарушение non-goals."
+  - "QA should record the violation and return to Development/Briefing depending on the issue."
+  - "Should not: Miss a non-goals violation."
 tags: ["qa", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-MVP не должен выбирать бренды, но результат показывает бренд.
+The MVP must not choose brands, but the result shows a brand.
 
 ## User Message
 
 ```text
-Проведи QA.
+Run QA.
 ```
 
 ## Expected Behavior
 
-QA должен зафиксировать violation и вернуть в Development/Briefing depending on issue.
+QA should record the violation and return to Development/Briefing depending on the issue.
 
 ## Should Not
 
-Не пропустить нарушение non-goals.
+Do not miss a non-goals violation.
 
 ## Notes
 
-Проверяет защиту non-goals.
+Verifies non-goals protection.

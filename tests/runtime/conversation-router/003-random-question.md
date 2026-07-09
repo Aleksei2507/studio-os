@@ -2,10 +2,10 @@
 id: "conversation-router-003-random-question"
 title: "random question"
 stage: "Any"
-prompt: "Расскажи анекдот."
+prompt: "What is the capital of France?"
 expect:
-  - "Studio OS должна понять, что это временный сторонний вопрос, ответить кратко или уточнить, не меняя проектный контекст."
-  - "Should not: Не менять stage. Не обновлять Project Memory. Не считать вопрос новым требованием."
+  - "Studio OS should answer the unrelated question briefly if appropriate and avoid mutating project artifacts."
+  - "Should not: Treat the question as project scope or update Project Memory."
 tags: ["conversation-router", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Любая активная стадия, например Discovery.
+A Studio OS project is active.
 
 ## User Message
 
 ```text
-Расскажи анекдот.
+What is the capital of France?
 ```
 
 ## Expected Behavior
 
-Studio OS должна понять, что это временный сторонний вопрос, ответить кратко или уточнить, не меняя проектный контекст.
+Studio OS should answer the unrelated question briefly if appropriate and avoid mutating project artifacts.
 
 ## Should Not
 
-Не менять stage. Не обновлять Project Memory. Не считать вопрос новым требованием.
+Do not treat the question as project scope. Do not update Project Memory.
 
 ## Notes
 
-Проверяет устойчивость к случайным сообщениям.
+Verifies unrelated question handling.

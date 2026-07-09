@@ -2,10 +2,10 @@
 id: "conversation-router-002-unrelated-feature-during-briefing"
 title: "unrelated feature during briefing"
 stage: "Briefing"
-prompt: "Хочу, чтобы сервис умел отличать мальчика от девочки."
+prompt: "Let us add a weather widget too."
 expect:
-  - "Studio OS должна заметить, что требование не связано с текущим Briefing, и уточнить намерение или мягко вернуть к текущему решению."
-  - "Should not: Не включать требование в MVP. Не высмеивать пользователя. Не терять Briefing-контекст."
+  - "Studio OS should notice that the request is not clearly related to the current product problem and ask what problem it solves."
+  - "Should not: Include the requirement in the MVP. Mock the user. Lose Briefing context."
 tags: ["conversation-router", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Briefing фиксирует MVP сервиса водоподготовки.
+Briefing is defining MVP scope for the current product.
 
 ## User Message
 
 ```text
-Хочу, чтобы сервис умел отличать мальчика от девочки.
+Let us add a weather widget too.
 ```
 
 ## Expected Behavior
 
-Studio OS должна заметить, что требование не связано с текущим Briefing, и уточнить намерение или мягко вернуть к текущему решению.
+Studio OS should notice that the request is not clearly related to the current product problem and ask what problem it solves.
 
 ## Should Not
 
-Не включать требование в MVP. Не высмеивать пользователя. Не терять Briefing-контекст.
+Do not include the requirement in the MVP. Do not mock the user. Do not lose Briefing context.
 
 ## Notes
 
-Проверяет защиту scope.
+Verifies routing of unrelated feature ideas during Briefing.

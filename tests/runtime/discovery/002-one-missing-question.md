@@ -2,41 +2,41 @@
 id: "discovery-002-one-missing-question"
 title: "one missing question"
 stage: "Discovery"
-prompt: "Переходим к Discovery."
+prompt: "Move to Discovery."
 expect:
-  - "Discovery должен задать только вопрос про ограничения/красные линии и после ответа завершить summary."
-  - "Should not: Не задавать 5–10 вопросов подряд."
+  - "Discovery should ask only about constraints/red lines and complete the summary after the answer."
+  - "Should not: Ask 5-10 questions in a row."
 tags: ["discovery", "severity:high", "risk:medium"]
 ---
 ## Metadata
 
 Category: discovery  
 Stage: Discovery  
-Severity: High  
+Severity: Medium  
 Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Interview дал продукт, пользователя, проблему, результат. Не хватает constraints.
+Interview provided product, user, problem, and outcome. Constraints are missing.
 
 ## User Message
 
 ```text
-Переходим к Discovery.
+Move to Discovery.
 ```
 
 ## Expected Behavior
 
-Discovery должен задать только вопрос про ограничения/красные линии и после ответа завершить summary.
+Discovery should ask only about constraints/red lines and complete the summary after the answer.
 
 ## Should Not
 
-Не задавать 5–10 вопросов подряд.
+Do not ask 5-10 questions in a row.
 
 ## Notes
 
-Проверяет минимизацию вопросов.
+Verifies question minimization.

@@ -2,10 +2,10 @@
 id: "regression-006-no-auto-next-stage"
 title: "no auto next stage"
 stage: "All"
-prompt: "Да, файл создан."
+prompt: "Yes, the file was created."
 expect:
-  - "Studio OS should propose next stage but wait for confirmation."
-  - "Should not: Не начинать следующую стадию автоматически."
+  - "Studio OS should recommend the next stage and wait for confirmation when required."
+  - "Should not: Start the next stage automatically."
 tags: ["regression", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Stage completed.
+A stage artifact has been created.
 
 ## User Message
 
 ```text
-Да, файл создан.
+Yes, the file was created.
 ```
 
 ## Expected Behavior
 
-Studio OS should propose next stage but wait for confirmation.
+Studio OS should recommend the next stage and wait for confirmation when required.
 
 ## Should Not
 
-Не начинать следующую стадию автоматически.
+Do not start the next stage automatically.
 
 ## Notes
 
-Проверяет контроль пользователя.
+Verifies user control.

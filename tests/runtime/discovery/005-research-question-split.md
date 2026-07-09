@@ -2,10 +2,10 @@
 id: "discovery-005-research-question-split"
 title: "research question split"
 stage: "Discovery"
-prompt: "Продолжай."
+prompt: "Continue."
 expect:
-  - "Discovery должен разделить Open Questions и Research Questions, если оба типа есть."
-  - "Should not: Не заставлять пользователя отвечать на вопросы, которые должны решаться Research."
+  - "Discovery should separate Open Questions and Research Questions when both types exist."
+  - "Should not: Force the user to answer questions that should be handled by Research."
 tags: ["discovery", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Discovery нашёл вопросы про рынок и вопросы к пользователю.
+Discovery found market questions and questions for the user.
 
 ## User Message
 
 ```text
-Продолжай.
+Continue.
 ```
 
 ## Expected Behavior
 
-Discovery должен разделить Open Questions и Research Questions, если оба типа есть.
+Discovery should separate Open Questions and Research Questions when both types exist.
 
 ## Should Not
 
-Не заставлять пользователя отвечать на вопросы, которые должны решаться Research.
+Do not force the user to answer questions that should be handled by Research.
 
 ## Notes
 
-Проверяет качество summary.
+Verifies summary quality.

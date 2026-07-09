@@ -2,10 +2,10 @@
 id: "conversation-router-005-work-item-after-release"
 title: "work item after release"
 stage: "Maintenance"
-prompt: "Добавь авторизацию пользователей."
+prompt: "Add export to CSV."
 expect:
-  - "Studio OS должна классифицировать сообщение как Work Item и предложить создать отдельное изменение, не перезапуская весь проект."
-  - "Should not: Не начинать Greenfield. Не менять старый brief без Work Item."
+  - "Studio OS should route the request to a Work Item lifecycle after Release."
+  - "Should not: Restart the whole project lifecycle."
 tags: ["conversation-router", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Проект уже прошёл Release.
+The project has completed Release.
 
 ## User Message
 
 ```text
-Добавь авторизацию пользователей.
+Add export to CSV.
 ```
 
 ## Expected Behavior
 
-Studio OS должна классифицировать сообщение как Work Item и предложить создать отдельное изменение, не перезапуская весь проект.
+Studio OS should route the request to a Work Item lifecycle after Release.
 
 ## Should Not
 
-Не начинать Greenfield. Не менять старый brief без Work Item.
+Do not restart the whole project lifecycle. Do not mutate completed artifacts without a Work Item.
 
 ## Notes
 
-Проверяет Brownfield/Work Item mode.
+Verifies post-release change routing.

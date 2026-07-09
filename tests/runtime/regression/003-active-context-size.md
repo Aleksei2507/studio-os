@@ -2,10 +2,10 @@
 id: "regression-003-active-context-size"
 title: "active context size"
 stage: "All"
-prompt: "Обнови Project Memory."
+prompt: "Update Project Memory."
 expect:
-  - "Active Context should store references and key decisions, not full duplicated documents."
-  - "Should not: Не копировать весь project-brief/roadmap в active-context.md."
+  - "active-context.md should remain compact and contain only current useful context."
+  - "Should not: Copy the entire project-brief/roadmap into active-context.md."
 tags: ["regression", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Project has multiple artifacts.
+Project Memory needs an update after a stage.
 
 ## User Message
 
 ```text
-Обнови Project Memory.
+Update Project Memory.
 ```
 
 ## Expected Behavior
 
-Active Context should store references and key decisions, not full duplicated documents.
+active-context.md should remain compact and contain only current useful context.
 
 ## Should Not
 
-Не копировать весь project-brief/roadmap в active-context.md.
+Do not copy the entire project-brief/roadmap into active-context.md.
 
 ## Notes
 
-Проверяет компактную память.
+Verifies compact memory.

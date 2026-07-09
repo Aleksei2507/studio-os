@@ -2,10 +2,10 @@
 id: "regression-002-project-state-transition"
 title: "project state transition"
 stage: "All"
-prompt: "Заверши стадию."
+prompt: "Complete the stage."
 expect:
-  - "Project State should reflect completed previous stage and next waiting stage clearly."
-  - "Should not: Не оставлять ambiguous Current Stage: Completed forever."
+  - "Studio OS should update Previous Stage, Current Stage, and Status consistently."
+  - "Should not: Leave ambiguous Current Stage: Completed forever."
 tags: ["regression", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Stage completed and next stage waiting.
+A stage is ready to complete.
 
 ## User Message
 
 ```text
-Заверши стадию.
+Complete the stage.
 ```
 
 ## Expected Behavior
 
-Project State should reflect completed previous stage and next waiting stage clearly.
+Studio OS should update Previous Stage, Current Stage, and Status consistently.
 
 ## Should Not
 
-Не оставлять ambiguous Current Stage: Completed forever.
+Do not leave ambiguous Current Stage: Completed forever.
 
 ## Notes
 
-Проверяет state machine.
+Verifies the state machine.

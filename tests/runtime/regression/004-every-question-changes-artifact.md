@@ -2,10 +2,10 @@
 id: "regression-004-every-question-changes-artifact"
 title: "every question changes artifact"
 stage: "All"
-prompt: "Продолжай."
+prompt: "Continue."
 expect:
-  - "Before asking, Runtime should ensure the answer changes the next artifact."
-  - "Should not: Не задавать любопытные, но бесполезные вопросы."
+  - "Every question should be tied to an artifact decision, quality gate, or routing decision."
+  - "Should not: Ask curious but useless questions."
 tags: ["regression", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Runtime собирается задать вопрос.
+Runtime is about to ask a question.
 
 ## User Message
 
 ```text
-Продолжай.
+Continue.
 ```
 
 ## Expected Behavior
 
-Before asking, Runtime should ensure the answer changes the next artifact.
+Every question should be tied to an artifact decision, quality gate, or routing decision.
 
 ## Should Not
 
-Не задавать любопытные, но бесполезные вопросы.
+Do not ask curious but useless questions.
 
 ## Notes
 
-Проверяет главный принцип.
+Verifies the main principle.

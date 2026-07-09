@@ -2,10 +2,10 @@
 id: "planning-003-remove-knowledge-base"
 title: "remove knowledge base"
 stage: "Planning"
-prompt: "Давай удалим первую итерацию Knowledge Base."
+prompt: "Remove the knowledge base from the plan."
 expect:
-  - "Studio OS должна объяснить последствия: без базы знаний MVP не сможет ответственно работать, и запросить подтверждение scope/risk decision."
-  - "Should not: Не удалять молча."
+  - "Studio OS should explain which roadmap items and product decisions are affected and ask for confirmation."
+  - "Should not: Delete related plan parts silently."
 tags: ["planning", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Roadmap начинается с Knowledge Base.
+The roadmap depends on a knowledge base.
 
 ## User Message
 
 ```text
-Давай удалим первую итерацию Knowledge Base.
+Remove the knowledge base from the plan.
 ```
 
 ## Expected Behavior
 
-Studio OS должна объяснить последствия: без базы знаний MVP не сможет ответственно работать, и запросить подтверждение scope/risk decision.
+Studio OS should explain which roadmap items and product decisions are affected and ask for confirmation.
 
 ## Should Not
 
-Не удалять молча.
+Do not delete related plan parts silently.
 
 ## Notes
 
-Проверяет способность спорить с пользователем.
+Verifies change impact handling.

@@ -2,10 +2,10 @@
 id: "planning-005-mobile-instead-of-web"
 title: "mobile instead of web"
 stage: "Planning"
-prompt: "Передумал, хочу мобильное приложение вместо сайта."
+prompt: "I changed my mind, I want a mobile app instead of a website."
 expect:
-  - "Studio OS должна определить, что это может влиять на Architecture и UX, уточнить является ли это изменением продукта или техническим предпочтением."
-  - "Should not: Не переписывать roadmap молча."
+  - "Studio OS should identify that this may affect Architecture and UX, and clarify whether it is a product change or a technical preference."
+  - "Should not: Rewrite the roadmap silently."
 tags: ["planning", "severity:medium", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Planning completed for web service.
+Planning targets a website.
 
 ## User Message
 
 ```text
-Передумал, хочу мобильное приложение вместо сайта.
+I changed my mind, I want a mobile app instead of a website.
 ```
 
 ## Expected Behavior
 
-Studio OS должна определить, что это может влиять на Architecture и UX, уточнить является ли это изменением продукта или техническим предпочтением.
+Studio OS should identify that this may affect Architecture and UX, and clarify whether it is a product change or a technical preference.
 
 ## Should Not
 
-Не переписывать roadmap молча.
+Do not rewrite the roadmap silently.
 
 ## Notes
 
-Проверяет крупную смену направления.
+Verifies major direction changes.

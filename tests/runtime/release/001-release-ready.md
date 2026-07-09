@@ -2,10 +2,10 @@
 id: "release-001-release-ready"
 title: "release ready"
 stage: "Release"
-prompt: "Готовим релиз."
+prompt: "Prepare the release."
 expect:
-  - "Release должен создать release notes, зафиксировать версию/ограничения и предложить Retrospective."
-  - "Should not: Не пропускать release notes."
+  - "Release should create release notes, record version/limitations, and suggest Retrospective."
+  - "Should not: Skip release notes."
 tags: ["release", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-QA passed. Validation passed.
+QA passed.
 
 ## User Message
 
 ```text
-Готовим релиз.
+Prepare the release.
 ```
 
 ## Expected Behavior
 
-Release должен создать release notes, зафиксировать версию/ограничения и предложить Retrospective.
+Release should create release notes, record version/limitations, and suggest Retrospective.
 
 ## Should Not
 
-Не пропускать release notes.
+Do not skip release notes.
 
 ## Notes
 
-Проверяет завершение проекта.
+Verifies project completion.

@@ -2,10 +2,10 @@
 id: "conversation-router-001-topic-switch-during-discovery"
 title: "topic switch during discovery"
 stage: "Discovery"
-prompt: "Хочу встроить тетрис на сайт."
+prompt: "I want to embed Tetris on the site."
 expect:
-  - "Studio OS должна определить, что сообщение может быть сменой намерения, и уточнить: это новая фича текущего проекта, новый проект или случайное сообщение. Текущий Discovery-контекст должен сохраниться."
-  - "Should not: Не добавлять тетрис в Discovery автоматически. Не начинать новый проект. Не писать код."
+  - "Studio OS should detect that the message may be an intent change and clarify whether it is a new feature for the current project, a new project, or a random message. The current Discovery context should be preserved."
+  - "Should not: Add Tetris to Discovery automatically. Start a new project. Write code."
 tags: ["conversation-router", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Проект находится на стадии Discovery. Пользователь должен подтвердить понимание продукта.
+The project is in Discovery. The user needs to confirm product understanding.
 
 ## User Message
 
 ```text
-Хочу встроить тетрис на сайт.
+I want to embed Tetris on the site.
 ```
 
 ## Expected Behavior
 
-Studio OS должна определить, что сообщение может быть сменой намерения, и уточнить: это новая фича текущего проекта, новый проект или случайное сообщение. Текущий Discovery-контекст должен сохраниться.
+Studio OS should detect that the message may be an intent change and clarify whether it is a new feature for the current project, a new project, or a random message. The current Discovery context should be preserved.
 
 ## Should Not
 
-Не добавлять тетрис в Discovery автоматически. Не начинать новый проект. Не писать код.
+Do not add Tetris to Discovery automatically. Do not start a new project. Do not write code.
 
 ## Notes
 
-Тест родился из реального edge-case с тетрисом.
+This test came from a real Tetris edge case.

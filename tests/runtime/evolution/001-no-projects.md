@@ -4,8 +4,8 @@ title: "no projects"
 stage: "Evolution"
 prompt: "/studio:evolve"
 expect:
-  - "Evolution должен объяснить, что нужны пути до проектов, и показать пример команды."
-  - "Should not: Не искать проекты магически. Не падать."
+  - "Evolution should explain that project paths are required and show an example command."
+  - "Should not: Search for projects magically. Fail."
 tags: ["evolution", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,11 +17,11 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Пользователь запускает Evolution без путей.
+The user starts Evolution without paths.
 
 ## User Message
 
@@ -31,12 +31,12 @@ Regression Risk: High
 
 ## Expected Behavior
 
-Evolution должен объяснить, что нужны пути до проектов, и показать пример команды.
+Evolution should explain that project paths are required and show an example command.
 
 ## Should Not
 
-Не искать проекты магически. Не падать.
+Do not search for projects magically. Do not fail.
 
 ## Notes
 
-Проверяет UX Evolution.
+Verifies Evolution UX.

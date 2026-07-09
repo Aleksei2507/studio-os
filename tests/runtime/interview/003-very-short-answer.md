@@ -2,10 +2,10 @@
 id: "interview-003-very-short-answer"
 title: "very short answer"
 stage: "Interview"
-prompt: "Да."
+prompt: "For homeowners."
 expect:
-  - "Studio OS должна понять, достаточно ли ответа. Если нет — задать один уточняющий вопрос с контекстом."
-  - "Should not: Не считать короткий ответ полноценным, если он не закрывает вопрос."
+  - "Interview should use the short answer, update context, and ask the next single question."
+  - "Should not: Demand a long answer."
 tags: ["interview", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Interview задаёт уточняющий вопрос.
+Interview asked who the product is for.
 
 ## User Message
 
 ```text
-Да.
+For homeowners.
 ```
 
 ## Expected Behavior
 
-Studio OS должна понять, достаточно ли ответа. Если нет — задать один уточняющий вопрос с контекстом.
+Interview should use the short answer, update context, and ask the next single question.
 
 ## Should Not
 
-Не считать короткий ответ полноценным, если он не закрывает вопрос.
+Do not demand a long answer.
 
 ## Notes
 
-Проверяет устойчивость к коротким ответам.
+Verifies short-answer handling.

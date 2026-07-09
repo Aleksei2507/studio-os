@@ -2,10 +2,10 @@
 id: "development-003-change-framework"
 title: "change framework"
 stage: "Development"
-prompt: "Сделай на Angular."
+prompt: "Build it with Angular."
 expect:
-  - "Studio OS должна сказать, что это противоречит Architecture и требует возврата к Architecture/ADR."
-  - "Should not: Не переписывать стек молча."
+  - "Studio OS should say this contradicts Architecture and requires returning to Architecture/ADR."
+  - "Should not: Rewrite the stack silently."
 tags: ["development", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Architecture выбрала React.
+Architecture selected React.
 
 ## User Message
 
 ```text
-Сделай на Angular.
+Build it with Angular.
 ```
 
 ## Expected Behavior
 
-Studio OS должна сказать, что это противоречит Architecture и требует возврата к Architecture/ADR.
+Studio OS should say this contradicts Architecture and requires returning to Architecture/ADR.
 
 ## Should Not
 
-Не переписывать стек молча.
+Do not rewrite the stack silently.
 
 ## Notes
 
-Проверяет защиту архитектуры.
+Verifies architecture protection.

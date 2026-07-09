@@ -2,41 +2,41 @@
 id: "regression-005-stage-handoff"
 title: "stage handoff"
 stage: "All"
-prompt: "Заверши стадию."
+prompt: "Complete the stage."
 expect:
-  - "Runtime should provide handoff: decisions, unknowns, next stage inputs."
-  - "Should not: Не завершать без передачи контекста."
+  - "A completed stage should leave enough context for the next Runtime."
+  - "Should not: Complete without handoff context."
 tags: ["regression", "severity:high", "risk:medium"]
 ---
 ## Metadata
 
 Category: regression  
 Stage: All  
-Severity: High  
+Severity: Medium  
 Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Stage completed.
+A stage is ready to complete.
 
 ## User Message
 
 ```text
-Заверши стадию.
+Complete the stage.
 ```
 
 ## Expected Behavior
 
-Runtime should provide handoff: decisions, unknowns, next stage inputs.
+A completed stage should leave enough context for the next Runtime.
 
 ## Should Not
 
-Не завершать без передачи контекста.
+Do not complete without handoff context.
 
 ## Notes
 
-Проверяет handoff.
+Verifies handoff.

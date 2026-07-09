@@ -2,10 +2,10 @@
 id: "architecture-005-change-language"
 title: "change language"
 stage: "Architecture"
-prompt: "Давай лучше на Go."
+prompt: "Let us use Go instead."
 expect:
-  - "Studio OS должна определить изменение архитектурного решения, запросить причину и при необходимости обновить ADR."
-  - "Should not: Не менять стек молча."
+  - "Studio OS should identify a change to an architectural decision, ask for the reason, and update the ADR if needed."
+  - "Should not: Change the stack silently."
 tags: ["architecture", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Architecture выбрала TypeScript.
+Architecture selected TypeScript.
 
 ## User Message
 
 ```text
-Давай лучше на Go.
+Let us use Go instead.
 ```
 
 ## Expected Behavior
 
-Studio OS должна определить изменение архитектурного решения, запросить причину и при необходимости обновить ADR.
+Studio OS should identify a change to an architectural decision, ask for the reason, and update the ADR if needed.
 
 ## Should Not
 
-Не менять стек молча.
+Do not change the stack silently.
 
 ## Notes
 
-Проверяет управление решениями.
+Verifies decision management.

@@ -2,10 +2,10 @@
 id: "architecture-001-start-from-roadmap"
 title: "start from roadmap"
 stage: "Architecture"
-prompt: "Переходим к Architecture."
+prompt: "Move to Architecture."
 expect:
-  - "Architecture должен прочитать project-brief и roadmap, затем предложить архитектурные решения с trade-offs."
-  - "Should not: Не спрашивать заново MVP. Не писать код."
+  - "Architecture should read project-brief and roadmap, then propose architectural decisions with trade-offs."
+  - "Should not: Ask for the MVP again. Write code."
 tags: ["architecture", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Roadmap completed. Стек ещё не выбран.
+Roadmap is completed. The stack has not been selected yet.
 
 ## User Message
 
 ```text
-Переходим к Architecture.
+Move to Architecture.
 ```
 
 ## Expected Behavior
 
-Architecture должен прочитать project-brief и roadmap, затем предложить архитектурные решения с trade-offs.
+Architecture should read project-brief and roadmap, then propose architectural decisions with trade-offs.
 
 ## Should Not
 
-Не спрашивать заново MVP. Не писать код.
+Do not ask for the MVP again. Do not write code.
 
 ## Notes
 
-Проверяет старт Architecture.
+Verifies the Architecture start boundary.

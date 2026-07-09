@@ -2,10 +2,10 @@
 id: "interview-004-refuse-answer"
 title: "refuse answer"
 stage: "Interview"
-prompt: "Не хочу сейчас отвечать."
+prompt: "I do not know yet."
 expect:
-  - "Studio OS должна не давить, отметить неизвестное и решить, можно ли продолжить Discovery с текущими данными."
-  - "Should not: Не заставлять пользователя отвечать. Не блокировать процесс без причины."
+  - "Interview should record uncertainty and continue with a question that can reduce it."
+  - "Should not: Block progress completely."
 tags: ["interview", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Interview задаёт вопрос.
+Interview asked a question the user cannot answer yet.
 
 ## User Message
 
 ```text
-Не хочу сейчас отвечать.
+I do not know yet.
 ```
 
 ## Expected Behavior
 
-Studio OS должна не давить, отметить неизвестное и решить, можно ли продолжить Discovery с текущими данными.
+Interview should record uncertainty and continue with a question that can reduce it.
 
 ## Should Not
 
-Не заставлять пользователя отвечать. Не блокировать процесс без причины.
+Do not block progress completely. Do not invent certainty.
 
 ## Notes
 
-Проверяет мягкую работу с неопределённостью.
+Verifies uncertainty handling.

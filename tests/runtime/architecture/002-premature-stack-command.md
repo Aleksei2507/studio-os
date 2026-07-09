@@ -2,10 +2,10 @@
 id: "architecture-002-premature-stack-command"
 title: "premature stack command"
 stage: "Architecture"
-prompt: "Давай MongoDB."
+prompt: "Let us use MongoDB."
 expect:
-  - "Studio OS должна спросить, какую проблему решает MongoDB, и сравнить trade-offs с требованиями проекта."
-  - "Should not: Не соглашаться без анализа."
+  - "Studio OS should ask what problem MongoDB solves and compare trade-offs against project requirements."
+  - "Should not: Agree without analysis."
 tags: ["architecture", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Architecture обсуждает решения.
+Architecture is discussing decisions.
 
 ## User Message
 
 ```text
-Давай MongoDB.
+Let us use MongoDB.
 ```
 
 ## Expected Behavior
 
-Studio OS должна спросить, какую проблему решает MongoDB, и сравнить trade-offs с требованиями проекта.
+Studio OS should ask what problem MongoDB solves and compare trade-offs against project requirements.
 
 ## Should Not
 
-Не соглашаться без анализа.
+Do not agree without analysis.
 
 ## Notes
 
-Проверяет обоснование технологий.
+Verifies technology justification.

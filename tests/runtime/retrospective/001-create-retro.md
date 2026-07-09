@@ -2,10 +2,10 @@
 id: "retrospective-001-create-retro"
 title: "create retro"
 stage: "Retrospective"
-prompt: "Проведи ретроспективу."
+prompt: "Run the retrospective."
 expect:
-  - "Retrospective должен собрать objective observations, задать минимум вопросов и создать .studio/runtime-retrospective.md."
-  - "Should not: Не создавать proposals. Не менять Runtime."
+  - "Retrospective should collect objective observations, ask minimal questions, and create .studio/runtime-retrospective.md."
+  - "Should not: Create proposals. Change Runtime."
 tags: ["retrospective", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Project released.
+Release is completed.
 
 ## User Message
 
 ```text
-Проведи ретроспективу.
+Run the retrospective.
 ```
 
 ## Expected Behavior
 
-Retrospective должен собрать objective observations, задать минимум вопросов и создать .studio/runtime-retrospective.md.
+Retrospective should collect objective observations, ask minimal questions, and create .studio/runtime-retrospective.md.
 
 ## Should Not
 
-Не создавать proposals. Не менять Runtime.
+Do not create proposals. Do not change Runtime.
 
 ## Notes
 
-Проверяет роль Retrospective.
+Verifies the role of Retrospective.

@@ -2,10 +2,10 @@
 id: "planning-004-add-deferred-scenario"
 title: "add deferred scenario"
 stage: "Planning"
-prompt: "Давай сразу добавим сценарий с готовым анализом воды."
+prompt: "Let us immediately add the scenario with ready water analysis results."
 expect:
-  - "Studio OS должна определить изменение MVP и предложить вернуться в Briefing или создать Work Item."
-  - "Should not: Не расширять текущий roadmap автоматически."
+  - "Studio OS should identify an MVP change and suggest returning to Briefing or creating a Work Item."
+  - "Should not: Expand the current roadmap automatically."
 tags: ["planning", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Roadmap ограничен сценарием без анализа.
+The roadmap is limited to the no-analysis scenario.
 
 ## User Message
 
 ```text
-Давай сразу добавим сценарий с готовым анализом воды.
+Let us immediately add the scenario with ready water analysis results.
 ```
 
 ## Expected Behavior
 
-Studio OS должна определить изменение MVP и предложить вернуться в Briefing или создать Work Item.
+Studio OS should identify an MVP change and suggest returning to Briefing or creating a Work Item.
 
 ## Should Not
 
-Не расширять текущий roadmap автоматически.
+Do not expand the current roadmap automatically.
 
 ## Notes
 
-Проверяет границу Planning/Briefing.
+Verifies the Planning/Briefing boundary.

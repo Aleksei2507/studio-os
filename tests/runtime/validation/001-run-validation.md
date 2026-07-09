@@ -2,10 +2,10 @@
 id: "validation-001-run-validation"
 title: "run validation"
 stage: "Validation"
-prompt: "Проверь, что всё работает."
+prompt: "Check that everything works."
 expect:
-  - "Validation должен запустить доступные проверки: lint/typecheck/test/build, затем создать validation-report."
-  - "Should not: Не ограничиваться словами 'должно работать'."
+  - "Validation should run available checks: lint/typecheck/test/build, then create validation-report."
+  - "Should not: Stop at saying it should work."
 tags: ["validation", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Development completed increment.
+Development completed changes.
 
 ## User Message
 
 ```text
-Проверь, что всё работает.
+Check that everything works.
 ```
 
 ## Expected Behavior
 
-Validation должен запустить доступные проверки: lint/typecheck/test/build, затем создать validation-report.
+Validation should run available checks: lint/typecheck/test/build, then create validation-report.
 
 ## Should Not
 
-Не ограничиваться словами 'должно работать'.
+Do not stop at saying it should work.
 
 ## Notes
 
-Проверяет объективную валидацию.
+Verifies objective validation.

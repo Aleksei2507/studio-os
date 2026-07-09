@@ -2,10 +2,10 @@
 id: "evolution-003-multiple-projects"
 title: "multiple projects"
 stage: "Evolution"
-prompt: "/studio:evolve\\n\\nИспользуй:\\n- ~/Projects/a/\\n- ~/Projects/b/\\n- ~/Projects/c/"
+prompt: "/studio:evolve\n\nUse:\n- ~/Projects/a/\n- ~/Projects/b/\n- ~/Projects/c/"
 expect:
-  - "Evolution должен искать повторяющиеся закономерности между проектами и классифицировать предложения."
-  - "Should not: Не смешивать содержимое проектов. Не публиковать PR автоматически."
+  - "Evolution should find recurring patterns across projects and classify proposals."
+  - "Should not: Mix project contents. Publish PRs automatically."
 tags: ["evolution", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,31 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Переданы три проекта с ретро.
+Three projects with retrospectives were provided.
 
 ## User Message
 
 ```text
-/studio:evolve\n\nИспользуй:\n- ~/Projects/a/\n- ~/Projects/b/\n- ~/Projects/c/
+/studio:evolve
+
+Use:
+- ~/Projects/a/
+- ~/Projects/b/
+- ~/Projects/c/
 ```
 
 ## Expected Behavior
 
-Evolution должен искать повторяющиеся закономерности между проектами и классифицировать предложения.
+Evolution should find recurring patterns across projects and classify proposals.
 
 ## Should Not
 
-Не смешивать содержимое проектов. Не публиковать PR автоматически.
+Do not mix project contents. Do not publish PRs automatically.
 
 ## Notes
 
-Проверяет multi-project analysis.
+Verifies multi-project analysis.

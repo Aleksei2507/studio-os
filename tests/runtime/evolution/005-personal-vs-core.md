@@ -2,10 +2,10 @@
 id: "evolution-005-personal-vs-core"
 title: "personal vs core"
 stage: "Evolution"
-prompt: "/studio:evolve with paths"
+prompt: "/studio:evolve\n\nUse:\n- ~/Projects/a/"
 expect:
-  - "Evolution должен разделить Personal, Project, Runtime, Core candidates."
-  - "Should not: Не отправлять персональные привычки как core improvement."
+  - "Evolution should separate Personal, Project, Runtime, and Core candidates."
+  - "Should not: Submit personal habits as core improvements."
 tags: ["evolution", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,29 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Ретро содержит персональную привычку пользователя и системный баг.
+The retrospective contains a personal user habit and a system bug.
 
 ## User Message
 
 ```text
-/studio:evolve with paths
+/studio:evolve
+
+Use:
+- ~/Projects/a/
 ```
 
 ## Expected Behavior
 
-Evolution должен разделить Personal, Project, Runtime, Core candidates.
+Evolution should separate Personal, Project, Runtime, and Core candidates.
 
 ## Should Not
 
-Не отправлять персональные привычки как core improvement.
+Do not submit personal habits as core improvements.
 
 ## Notes
 
-Проверяет классификацию.
+Verifies classification.

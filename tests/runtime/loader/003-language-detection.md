@@ -2,10 +2,10 @@
 id: "loader-003-language-detection"
 title: "language detection"
 stage: "Loader"
-prompt: "Используй Studio OS\\n\\nХочу сделать сервис..."
+prompt: "Use Studio OS\n\nI want to build a service..."
 expect:
-  - "Studio OS должна установить Project Language: ru-RU и писать docs/.studio на русском."
-  - "Should not: Не писать артефакты на английском без запроса пользователя."
+  - "Studio OS should set Project Language: en-US and write docs/.studio in English."
+  - "Should not: Write artifacts in another language without a user request."
 tags: ["loader", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,28 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Новый проект. Пользователь пишет на русском.
+New project. The user writes in English.
 
 ## User Message
 
 ```text
-Используй Studio OS\n\nХочу сделать сервис...
+Use Studio OS
+
+I want to build a service...
 ```
 
 ## Expected Behavior
 
-Studio OS должна установить Project Language: ru-RU и писать docs/.studio на русском.
+Studio OS should set Project Language: en-US and write docs/.studio in English.
 
 ## Should Not
 
-Не писать артефакты на английском без запроса пользователя.
+Do not write artifacts in another language without a user request.
 
 ## Notes
 
-Проверяет локализацию.
+Verifies localization.

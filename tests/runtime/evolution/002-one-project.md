@@ -2,10 +2,10 @@
 id: "evolution-002-one-project"
 title: "one project"
 stage: "Evolution"
-prompt: "/studio:evolve\\n\\nИспользуй:\\n- ~/Projects/water-filter/"
+prompt: "/studio:evolve\n\nUse:\n- ~/Projects/water-filter/"
 expect:
-  - "Evolution должен проанализировать ретро и создать локальные proposals только при наличии оснований."
-  - "Should not: Не менять Runtime автоматически."
+  - "Evolution should analyze the retrospective and create local proposals only when justified."
+  - "Should not: Change Runtime automatically."
 tags: ["evolution", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,29 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Передан один проект с .studio/runtime-retrospective.md.
+One project with .studio/runtime-retrospective.md was provided.
 
 ## User Message
 
 ```text
-/studio:evolve\n\nИспользуй:\n- ~/Projects/water-filter/
+/studio:evolve
+
+Use:
+- ~/Projects/water-filter/
 ```
 
 ## Expected Behavior
 
-Evolution должен проанализировать ретро и создать локальные proposals только при наличии оснований.
+Evolution should analyze the retrospective and create local proposals only when justified.
 
 ## Should Not
 
-Не менять Runtime автоматически.
+Do not change Runtime automatically.
 
 ## Notes
 
-Проверяет базовый Evolution.
+Verifies basic Evolution.

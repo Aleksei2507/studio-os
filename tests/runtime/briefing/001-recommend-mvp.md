@@ -2,10 +2,10 @@
 id: "briefing-001-recommend-mvp"
 title: "recommend mvp"
 stage: "Briefing"
-prompt: "Переходим к Briefing."
+prompt: "Move to Briefing."
 expect:
-  - "Briefing должен предложить MVP-решение на основе Discovery с why/trade-offs, а не спрашивать 'что входит в MVP?'."
-  - "Should not: Не начинать новое интервью. Не выбирать стек."
+  - "Briefing should recommend an MVP decision based on Discovery with why/trade-offs instead of asking what belongs in the MVP."
+  - "Should not: Start a new interview. Choose the stack."
 tags: ["briefing", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Discovery completed.
+Discovery is completed and Project Memory contains product understanding.
 
 ## User Message
 
 ```text
-Переходим к Briefing.
+Move to Briefing.
 ```
 
 ## Expected Behavior
 
-Briefing должен предложить MVP-решение на основе Discovery с why/trade-offs, а не спрашивать 'что входит в MVP?'.
+Briefing should recommend an MVP decision based on Discovery with why/trade-offs instead of asking what belongs in the MVP.
 
 ## Should Not
 
-Не начинать новое интервью. Не выбирать стек.
+Do not start a new interview. Do not choose the stack.
 
 ## Notes
 
-Проверяет роль Briefing как Product Decisions.
+Verifies Briefing as Product Decisions.

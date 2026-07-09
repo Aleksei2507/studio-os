@@ -2,41 +2,41 @@
 id: "conversation-router-007-return-after-week"
 title: "return after week"
 stage: "Paused"
-prompt: "Продолжим проект."
+prompt: "Continue the project."
 expect:
-  - "Studio OS должна восстановить текущую стадию из Project Memory и кратко напомнить контекст."
-  - "Should not: Не начинать Interview заново. Не спрашивать всё сначала."
+  - "Studio OS should read Project Memory, summarize the current state, and resume from the appropriate stage."
+  - "Should not: Rely only on chat history."
 tags: ["conversation-router", "severity:high", "risk:medium"]
 ---
 ## Metadata
 
 Category: conversation-router  
 Stage: Paused  
-Severity: High  
+Severity: Medium  
 Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Проект был поставлен на паузу. В .studio есть project-state.md и active-context.md.
+The user returns after a pause.
 
 ## User Message
 
 ```text
-Продолжим проект.
+Continue the project.
 ```
 
 ## Expected Behavior
 
-Studio OS должна восстановить текущую стадию из Project Memory и кратко напомнить контекст.
+Studio OS should read Project Memory, summarize the current state, and resume from the appropriate stage.
 
 ## Should Not
 
-Не начинать Interview заново. Не спрашивать всё сначала.
+Do not rely only on chat history. Do not restart from scratch.
 
 ## Notes
 
-Проверяет восстановление проекта.
+Verifies resume behavior.

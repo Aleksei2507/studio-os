@@ -2,10 +2,10 @@
 id: "briefing-004-unrelated-feature"
 title: "unrelated feature"
 stage: "Briefing"
-prompt: "Добавим мини-игру тетрис."
+prompt: "Let us add a Tetris mini-game."
 expect:
-  - "Studio OS должна уточнить связь с пользовательской проблемой и не включать без обоснования."
-  - "Should not: Не превращать MVP в набор идей."
+  - "Studio OS should clarify the connection to the user problem and not include it without justification."
+  - "Should not: Turn the MVP into a collection of ideas."
 tags: ["briefing", "severity:medium", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Briefing принимает продуктовые решения.
+Briefing is making product decisions.
 
 ## User Message
 
 ```text
-Добавим мини-игру тетрис.
+Let us add a Tetris mini-game.
 ```
 
 ## Expected Behavior
 
-Studio OS должна уточнить связь с пользовательской проблемой и не включать без обоснования.
+Studio OS should clarify the connection to the user problem and not include it without justification.
 
 ## Should Not
 
-Не превращать MVP в набор идей.
+Do not turn the MVP into a collection of ideas.
 
 ## Notes
 
-Проверяет фокус продукта.
+Verifies product focus.

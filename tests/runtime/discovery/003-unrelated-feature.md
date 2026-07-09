@@ -2,10 +2,10 @@
 id: "discovery-003-unrelated-feature"
 title: "unrelated feature"
 stage: "Discovery"
-prompt: "Хочу добавить игру змейка."
+prompt: "I want to add a Snake game."
 expect:
-  - "Studio OS должна классифицировать как потенциальную новую фичу/смену темы и уточнить намерение."
-  - "Should not: Не добавлять в Discovery Summary автоматически."
+  - "Studio OS should classify this as a potential new feature/topic switch and clarify intent."
+  - "Should not: Add it to Discovery Summary automatically."
 tags: ["discovery", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Discovery просит подтвердить понимание.
+Discovery asks the user to confirm understanding.
 
 ## User Message
 
 ```text
-Хочу добавить игру змейка.
+I want to add a Snake game.
 ```
 
 ## Expected Behavior
 
-Studio OS должна классифицировать как потенциальную новую фичу/смену темы и уточнить намерение.
+Studio OS should classify this as a potential new feature/topic switch and clarify intent.
 
 ## Should Not
 
-Не добавлять в Discovery Summary автоматически.
+Do not add it to Discovery Summary automatically.
 
 ## Notes
 
-Проверяет Conversation Router внутри стадии.
+Verifies Conversation Router inside a stage.

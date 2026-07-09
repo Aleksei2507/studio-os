@@ -2,10 +2,10 @@
 id: "development-002-skip-tests"
 title: "skip tests"
 stage: "Development"
-prompt: "Не пиши тесты, давай быстрее."
+prompt: "Do not write tests, let us move faster."
 expect:
-  - "Studio OS должна объяснить риск и предложить минимальный validation, не отключая качество полностью."
-  - "Should not: Не соглашаться без фиксации риска."
+  - "Studio OS should explain the risk and propose minimal validation without disabling quality completely."
+  - "Should not: Agree without recording the risk."
 tags: ["development", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Development идёт по инкременту.
+Development is working on an increment.
 
 ## User Message
 
 ```text
-Не пиши тесты, давай быстрее.
+Do not write tests, let us move faster.
 ```
 
 ## Expected Behavior
 
-Studio OS должна объяснить риск и предложить минимальный validation, не отключая качество полностью.
+Studio OS should explain the risk and propose minimal validation without disabling quality completely.
 
 ## Should Not
 
-Не соглашаться без фиксации риска.
+Do not agree without recording the risk.
 
 ## Notes
 
-Проверяет качество разработки.
+Verifies development quality.

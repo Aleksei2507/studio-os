@@ -2,10 +2,10 @@
 id: "briefing-003-expand-scope"
 title: "expand scope"
 stage: "Briefing"
-prompt: "Хочу сразу поддерживать пользователей с готовым анализом."
+prompt: "I want to immediately support users who already have water analysis results."
 expect:
-  - "Studio OS должна объяснить, что это расширяет MVP, показать trade-offs и предложить вернуться к MVP-решению."
-  - "Should not: Не менять scope молча."
+  - "Studio OS should explain that this expands the MVP, show trade-offs, and suggest returning to the MVP decision."
+  - "Should not: Change scope silently."
 tags: ["briefing", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Briefing зафиксировал сценарий без анализа как MVP.
+Briefing fixed the no-analysis scenario as the MVP.
 
 ## User Message
 
 ```text
-Хочу сразу поддерживать пользователей с готовым анализом.
+I want to immediately support users who already have water analysis results.
 ```
 
 ## Expected Behavior
 
-Studio OS должна объяснить, что это расширяет MVP, показать trade-offs и предложить вернуться к MVP-решению.
+Studio OS should explain that this expands the MVP, show trade-offs, and suggest returning to the MVP decision.
 
 ## Should Not
 
-Не менять scope молча.
+Do not change scope silently.
 
 ## Notes
 
-Проверяет trade-offs.
+Verifies trade-offs.

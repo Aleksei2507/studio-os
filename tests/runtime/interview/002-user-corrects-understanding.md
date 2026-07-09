@@ -2,10 +2,10 @@
 id: "interview-002-user-corrects-understanding"
 title: "user corrects understanding"
 stage: "Interview"
-prompt: "Нет, это не для дачников, а для монтажников фильтров."
+prompt: "No, this is not for dacha owners. It is for small water filter installers."
 expect:
-  - "Interview должен принять исправление, обновить понимание и продолжить вопросы уже для новой аудитории."
-  - "Should not: Не спорить. Не сохранять старую аудиторию как основную."
+  - "Interview should accept the correction, update understanding, and continue from the corrected context."
+  - "Should not: Defend the previous interpretation."
 tags: ["interview", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Interview показал понимание идеи.
+Interview previously assumed the wrong user.
 
 ## User Message
 
 ```text
-Нет, это не для дачников, а для монтажников фильтров.
+No, this is not for dacha owners. It is for small water filter installers.
 ```
 
 ## Expected Behavior
 
-Interview должен принять исправление, обновить понимание и продолжить вопросы уже для новой аудитории.
+Interview should accept the correction, update understanding, and continue from the corrected context.
 
 ## Should Not
 
-Не спорить. Не сохранять старую аудиторию как основную.
+Do not defend the previous interpretation. Do not ignore the correction.
 
 ## Notes
 
-Проверяет корректировку гипотезы.
+Verifies correction handling.

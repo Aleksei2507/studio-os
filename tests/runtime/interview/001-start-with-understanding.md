@@ -2,10 +2,10 @@
 id: "interview-001-start-with-understanding"
 title: "start with understanding"
 stage: "Interview"
-prompt: "Хочу сделать сервис, который помогает владельцам дач понять фильтрацию воды."
+prompt: "I want to make a service for dacha owners to understand water filtration."
 expect:
-  - "Interview должен сначала пересказать своё понимание идеи и попросить подтвердить/исправить, а не сразу задавать шаблонные вопросы."
-  - "Should not: Не начинать с 'какую проблему решает?'. Не обсуждать технологии."
+  - "Interview should restate understanding and ask one targeted question."
+  - "Should not: Start planning or choose technologies."
 tags: ["interview", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Greenfield. Пользователь дал идею.
+A new Greenfield project starts.
 
 ## User Message
 
 ```text
-Хочу сделать сервис, который помогает владельцам дач понять фильтрацию воды.
+I want to make a service for dacha owners to understand water filtration.
 ```
 
 ## Expected Behavior
 
-Interview должен сначала пересказать своё понимание идеи и попросить подтвердить/исправить, а не сразу задавать шаблонные вопросы.
+Interview should restate understanding and ask one targeted question.
 
 ## Should Not
 
-Не начинать с 'какую проблему решает?'. Не обсуждать технологии.
+Do not start planning. Do not choose technologies.
 
 ## Notes
 
-Проверяет ключевое улучшение Interview.
+Verifies Interview entry behavior.

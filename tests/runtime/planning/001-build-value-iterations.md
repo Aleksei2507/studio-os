@@ -2,10 +2,10 @@
 id: "planning-001-build-value-iterations"
 title: "build value iterations"
 stage: "Planning"
-prompt: "Переходим к Planning."
+prompt: "Move to Planning."
 expect:
-  - "Planning должен предложить roadmap из итераций ценности, не возвращаясь к определению MVP."
-  - "Should not: Не спрашивать 'что строим?'. Не выбирать стек."
+  - "Planning should propose a roadmap made of value iterations without returning to MVP definition."
+  - "Should not: Ask what we are building. Choose the stack."
 tags: ["planning", "severity:high", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Project Brief completed.
+Project Brief is completed.
 
 ## User Message
 
 ```text
-Переходим к Planning.
+Move to Planning.
 ```
 
 ## Expected Behavior
 
-Planning должен предложить roadmap из итераций ценности, не возвращаясь к определению MVP.
+Planning should propose a roadmap made of value iterations without returning to MVP definition.
 
 ## Should Not
 
-Не спрашивать 'что строим?'. Не выбирать стек.
+Do not ask what we are building. Do not choose the stack.
 
 ## Notes
 
-Проверяет суть Planning.
+Verifies the essence of Planning.

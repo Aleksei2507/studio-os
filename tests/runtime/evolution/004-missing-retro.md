@@ -2,10 +2,10 @@
 id: "evolution-004-missing-retro"
 title: "missing retro"
 stage: "Evolution"
-prompt: "/studio:evolve with paths"
+prompt: "/studio:evolve\n\nUse:\n- ~/Projects/a/\n- ~/Projects/b/"
 expect:
-  - "Evolution должен пропустить/отметить проект без ретро и продолжить с доступными источниками."
-  - "Should not: Не падать. Не выдумывать ретро."
+  - "Evolution should skip/mark the project without a retrospective and continue with available sources."
+  - "Should not: Fail. Invent a retrospective."
 tags: ["evolution", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,30 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Один из переданных проектов не имеет .studio/runtime-retrospective.md.
+One of the provided projects has no .studio/runtime-retrospective.md.
 
 ## User Message
 
 ```text
-/studio:evolve with paths
+/studio:evolve
+
+Use:
+- ~/Projects/a/
+- ~/Projects/b/
 ```
 
 ## Expected Behavior
 
-Evolution должен пропустить/отметить проект без ретро и продолжить с доступными источниками.
+Evolution should skip/mark the project without a retrospective and continue with available sources.
 
 ## Should Not
 
-Не падать. Не выдумывать ретро.
+Do not fail. Do not invent a retrospective.
 
 ## Notes
 
-Проверяет устойчивость.
+Verifies resilience.

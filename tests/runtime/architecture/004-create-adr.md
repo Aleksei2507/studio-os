@@ -2,41 +2,41 @@
 id: "architecture-004-create-adr"
 title: "create adr"
 stage: "Architecture"
-prompt: "Да, фиксируй решение."
+prompt: "Yes, record the decision."
 expect:
-  - "Studio OS должна создать ADR в docs/adr/ и связать его с architecture.md."
-  - "Should not: Не оставлять важное решение только в чате."
+  - "Studio OS should create an ADR in docs/adr/ and link it to architecture.md."
+  - "Should not: Leave an important decision only in chat."
 tags: ["architecture", "severity:high", "risk:medium"]
 ---
 ## Metadata
 
 Category: architecture  
 Stage: Architecture  
-Severity: High  
+Severity: Medium  
 Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Принято важное архитектурное решение.
+An important architectural decision has been accepted.
 
 ## User Message
 
 ```text
-Да, фиксируй решение.
+Yes, record the decision.
 ```
 
 ## Expected Behavior
 
-Studio OS должна создать ADR в docs/adr/ и связать его с architecture.md.
+Studio OS should create an ADR in docs/adr/ and link it to architecture.md.
 
 ## Should Not
 
-Не оставлять важное решение только в чате.
+Do not leave an important decision only in chat.
 
 ## Notes
 
-Проверяет ADR discipline.
+Verifies ADR discipline.

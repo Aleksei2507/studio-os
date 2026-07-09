@@ -2,10 +2,10 @@
 id: "discovery-004-completion-confirmation"
 title: "completion confirmation"
 stage: "Discovery"
-prompt: "Подтверждаю."
+prompt: "Confirmed."
 expect:
-  - "Studio OS должна создать docs/discovery-summary.md, обновить .studio и предложить Briefing без автозапуска."
-  - "Should not: Не начинать Briefing автоматически."
+  - "Studio OS should create docs/discovery-summary.md, update .studio, and suggest Briefing without auto-starting it."
+  - "Should not: Start Briefing automatically."
 tags: ["discovery", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Discovery подготовил summary.
+Discovery prepared the summary.
 
 ## User Message
 
 ```text
-Подтверждаю.
+Confirmed.
 ```
 
 ## Expected Behavior
 
-Studio OS должна создать docs/discovery-summary.md, обновить .studio и предложить Briefing без автозапуска.
+Studio OS should create docs/discovery-summary.md, update .studio, and suggest Briefing without auto-starting it.
 
 ## Should Not
 
-Не начинать Briefing автоматически.
+Do not start Briefing automatically.
 
 ## Notes
 
-Проверяет завершение стадии.
+Verifies stage completion.

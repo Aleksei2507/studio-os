@@ -2,10 +2,10 @@
 id: "brownfield-001-create-project-memory"
 title: "create initial project memory"
 stage: "Brownfield Onboarding"
-prompt: "Проанализируй существующий проект через Studio OS."
+prompt: "Analyze the existing project through Studio OS."
 expect:
-  - "Brownfield Runtime должен создать .studio/project-state.md, .studio/active-context.md и docs/discovery-summary.md."
-  - "Should not: Не менять код, не писать roadmap, не писать architecture и не начинать Briefing автоматически."
+  - "Brownfield Runtime should create .studio/project-state.md, .studio/active-context.md, and docs/discovery-summary.md."
+  - "Should not: Change code, write roadmap, write architecture, or start Briefing automatically."
 tags: ["brownfield", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,30 +17,30 @@ Regression Risk: High
 
 ## Goal
 
-Проверить создание первоначальной Project Memory для существующего проекта.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-В проекте есть существующий код и документация, но нет `.studio/`.
+The project has existing code and documentation, but no .studio/ directory.
 
 ## User Message
 
 ```text
-Проанализируй существующий проект через Studio OS.
+Analyze the existing project through Studio OS.
 ```
 
 ## Expected Behavior
 
-Brownfield Runtime должен создать `.studio/project-state.md`, `.studio/active-context.md` и `docs/discovery-summary.md`.
+Brownfield Runtime should create `.studio/project-state.md`, `.studio/active-context.md`, and `docs/discovery-summary.md`.
 
-`project-state.md` должен содержать Mode: Brownfield, Previous Stage: Brownfield Onboarding, Current Stage: Briefing и Status: Waiting Confirmation.
+`project-state.md` should contain Mode: Brownfield, Previous Stage: Brownfield Onboarding, Current Stage: Briefing, and Status: Waiting Confirmation.
 
-`docs/discovery-summary.md` должен завершаться Recommended Next Step: Briefing.
+`docs/discovery-summary.md` should end with Recommended Next Step: Briefing.
 
 ## Should Not
 
-Не менять код. Не выполнять рефакторинг. Не писать roadmap. Не писать architecture. Не делать planning. Не начинать Briefing автоматически.
+Do not change code. Do not refactor. Do not write roadmap. Do not write architecture. Do not do planning. Do not start Briefing automatically.
 
 ## Notes
 
-Проверяет границы Brownfield Runtime.
+Verifies Brownfield Runtime boundaries.

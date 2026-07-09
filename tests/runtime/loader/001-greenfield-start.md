@@ -2,10 +2,10 @@
 id: "loader-001-greenfield-start"
 title: "greenfield start"
 stage: "Loader"
-prompt: "Используй Studio OS\\n\\nХочу сделать сервис для подбора фильтрации воды на даче."
+prompt: "Use Studio OS. I want to build a product for water filter selection."
 expect:
-  - "Loader должен определить Greenfield, зафиксировать язык проекта и сразу передать управление Interview."
-  - "Should not: Не спрашивать лишнее подтверждение 'начинать Interview?'. Не выбирать стек. Не писать код."
+  - "Loader should detect Greenfield mode and start Interview directly."
+  - "Should not: Ask whether to start Interview when the product idea is already provided."
 tags: ["loader", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-В папке нет .studio, docs и исходного кода.
+No .studio/ directory and no meaningful source code exist.
 
 ## User Message
 
 ```text
-Используй Studio OS\n\nХочу сделать сервис для подбора фильтрации воды на даче.
+Use Studio OS. I want to build a product for water filter selection.
 ```
 
 ## Expected Behavior
 
-Loader должен определить Greenfield, зафиксировать язык проекта и сразу передать управление Interview.
+Loader should detect Greenfield mode and start Interview directly.
 
 ## Should Not
 
-Не спрашивать лишнее подтверждение 'начинать Interview?'. Не выбирать стек. Не писать код.
+Do not ask whether to start Interview when the product idea is already provided.
 
 ## Notes
 
-Проверяет невидимый Loader.
+Verifies Greenfield startup.

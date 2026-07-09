@@ -2,10 +2,10 @@
 id: "conversation-router-006-pause-project"
 title: "pause project"
 stage: "Any"
-prompt: "Давай пока поставим проект на паузу."
+prompt: "Pause this project for now."
 expect:
-  - "Studio OS должна сохранить текущий state, отметить паузу и сказать, как продолжить позже."
-  - "Should not: Не удалять контекст. Не продолжать задавать вопросы стадии."
+  - "Studio OS should respect the pause request and update state only if the user explicitly wants project state changed."
+  - "Should not: Continue asking stage questions."
 tags: ["conversation-router", "severity:medium", "risk:medium"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: Medium
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-Проект находится в любой стадии.
+A stage Runtime is active.
 
 ## User Message
 
 ```text
-Давай пока поставим проект на паузу.
+Pause this project for now.
 ```
 
 ## Expected Behavior
 
-Studio OS должна сохранить текущий state, отметить паузу и сказать, как продолжить позже.
+Studio OS should respect the pause request and update state only if the user explicitly wants project state changed.
 
 ## Should Not
 
-Не удалять контекст. Не продолжать задавать вопросы стадии.
+Do not continue asking stage questions. Do not force progress.
 
 ## Notes
 
-Проверяет управление состоянием.
+Verifies pause handling.

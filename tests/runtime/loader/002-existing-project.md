@@ -2,10 +2,10 @@
 id: "loader-002-existing-project"
 title: "existing project"
 stage: "Loader"
-prompt: "Продолжим."
+prompt: "Use Studio OS in this repository."
 expect:
-  - "Loader должен прочитать Project State и передать управление текущему Runtime."
-  - "Should not: Не начинать новый проект. Не игнорировать .studio."
+  - "Loader should detect existing meaningful source code without .studio/ and start Brownfield Runtime."
+  - "Should not: Start Interview for an existing project."
 tags: ["loader", "severity:critical", "risk:high"]
 ---
 ## Metadata
@@ -17,26 +17,26 @@ Regression Risk: High
 
 ## Goal
 
-Проверить поведение Studio OS в этом сценарии.
+Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-В проекте есть .studio/project-state.md со стадией Briefing waiting confirmation.
+The repository has source code but no .studio/ directory.
 
 ## User Message
 
 ```text
-Продолжим.
+Use Studio OS in this repository.
 ```
 
 ## Expected Behavior
 
-Loader должен прочитать Project State и передать управление текущему Runtime.
+Loader should detect existing meaningful source code without .studio/ and start Brownfield Runtime.
 
 ## Should Not
 
-Не начинать новый проект. Не игнорировать .studio.
+Do not start Interview for an existing project.
 
 ## Notes
 
-Проверяет продолжение.
+Verifies Brownfield startup detection.
