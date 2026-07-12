@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "runtimeRoot": "skill/runtimes",
+  "runtimes": {
+    "interview": { "path": "skill/runtimes/interview/SKILL.md", "status": "active" },
+    "discovery": { "path": "skill/runtimes/discovery/SKILL.md", "status": "active" },
+    "briefing": { "path": "skill/runtimes/briefing/SKILL.md", "status": "active" },
+    "planning": { "path": "skill/runtimes/planning/SKILL.md", "status": "active" },
+    "brownfield": { "path": "skill/runtimes/brownfield/SKILL.md", "status": "active" },
+    "research": { "path": "skill/runtimes/research/SKILL.md", "status": "planned" },
+    "design-strategy": { "path": "skill/runtimes/design-strategy/SKILL.md", "status": "planned" },
+    "architecture": { "path": "skill/runtimes/architecture/SKILL.md", "status": "planned" },
+    "development": { "path": "skill/runtimes/development/SKILL.md", "status": "planned" },
+    "validation": { "path": "skill/runtimes/validation/SKILL.md", "status": "planned" },
+    "qa": { "path": "skill/runtimes/qa/SKILL.md", "status": "planned" },
+    "release": { "path": "skill/runtimes/release/SKILL.md", "status": "planned" },
+    "retrospective": { "path": "skill/runtimes/retrospective/SKILL.md", "status": "active" },
+    "evolution": { "path": "skill/runtimes/evolution/SKILL.md", "status": "active" },
+    "work-item": { "path": "skill/runtimes/work-item/SKILL.md", "status": "active" }
+  },
+  "workflows": [
+    {
+      "id": "greenfield",
+      "file": "skill/workflows/greenfield.md",
+      "entryRuntime": "interview",
+      "stages": [
+        { "runtime": "interview", "policy": "required" },
+        { "runtime": "discovery", "policy": "required" },
+        { "runtime": "research", "policy": "conditional" },
+        { "runtime": "briefing", "policy": "required" },
+        { "runtime": "design-strategy", "policy": "conditional" },
+        { "runtime": "planning", "policy": "required" },
+        { "runtime": "architecture", "policy": "required" },
+        { "runtime": "development", "policy": "required" },
+        { "runtime": "validation", "policy": "required" },
+        { "runtime": "qa", "policy": "required" },
+        { "runtime": "release", "policy": "required" },
+        { "runtime": "retrospective", "policy": "conditional" }
+      ]
+    },
+    {
+      "id": "brownfield",
+      "file": "skill/workflows/brownfield.md",
+      "entryRuntime": "brownfield",
+      "stages": [
+        { "runtime": "brownfield", "policy": "required" },
+        { "runtime": "briefing", "policy": "required" },
+        { "runtime": "research", "policy": "conditional" },
+        { "runtime": "planning", "policy": "required" },
+        { "runtime": "architecture", "policy": "required" },
+        { "runtime": "development", "policy": "required" },
+        { "runtime": "validation", "policy": "required" },
+        { "runtime": "qa", "policy": "required" },
+        { "runtime": "release", "policy": "required" },
+        { "runtime": "retrospective", "policy": "conditional" }
+      ]
+    },
+    {
+      "id": "work-item-feature",
+      "file": "skill/workflows/work-item-feature.md",
+      "entryRuntime": "work-item",
+      "stages": [
+        { "runtime": "work-item", "policy": "required" },
+        { "runtime": "briefing", "policy": "conditional" },
+        { "runtime": "planning", "policy": "conditional" },
+        { "runtime": "architecture", "policy": "conditional" },
+        { "runtime": "development", "policy": "required" },
+        { "runtime": "validation", "policy": "required" },
+        { "runtime": "qa", "policy": "required" },
+        { "runtime": "release", "policy": "required" }
+      ]
+    },
+    {
+      "id": "work-item-bugfix",
+      "file": "skill/workflows/work-item-bugfix.md",
+      "entryRuntime": "work-item",
+      "stages": [
+        { "runtime": "work-item", "policy": "required" },
+        { "runtime": "development", "policy": "required" },
+        { "runtime": "validation", "policy": "required" },
+        { "runtime": "qa", "policy": "required" },
+        { "runtime": "release", "policy": "conditional" }
+      ]
+    },
+    {
+      "id": "work-item-research",
+      "file": "skill/workflows/work-item-research.md",
+      "entryRuntime": "work-item",
+      "stages": [
+        { "runtime": "work-item", "policy": "required" },
+        { "runtime": "research", "policy": "required" }
+      ]
+    },
+    {
+      "id": "work-item-refactor",
+      "file": "skill/workflows/work-item-refactor.md",
+      "entryRuntime": "work-item",
+      "stages": [
+        { "runtime": "work-item", "policy": "required" },
+        { "runtime": "architecture", "policy": "conditional" },
+        { "runtime": "development", "policy": "required" },
+        { "runtime": "validation", "policy": "required" },
+        { "runtime": "qa", "policy": "conditional" },
+        { "runtime": "release", "policy": "conditional" }
+      ]
+    },
+    {
+      "id": "evolution",
+      "file": "skill/workflows/evolution.md",
+      "entryRuntime": "evolution",
+      "stages": [
+        { "runtime": "evolution", "policy": "required" }
+      ]
+    }
+  ]
+}

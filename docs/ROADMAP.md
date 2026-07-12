@@ -74,7 +74,7 @@ v0.4 — Product Evolution
 
 Основные задачи:
 
-* Work Item Mode
+* Work Item Workflows
 * Product Memory
 * Lessons Learned
 * RFC Generation

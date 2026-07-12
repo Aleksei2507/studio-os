@@ -1,7 +1,10 @@
-# Studio OS Skill
+---
+name: studio-os
+description: Run an adaptive, model-independent product studio workflow for new ideas, existing codebases, and bounded product changes. Use when the user asks to start, continue, research, plan, build, validate, release, or evolve a Studio OS project.
+---
 
-Main entry point:
+# Studio OS
 
-- skill/LOADER.md
+Read `skill/core/LOADER.md` and follow its progressive loading rules.
 
-Before doing any work, read `skill/LOADER.md` and follow it.
+Do not load all Studio OS files at startup.

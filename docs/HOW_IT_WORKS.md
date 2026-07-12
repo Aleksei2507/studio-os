@@ -77,10 +77,44 @@ User Message
 ↓
 Conversation Router
 ↓
-Loader / Current Runtime
+Project Mode + Work Type
+↓
+Selected Workflow
+↓
+Current Runtime
 ```
 
 This prevents accidental topic changes from corrupting the current stage.
+
+Studio OS loads only the selected workflow and active Runtime. Public documentation and unrelated Runtime files are not mandatory startup context.
+
+The workflow registry also records Runtime readiness. A `planned` Runtime blocks execution until its contract is implemented; Studio OS must not pretend that the stage completed.
+
+---
+
+# Workflow Model
+
+Studio OS separates:
+
+- Project Mode: how the project entered Studio OS;
+- Work Type: what outcome the current request needs;
+- Workflow: which Runtime sequence handles that work;
+- Interaction Strategy: how Studio OS collaborates with the user.
+
+Examples:
+
+```text
+Greenfield + New Product + Advisor
+→ Greenfield workflow
+
+Existing Studio OS project + Bugfix + Executor
+→ Bugfix Work Item workflow
+
+Brownfield-origin project + Feature + Collaborator
+→ Feature Work Item workflow
+```
+
+Interaction Strategy never selects or bypasses a workflow.
 
 ---
 
@@ -393,6 +427,21 @@ It creates input for optional Evolution.
 After Retrospective, the project lifecycle is complete.
 
 Future changes should be handled as Work Items.
+
+---
+
+# Work Item Workflows
+
+A Work Item is a bounded change to an existing Studio OS project.
+
+Available workflow types:
+
+- Feature;
+- Bugfix;
+- Research;
+- Refactor.
+
+Each workflow reuses only the Runtime stages it needs. A Bugfix does not restart Discovery. A Feature uses Briefing, Planning, or Architecture only when scope, sequencing, or technical impact requires them.
 
 ---
 

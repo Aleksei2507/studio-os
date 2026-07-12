@@ -79,7 +79,10 @@ Recommended format:
 ```md
 # Project State
 
-Mode: Greenfield | Brownfield | Work Item
+Mode: Greenfield | Brownfield
+Workflow: greenfield | brownfield | work-item-feature | work-item-bugfix | work-item-research | work-item-refactor
+Work Type: New Product | Feature | Bugfix | Research | Refactor | Not Selected
+Active Work Item: work-items/YYYY-MM-DD-short-name | None
 Project Language: ru-RU
 
 Previous Stage: Briefing
@@ -98,6 +101,16 @@ Latest Artifacts:
 
 Last Updated: YYYY-MM-DD
 ```
+
+`Mode`, `Workflow`, and `Work Type` are separate fields:
+
+- Mode records whether the project originated as Greenfield or Brownfield;
+- Workflow records the selected Runtime sequence;
+- Work Type records the requested outcome.
+
+Starting a Work Item must not replace the stored project Mode.
+
+Interaction Strategy is inferred from current behavior and must not become a permanent user classification in Project Memory.
 
 When a stage completes, prefer moving the current state to the next stage with `Waiting Confirmation` instead of leaving the completed stage as current.
 
@@ -138,6 +151,8 @@ work-items/
 ```
 
 After a Work Item is completed, update the main project artifacts and Project Memory.
+
+Work Item Intake writes `request.md` before routing to Feature, Bugfix, Research, or Refactor workflow.
 
 ---
 

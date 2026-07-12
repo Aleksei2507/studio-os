@@ -6,7 +6,8 @@
   "scripts": {
     "test:runtime": "tsx scripts/run-runtime-tests.ts",
     "test:runtime:dry": "tsx scripts/run-runtime-tests.ts --dry",
-    "test:runner": "node --import tsx --test tests/runner/*.test.ts"
+    "test:runner": "node --import tsx --test tests/runner/*.test.ts tests/structure/*.test.ts",
+    "test:structure": "node --import tsx --test tests/structure/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

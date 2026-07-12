@@ -14,7 +14,7 @@ Use Studio OS.
 I want to build...
 ```
 
-Studio OS detects the project mode and routes the conversation through the correct Runtime.
+Studio OS detects the project mode and work type, selects a workflow, and loads the active Runtime.
 
 ---
 
@@ -89,9 +89,41 @@ Studio OS automatically detects:
 - Greenfield projects
 - Project Language
 
+Project mode describes the project entry point. It does not describe every future task.
+
+For an existing Studio OS project, Studio OS also classifies the current Work Type:
+
+- Feature
+- Bugfix
+- Research
+- Refactor
+
+Each Work Type uses its own workflow without restarting the full product lifecycle.
+
 ---
 
-# Project Lifecycle
+# Workflow Composition
+
+```text
+Project Mode
++ Work Type
++ Interaction Strategy
+↓
+Selected Workflow
+↓
+Active Runtime
+```
+
+- Project Mode: Greenfield, Brownfield, or existing Studio OS project.
+- Work Type: New Product, Feature, Bugfix, Research, or Refactor.
+- Interaction Strategy: Advisor, Collaborator, or Executor.
+- Workflow: the Runtime sequence for the current work.
+
+These concerns are independent.
+
+---
+
+# Greenfield Lifecycle
 
 ```text
 Interview
@@ -122,19 +154,25 @@ Retrospective
 Runtime behavior lives in:
 
 ```text
-skill/
+skill/runtimes/<runtime-id>/SKILL.md
 ```
 
 Important files:
 
-- `LOADER.md`
-- `CONVERSATION_ROUTER.md`
-- `INTERVIEW.md`
-- `DISCOVERY.md`
-- `BRIEFING.md`
-- `PLANNING.md`
-- `RETROSPECTIVE.md`
-- `EVOLUTION.md`
+- `skill/SKILL.md`
+- `skill/core/LOADER.md`
+- `skill/core/INVARIANTS.md`
+- `skill/core/CONVERSATION_ROUTER.md`
+- `skill/core/INTERACTION.md`
+- `skill/workflows/registry.json`
+- `skill/workflows/*.md`
+- `skill/runtimes/*/SKILL.md`
+
+Legacy files under `skill/*.md` remain as compatibility pointers.
+
+Studio OS uses progressive loading. It reads core rules, Project Memory, the selected workflow, and the active Runtime instead of loading every Runtime at startup.
+
+`skill/workflows/registry.json` marks each Runtime as `active` or `planned`. Studio OS stops honestly when a workflow reaches a Runtime whose contract is not implemented yet.
 
 ---
 

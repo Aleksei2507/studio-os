@@ -33,6 +33,20 @@ The Markdown body must describe the conversation, fixture, or scenario.
 
 ## Commands
 
+Runner and Studio OS structure tests:
+
+```bash
+npm run test:runner
+```
+
+Structure tests validate workflow registry paths, Runtime metadata, compatibility entries, and progressive loading invariants.
+
+Run only structure tests with:
+
+```bash
+npm run test:structure
+```
+
 Dry mode validates test structure without calling an LLM API:
 
 ```bash

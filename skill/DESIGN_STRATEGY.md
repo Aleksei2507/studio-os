@@ -1,1 +1,3 @@
-# Work in progress
+# Compatibility Entry
+
+Canonical Design Strategy Runtime: `skill/runtimes/design-strategy/SKILL.md`.

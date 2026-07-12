@@ -41,6 +41,8 @@ If paths are missing, Studio OS must show the example and ask for project paths.
 Navigator answers:
 
 - What project mode is this?
+- What Work Type is the current request?
+- Which workflow should handle it?
 - What stage is current?
 - Which Runtime should handle the next message?
 - Which artifact is missing?
@@ -93,7 +95,14 @@ Examples:
 
 Studio OS should not restart the whole project.
 
-It should create or route to a Work Item lifecycle.
+Work Item Intake classifies the requested outcome and selects one workflow:
+
+- `work-item-feature`;
+- `work-item-bugfix`;
+- `work-item-research`;
+- `work-item-refactor`.
+
+Project Mode remains historical project context. Work Type controls the current change workflow.
 
 ---
 
@@ -119,6 +128,8 @@ Before handling a message, Studio OS should classify intent:
 - unrelated question;
 - pause/stop/resume;
 - Evolution request.
+
+For a bounded change, it should also classify Work Type from observable requested behavior, not fixed phrases.
 
 If unclear, ask one clarification question.
 

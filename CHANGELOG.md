@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0-alpha
+
+Progressive workflow composition release.
+
+- Added language-agnostic Interaction Layer strategies.
+- Split project mode, work type, workflow, and interaction strategy.
+- Added declarative Greenfield, Brownfield, Feature, Bugfix, Research, Refactor, and Evolution workflows.
+- Moved canonical Runtime contracts into isolated skill folders.
+- Added progressive Loader context selection and compatibility entries.
+- Added Work Item Intake Runtime and workflow routing scenarios.
+- Added deterministic structure tests for Runtime and workflow integrity.
+
 ## 0.3.1-alpha
 
 Localization consistency release.
