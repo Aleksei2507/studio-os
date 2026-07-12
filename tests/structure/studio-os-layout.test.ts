@@ -18,6 +18,7 @@ interface WorkflowDefinition {
 interface RuntimeDefinition {
   path: string;
   status: "active" | "planned";
+  capabilities: string[];
 }
 
 interface WorkflowRegistry {
@@ -27,12 +28,20 @@ interface WorkflowRegistry {
   workflows: WorkflowDefinition[];
 }
 
+interface CapabilityRegistry {
+  version: number;
+  capabilities: Record<string, { path: string }>;
+}
+
 const root = process.cwd();
 const read = (filePath: string): string =>
   readFileSync(path.join(root, filePath), "utf8");
 const registry = JSON.parse(
   read("skill/workflows/registry.json"),
 ) as WorkflowRegistry;
+const capabilityRegistry = JSON.parse(
+  read("skill/capabilities/registry.json"),
+) as CapabilityRegistry;
 
 describe("Studio OS progressive skill layout", () => {
   it("uses the canonical progressive Loader from the root skill", () => {
@@ -66,6 +75,10 @@ describe("Studio OS progressive skill layout", () => {
     for (const runtime of Object.values(registry.runtimes)) {
       assert.equal(existsSync(path.join(root, runtime.path)), true, runtime.path);
       assert.ok(["active", "planned"].includes(runtime.status), runtime.status);
+
+      for (const capabilityId of runtime.capabilities) {
+        assert.ok(capabilityId in capabilityRegistry.capabilities, capabilityId);
+      }
     }
 
     for (const workflow of registry.workflows) {
@@ -75,6 +88,25 @@ describe("Studio OS progressive skill layout", () => {
       for (const stage of workflow.stages) {
         assert.ok(stage.runtime in registry.runtimes, stage.runtime);
         assert.ok(["required", "conditional"].includes(stage.policy), stage.policy);
+      }
+    }
+  });
+
+  it("resolves capability contracts declared by active Runtimes", () => {
+    assert.equal(capabilityRegistry.version, 1);
+
+    for (const [capabilityId, capability] of Object.entries(
+      capabilityRegistry.capabilities,
+    )) {
+      assert.equal(existsSync(path.join(root, capability.path)), true, capability.path);
+
+      const consumers = Object.values(registry.runtimes).filter((runtime) =>
+        runtime.capabilities.includes(capabilityId),
+      );
+      assert.ok(consumers.length > 0, capabilityId);
+
+      for (const runtime of consumers) {
+        assert.ok(read(runtime.path).includes(`\`${capabilityId}\``), capabilityId);
       }
     }
   });
@@ -104,6 +136,17 @@ describe("Studio OS progressive skill layout", () => {
 
       for (const match of references) {
         assert.equal(existsSync(path.join(runtimeDir, match[1])), true, match[1]);
+      }
+    }
+  });
+
+  it("resolves output templates referenced by Runtime contracts", () => {
+    for (const runtime of Object.values(registry.runtimes)) {
+      const source = read(runtime.path);
+      const templates = source.matchAll(/`(templates\/[a-z0-9-]+\.md)`/g);
+
+      for (const match of templates) {
+        assert.equal(existsSync(path.join(root, match[1])), true, match[1]);
       }
     }
   });

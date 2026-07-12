@@ -73,6 +73,8 @@ Retrospective не создаёт proposals.
 - docs/qa-report.md
 - docs/release-notes.md
 
+Для Work Item также прочитай его активные Brief, Roadmap, Architecture, Development Report, Validation Report, QA Report, Release Notes и Summary при наличии.
+
 Если существуют telemetry-файлы, прочитай:
 
 - .studio/telemetry/runtime-events.md

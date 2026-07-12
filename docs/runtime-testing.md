@@ -41,6 +41,8 @@ npm run test:runner
 
 Structure tests validate workflow registry paths, Runtime metadata, compatibility entries, and progressive loading invariants.
 
+They also validate capability contracts and Runtime output template references.
+
 Run only structure tests with:
 
 ```bash
@@ -89,3 +91,5 @@ The runner already separates validation from judged execution:
 The next implementation step is replacing the current TODO judge with an LLM
 adapter that runs Studio OS against each prompt and compares the answer with
 `expect`.
+
+Manual end-to-end checks for existing and new projects are documented in `docs/MANUAL_TESTING.md`.

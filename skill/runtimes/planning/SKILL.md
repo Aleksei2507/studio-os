@@ -21,7 +21,8 @@ Requires Confirmation: Yes before moving to Architecture
 
 Creates:
 
-- `docs/roadmap.md`
+- `docs/roadmap.md` for Greenfield or Brownfield lifecycle;
+- `work-items/<id>/roadmap.md` for an active Work Item.
 
 Updates:
 
@@ -54,7 +55,7 @@ Planning answers:
 
 Read:
 
-- `docs/project-brief.md`
+- active Brief path from Project Memory
 - `docs/discovery-summary.md`
 - `.studio/project-state.md`
 - `.studio/active-context.md`
@@ -180,7 +181,7 @@ Planning should not ask:
 
 > What roadmap do you want?
 
-Planning should propose a roadmap based on the Project Brief.
+Planning should propose a roadmap based on the active Brief.
 
 If there are real trade-offs, show options and recommend one.
 
@@ -196,7 +197,7 @@ Use:
 
 If the user proposes a new feature after Planning started:
 
-1. Check whether it exists in Project Brief.
+1. Check whether it exists in the active Brief.
 2. If not, treat it as a scope change.
 3. Ask what problem it solves.
 4. Recommend one of:
@@ -213,7 +214,7 @@ Do not silently add scope to the roadmap.
 
 Before asking another question, ask internally:
 
-Will this answer change `docs/roadmap.md`?
+Will this answer change the active Roadmap artifact?
 
 If no, do not ask.
 
@@ -236,10 +237,12 @@ Planning must not:
 
 # Output
 
-Create:
+Create the path selected by Project Memory:
 
 ```text
 docs/roadmap.md
+or
+work-items/<id>/roadmap.md
 ```
 
 Document structure:
@@ -267,7 +270,7 @@ Each iteration should include:
 
 Update `.studio/active-context.md` with:
 
-- reference to `docs/roadmap.md`;
+- reference to the active Roadmap path;
 - iteration list;
 - key dependencies;
 - architecture inputs.
@@ -292,10 +295,11 @@ Completed Stages:
 - Planning
 
 Latest Artifacts:
-- docs/discovery-summary.md
-- docs/project-brief.md
-- docs/roadmap.md
+- <accepted product artifacts>
+- <active roadmap path>
 ```
+
+Do not overwrite the canonical Roadmap during an intermediate Work Item stage.
 
 ---
 
@@ -333,7 +337,7 @@ Before creating the artifact, show a short roadmap summary and ask:
 
 After confirmation:
 
-- create `docs/roadmap.md`;
+- create the active Roadmap path;
 - update Project Memory;
 - recommend Architecture;
 - do not start Architecture automatically.

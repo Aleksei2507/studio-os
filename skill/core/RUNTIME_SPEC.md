@@ -100,6 +100,8 @@ Workflow files decide:
 
 A Runtime may declare required capabilities such as external research, codebase analysis, implementation, or browser QA.
 
+Declare capability IDs in `skill/workflows/registry.json` and resolve them through `skill/capabilities/registry.json`.
+
 Describe the capability, not a vendor-specific tool. Adapters decide how Codex, Claude, or another environment supplies it.
 
 If a required capability is unavailable, stop and report the limitation instead of pretending the work was completed.
@@ -111,6 +113,8 @@ Use `Project Language` from `.studio/project-state.md`.
 If Project Memory does not exist, use the language of the initial project request. Ask one short question only when the language is unclear.
 
 Do not mix languages in `docs/` or `.studio/` unless the user explicitly changes Project Language.
+
+When using a template, preserve its semantic sections but translate headings and content to Project Language.
 
 ## Interaction Layer
 

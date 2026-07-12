@@ -10,10 +10,10 @@
 | Briefing | project-brief.md | Required when selected |
 | Design Strategy | design-strategy.md | Conditional |
 | Planning | roadmap.md | Required when selected |
-| Architecture | architecture.md | Required when selected |
+| Architecture | architecture.md, delivery-estimate.md, required ADRs | Required when selected |
 | Work Item Intake | work-items/*/request.md | Required for Work Items |
-| Development | Working Increment | Required when selected |
-| Validation | validation-report.md | Required after Development |
+| Development | Working Increment, development-report.md | Required when selected |
+| Validation | .studio/telemetry/validation-report.md | Required after Development |
 | QA | QA Report | Required when selected |
 | Release | Release Notes | Required when selected |
 | Retrospective | runtime-retrospective.md | Conditional |

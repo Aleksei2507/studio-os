@@ -22,11 +22,22 @@ Product artifacts normally live in:
 ```text
 docs/
   discovery-summary.md
+  research-summary.md
   project-brief.md
+  design-strategy.md
   roadmap.md
   architecture.md
+  delivery-estimate.md
   qa-report.md
   release-notes.md
+```
+
+Execution evidence normally lives in:
+
+```text
+.studio/telemetry/
+  development-report.md
+  validation-report.md
 ```
 
 ---
@@ -112,6 +123,8 @@ Starting a Work Item must not replace the stored project Mode.
 
 Interaction Strategy is inferred from current behavior and must not become a permanent user classification in Project Memory.
 
+For legacy Project State files without `Workflow`, `Work Type`, or `Active Work Item`, Loader preserves Mode, Project Language, current stage, completed stages, and artifacts. It proposes the missing fields and asks for confirmation before updating memory. It must not repeat Interview or Brownfield Onboarding.
+
 When a stage completes, prefer moving the current state to the next stage with `Waiting Confirmation` instead of leaving the completed stage as current.
 
 Example:
@@ -145,14 +158,21 @@ work-items/
     request.md
     brief.md
     roadmap.md
+    design-strategy.md
     architecture.md
+    delivery-estimate.md
+    development-report.md
+    validation-report.md
     qa-report.md
+    release-notes.md
     summary.md
 ```
 
 After a Work Item is completed, update the main project artifacts and Project Memory.
 
 Work Item Intake writes `request.md` before routing to Feature, Bugfix, Research, or Refactor workflow.
+
+Intermediate Work Item stages must not overwrite canonical `docs/` artifacts. Update the main product documents deliberately after an accepted release when product truth changed.
 
 ---
 

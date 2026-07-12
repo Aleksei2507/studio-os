@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "capabilities": {
+    "external-research": {
+      "path": "skill/capabilities/external-research.md"
+    },
+    "codebase-analysis": {
+      "path": "skill/capabilities/codebase-analysis.md"
+    },
+    "ux-analysis": {
+      "path": "skill/capabilities/ux-analysis.md"
+    },
+    "architecture-design": {
+      "path": "skill/capabilities/architecture-design.md"
+    },
+    "implementation": {
+      "path": "skill/capabilities/implementation.md"
+    },
+    "technical-validation": {
+      "path": "skill/capabilities/technical-validation.md"
+    },
+    "product-qa": {
+      "path": "skill/capabilities/product-qa.md"
+    },
+    "release-operations": {
+      "path": "skill/capabilities/release-operations.md"
+    }
+  }
+}

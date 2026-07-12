@@ -167,12 +167,16 @@ Important files:
 - `skill/workflows/registry.json`
 - `skill/workflows/*.md`
 - `skill/runtimes/*/SKILL.md`
+- `skill/capabilities/registry.json`
+- `skill/capabilities/*.md`
 
 Legacy files under `skill/*.md` remain as compatibility pointers.
 
 Studio OS uses progressive loading. It reads core rules, Project Memory, the selected workflow, and the active Runtime instead of loading every Runtime at startup.
 
 `skill/workflows/registry.json` marks each Runtime as `active` or `planned`. Studio OS stops honestly when a workflow reaches a Runtime whose contract is not implemented yet.
+
+Active Runtime entries declare environment-independent capabilities. The current AI adapter maps those capabilities to native tools, installed skills, MCP servers, CLI commands, or approved manual procedures.
 
 ---
 

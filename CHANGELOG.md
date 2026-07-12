@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+End-to-end studio workflow completion.
+
+- Added environment-independent capability contracts and registry.
+- Implemented evidence-based Research with source quality rules.
+- Added Studio Assessment outcomes to Briefing.
+- Implemented Design Strategy and Architecture with ADR and delivery estimation.
+- Implemented Development, Validation, QA, and Release Runtime contracts.
+- Added complete output templates for product and telemetry artifacts.
+- Added legacy Project Memory migration for existing Studio OS projects.
+- Expanded structural and runtime regression coverage.
+
 ## 0.4.0-alpha
 
 Progressive workflow composition release.

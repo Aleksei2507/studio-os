@@ -94,6 +94,8 @@ Create `request.md` with:
 
 For Bugfix include observed behavior, expected behavior, and available reproduction evidence.
 
+Use `templates/work-item-request.md` as the output structure.
+
 ## Project Memory Update
 
 Set:

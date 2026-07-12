@@ -35,7 +35,8 @@ Then read only what the current request requires:
 3. The selected workflow Markdown file.
 4. `skill/core/CONVERSATION_ROUTER.md` for a message inside an active project.
 5. The active Runtime `SKILL.md` from the registry.
-6. Optional Runtime references only when the Runtime says they are needed.
+6. `skill/capabilities/registry.json` and only capability contracts declared by the active Runtime.
+7. Optional Runtime references only when the Runtime says they are needed.
 
 Do not load README, user documentation, every workflow, or every Runtime at startup.
 
@@ -67,6 +68,8 @@ Brownfield Onboarding takes priority over a requested feature or bugfix when Pro
 
 Read stored workflow and stage from Project Memory.
 
+If Project Memory uses the legacy format, migrate it through the Legacy Project Memory rule before routing.
+
 If the user is continuing current work, resume them.
 
 If the user requests a bounded change, classify Work Type and select a Work Item workflow.
@@ -84,6 +87,21 @@ Classify requested outcome from observable intent, not fixed phrases:
 When uncertain whether a request changes product behavior, ask one focused clarification question.
 
 Do not infer Work Type from profession, language, or interaction strategy.
+
+## Legacy Project Memory
+
+When `.studio/project-state.md` has Mode and Current Stage but lacks new routing fields:
+
+1. Preserve `Mode` exactly as Greenfield or Brownfield.
+2. Infer `Workflow: greenfield` for Greenfield lifecycle state.
+3. Infer `Workflow: brownfield` for Brownfield lifecycle state.
+4. Use `Work Type: New Product` for Greenfield.
+5. Use `Work Type: Not Selected` for Brownfield unless the current request provides a bounded Work Type.
+6. Add `Active Work Item: None` unless an existing Work Item path is confirmed.
+7. Preserve completed stages, artifacts, Project Language, and current stage.
+8. Show the proposed migration and request confirmation before writing because Project Memory mutation is non-obvious.
+
+Do not restart Interview or Brownfield Onboarding merely because new routing fields are absent.
 
 ## Workflow Selection
 
@@ -131,6 +149,8 @@ Check its registry status before execution.
 - `planned`: report that the Runtime contract is not implemented, identify the blocked stage, and stop without claiming stage completion.
 
 For an active Runtime, load a reference only when its `SKILL.md` gives a condition that applies to the current situation.
+
+Resolve declared capability IDs through `skill/capabilities/registry.json`. Load only their contracts. If a required capability is unavailable, follow the capability and Runtime blocked behavior.
 
 Do not read other Runtime folders preemptively.
 

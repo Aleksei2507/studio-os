@@ -90,6 +90,8 @@ Studio OS loads only the selected workflow and active Runtime. Public documentat
 
 The workflow registry also records Runtime readiness. A `planned` Runtime blocks execution until its contract is implemented; Studio OS must not pretend that the stage completed.
 
+Active Runtime entries declare capabilities such as External Research, Codebase Analysis, Implementation, Technical Validation, Product QA, and Release Operations. Capability contracts define required evidence without tying Studio OS to one AI vendor.
+
 ---
 
 # Workflow Model
@@ -248,6 +250,8 @@ Turn Discovery into product decisions and MVP requirements.
 
 Briefing defines:
 
+- Studio Assessment: Go, Revise, More Research, or No-Go;
+- evidence and confidence;
 - MVP scope;
 - Non Goals;
 - User Scenarios;
@@ -332,6 +336,7 @@ Important decisions are recorded through ADRs.
 
 ```text
 docs/architecture.md
+docs/delivery-estimate.md
 docs/adr/
 ```
 
@@ -348,6 +353,12 @@ Development should not silently change product scope or architecture.
 ## Artifact
 
 Working product increment.
+
+Development also records:
+
+```text
+.studio/telemetry/development-report.md
+```
 
 ---
 

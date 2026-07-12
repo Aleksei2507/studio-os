@@ -64,6 +64,16 @@ Brownfield Runtime must not:
 
 ---
 
+# Required Capabilities
+
+- `codebase-analysis`
+
+Load `skill/capabilities/codebase-analysis.md` and use the repository's configured knowledge graph or code index before broad text search when available.
+
+If source access or structural analysis is unavailable, record the limitation and do not claim complete onboarding.
+
+---
+
 # Inputs
 
 Before starting, read available project materials.
