@@ -13,6 +13,7 @@ import {
   parseFrontmatter,
   runLlmJudgedTests,
   summarize,
+  validateRuntimeTest,
   writeResultArtifacts,
 } from "../../scripts/run-runtime-tests.ts";
 
@@ -58,6 +59,74 @@ User starts a project.
     assert.equal(results.length, 1);
     assert.equal(results[0].status, "PASS");
     assert.equal(summarize(results), "PASS");
+  });
+
+  it("loads fixture and workspace assertion contracts without exposing them as response expectations", () => {
+    const repositoryRoot = mkdtempSync(
+      path.join(tmpdir(), "studio-runtime-fixture-definition-"),
+    );
+    mkdirSync(path.join(repositoryRoot, "fixtures", "input"), {
+      recursive: true,
+    });
+    writeFileSync(
+      path.join(repositoryRoot, "fixtures", "input", "package.json"),
+      '{"name":"fixture"}\n',
+    );
+    writeFileSync(
+      path.join(repositoryRoot, "fixtures", "assertions.json"),
+      JSON.stringify({
+        version: 1,
+        created: [".studio/project-state.md"],
+        allowedChanges: [".studio/project-state.md"],
+      }),
+    );
+
+    const test = validateRuntimeTest(
+      path.join(repositoryRoot, "scenario.md"),
+      `---
+id: fixture-basic
+title: Fixture basic
+stage: Brownfield Onboarding
+prompt: Onboard this project
+expect:
+  - reports onboarding completion
+fixture: fixtures/input
+workspace_assertions: fixtures/assertions.json
+---
+The physical project fixture is authoritative.
+`,
+      repositoryRoot,
+    );
+
+    assert.equal(test.workspace?.assertions.version, 1);
+    assert.deepEqual(test.expect, ["reports onboarding completion"]);
+    assert.equal(
+      test.workspace?.assertions.created?.includes(
+        ".studio/project-state.md",
+      ),
+      true,
+    );
+  });
+
+  it("rejects an incomplete fixture declaration", () => {
+    assert.throws(
+      () =>
+        validateRuntimeTest(
+          "scenario.md",
+          `---
+id: fixture-invalid
+title: Fixture invalid
+stage: Brownfield Onboarding
+prompt: Onboard this project
+expect:
+  - reports onboarding completion
+fixture: fixtures/input
+---
+The physical project fixture is authoritative.
+`,
+        ),
+      /workspace_assertions/,
+    );
   });
 
   it("dry mode fails invalid runtime tests", () => {
@@ -275,12 +344,41 @@ Runtime scenario.
     ) as {
       run: {
         executesStudioOs: boolean;
+        fixtureBackedScenarios: number;
         usesLlmJudge: boolean;
+        validatesWorkspaceMutations: boolean;
       };
     };
 
     assert.equal(report.run.executesStudioOs, true);
     assert.equal(report.run.usesLlmJudge, true);
+    assert.equal(report.run.fixtureBackedScenarios, 0);
+    assert.equal(report.run.validatesWorkspaceMutations, false);
+  });
+
+  it("marks executed fixture scenarios as deterministic workspace checks", () => {
+    const report = buildResultsJson(
+      [
+        {
+          filePath: "tests/runtime/fixtures/001.md",
+          id: "fixture-001",
+          title: "Fixture",
+          stage: "Brownfield Onboarding",
+          status: "PASS",
+          details: ["Passed."],
+          fixtureBacked: true,
+        },
+      ],
+      "runtime-judge",
+    ) as {
+      run: {
+        fixtureBackedScenarios: number;
+        validatesWorkspaceMutations: boolean;
+      };
+    };
+
+    assert.equal(report.run.fixtureBackedScenarios, 1);
+    assert.equal(report.run.validatesWorkspaceMutations, true);
   });
 
   it("writes latest markdown summary and machine-readable JSON results", () => {

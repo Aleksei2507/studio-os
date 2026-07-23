@@ -15,10 +15,12 @@ import {
 } from "./runtime-testing/codex-cli.ts";
 import type {
   BehavioralStatus,
+  FixtureWorkspaceSpec,
   HarnessEvaluation,
   RuntimeScenario,
 } from "./runtime-testing/contracts.ts";
 import { RuntimeHarness } from "./runtime-testing/harness.ts";
+import { loadFixtureWorkspaceSpec } from "./runtime-testing/workspace-fixture.ts";
 
 type TestStatus = BehavioralStatus;
 type RuntimeTestMode = "scenario-structure" | "runtime-judge";
@@ -32,6 +34,7 @@ interface TestResult {
   stage: string;
   status: TestStatus;
   details: string[];
+  fixtureBacked?: boolean;
   evaluation?: HarnessEvaluation;
 }
 
@@ -72,7 +75,9 @@ interface RuntimeTestRun {
   label: string;
   assurance: string;
   executesStudioOs: boolean;
+  fixtureBackedScenarios?: number;
   usesLlmJudge: boolean;
+  validatesWorkspaceMutations?: boolean;
 }
 
 const REQUIRED_FIELDS = [
@@ -95,7 +100,7 @@ const RUN_MODES: Record<RuntimeTestMode, RuntimeTestRun> = {
     mode: "runtime-judge",
     label: "One-turn Runtime contract evaluation",
     assurance:
-      "Executes Universal Bootstrap against synthetic one-turn scenario context and uses an LLM judge; it does not validate file mutations or multi-turn state.",
+      "Executes Universal Bootstrap in one-turn scenarios and uses an LLM judge. Declared fixtures also receive deterministic workspace assertions; synthetic scenarios do not validate file mutations.",
     executesStudioOs: true,
     usesLlmJudge: true,
   },
@@ -350,7 +355,11 @@ function unquote(value: string): string {
   return value;
 }
 
-function validateRuntimeTest(filePath: string, source: string): RuntimeTest {
+function validateRuntimeTest(
+  filePath: string,
+  source: string,
+  repositoryRoot = process.cwd(),
+): RuntimeTest {
   const { frontmatter, body } = parseFrontmatter(source);
   const errors: string[] = [];
 
@@ -362,6 +371,11 @@ function validateRuntimeTest(filePath: string, source: string): RuntimeTest {
 
   const expect = normalizeStringList(frontmatter.expect);
   const tags = normalizeStringList(frontmatter.tags);
+  const fixture = optionalString(frontmatter.fixture);
+  const workspaceAssertions = optionalString(
+    frontmatter.workspace_assertions,
+  );
+  let workspace: FixtureWorkspaceSpec | undefined;
 
   if (typeof frontmatter.id !== "string" || !frontmatter.id.trim()) {
     errors.push("Field id must be a non-empty string");
@@ -387,6 +401,44 @@ function validateRuntimeTest(filePath: string, source: string): RuntimeTest {
     errors.push("Test body must describe the conversation or scenario");
   }
 
+  if (
+    "fixture" in frontmatter &&
+    (typeof frontmatter.fixture !== "string" ||
+      !frontmatter.fixture.trim())
+  ) {
+    errors.push("Field fixture must be a non-empty string");
+  }
+
+  if (
+    "workspace_assertions" in frontmatter &&
+    (typeof frontmatter.workspace_assertions !== "string" ||
+      !frontmatter.workspace_assertions.trim())
+  ) {
+    errors.push("Field workspace_assertions must be a non-empty string");
+  }
+
+  if (fixture && !workspaceAssertions) {
+    errors.push(
+      "Field workspace_assertions is required when fixture is declared",
+    );
+  }
+
+  if (!fixture && workspaceAssertions) {
+    errors.push("Field fixture is required when workspace_assertions is declared");
+  }
+
+  if (fixture && workspaceAssertions) {
+    try {
+      workspace = loadFixtureWorkspaceSpec(
+        repositoryRoot,
+        fixture,
+        workspaceAssertions,
+      );
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+
   if (errors.length > 0) {
     throw new Error(errors.join("; "));
   }
@@ -400,7 +452,14 @@ function validateRuntimeTest(filePath: string, source: string): RuntimeTest {
     expect,
     tags,
     body,
+    workspace,
   };
+}
+
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim()
+    ? value.trim()
+    : undefined;
 }
 
 function normalizeStringList(value: unknown): string[] {
@@ -443,7 +502,10 @@ function loadRuntimeTests(testsDir: string): TestResult[] {
         title: test.title,
         stage: test.stage,
         status: "PASS",
-        details: [`${test.expect.length} expectation(s), stage: ${test.stage}`],
+        fixtureBacked: Boolean(test.workspace),
+        details: [
+          `${test.expect.length} expectation(s), stage: ${test.stage}${test.workspace ? ", fixture-backed workspace" : ""}`,
+        ],
       };
     } catch (error) {
       return {
@@ -501,6 +563,7 @@ class HarnessRuntimeJudge implements RuntimeJudge {
       title: test.title,
       stage: test.stage,
       status: evaluation.status,
+      fixtureBacked: Boolean(test.workspace),
       details: [
         `${test.expect.length} expectation(s), stage: ${test.stage}`,
         ...evaluation.details,
@@ -587,10 +650,11 @@ function buildResultsJson(
   mode: RuntimeTestMode = "scenario-structure",
 ): object {
   const counts = countStatuses(results);
+  const run = buildRunMetadata(results, mode);
 
   return {
     generatedAt: new Date().toISOString(),
-    run: RUN_MODES[mode],
+    run,
     summary: {
       status: summarize(results),
       total: results.length,
@@ -604,6 +668,7 @@ function buildResultsJson(
       stage: result.stage,
       status: result.status,
       filePath: result.filePath,
+      fixtureBacked: Boolean(result.fixtureBacked),
       details: result.details,
       evaluation: result.evaluation,
     })),
@@ -615,12 +680,14 @@ function buildSummaryMarkdown(
   mode: RuntimeTestMode = "scenario-structure",
 ): string {
   const counts = countStatuses(results);
-  const run = RUN_MODES[mode];
+  const run = buildRunMetadata(results, mode);
   const lines = [
     `# Runtime Test Summary: ${run.label}`,
     "",
     `- Mode: ${run.label}`,
     `- Assurance: ${run.assurance}`,
+    `- Fixture-backed scenarios: ${run.fixtureBackedScenarios}`,
+    `- Workspace mutations evaluated: ${run.validatesWorkspaceMutations ? "Yes" : "No"}`,
     `- Total tests: ${results.length}`,
     `- Pass: ${counts.PASS}`,
     `- Fail: ${counts.FAIL}`,
@@ -636,6 +703,22 @@ function buildSummaryMarkdown(
   ];
 
   return lines.join("\n");
+}
+
+function buildRunMetadata(
+  results: TestResult[],
+  mode: RuntimeTestMode,
+): RuntimeTestRun {
+  const fixtureBackedScenarios = results.filter(
+    (result) => result.fixtureBacked,
+  ).length;
+
+  return {
+    ...RUN_MODES[mode],
+    fixtureBackedScenarios,
+    validatesWorkspaceMutations:
+      mode === "runtime-judge" && fixtureBackedScenarios > 0,
+  };
 }
 
 function escapeMarkdownTable(value: string): string {
@@ -688,10 +771,14 @@ function evaluationFileName(id: string): string {
 
 function printResults(results: TestResult[], mode: RuntimeTestMode): void {
   const summary = summarize(results);
-  const run = RUN_MODES[mode];
+  const run = buildRunMetadata(results, mode);
 
   console.log(`Mode: ${run.label}`);
   console.log(`Assurance: ${run.assurance}`);
+  console.log(`Fixture-backed scenarios: ${run.fixtureBackedScenarios}`);
+  console.log(
+    `Workspace mutations evaluated: ${run.validatesWorkspaceMutations ? "Yes" : "No"}`,
+  );
   console.log("");
 
   for (const result of results) {

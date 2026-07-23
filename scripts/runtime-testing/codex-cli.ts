@@ -5,6 +5,7 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -17,11 +18,16 @@ import type {
   RuntimeExecutor,
   RuntimeScenario,
 } from "./contracts.ts";
+import { runFixtureWorkspace } from "./workspace-fixture.ts";
+
+export type CodexSandbox = "read-only" | "workspace-write";
 
 export interface CodexPromptRequest {
   prompt: string;
   model?: string;
   outputSchema?: object;
+  sandbox?: CodexSandbox;
+  workingDirectory?: string;
 }
 
 export interface CodexPromptResult {
@@ -54,13 +60,32 @@ export class CodexCliPromptRunner implements CodexPromptRunner {
 
   async run(request: CodexPromptRequest): Promise<CodexPromptResult> {
     const sessionRoot = mkdtempSync(path.join(tmpdir(), "studio-os-runtime-"));
-    const workspace = path.join(sessionRoot, "workspace");
+    const workspace = request.workingDirectory
+      ? path.resolve(request.workingDirectory)
+      : path.join(sessionRoot, "workspace");
     const outputPath = path.join(sessionRoot, "response.txt");
     const schemaPath = path.join(sessionRoot, "output-schema.json");
-    mkdirSync(workspace);
 
-    if (request.outputSchema) {
-      writeFileSync(schemaPath, `${JSON.stringify(request.outputSchema, null, 2)}\n`);
+    try {
+      if (request.workingDirectory) {
+        if (!existsSync(workspace) || !statSync(workspace).isDirectory()) {
+          throw new Error(
+            `Codex working directory is unavailable: ${request.workingDirectory}`,
+          );
+        }
+      } else {
+        mkdirSync(workspace);
+      }
+
+      if (request.outputSchema) {
+        writeFileSync(
+          schemaPath,
+          `${JSON.stringify(request.outputSchema, null, 2)}\n`,
+        );
+      }
+    } catch (error) {
+      rmSync(sessionRoot, { recursive: true, force: true });
+      throw error;
     }
 
     const args = [
@@ -69,7 +94,7 @@ export class CodexCliPromptRunner implements CodexPromptRunner {
       "--ignore-rules",
       "--ephemeral",
       "--sandbox",
-      "read-only",
+      request.sandbox ?? "read-only",
       "--skip-git-repo-check",
       "--color",
       "never",
@@ -146,6 +171,26 @@ export class CodexCliRuntimeExecutor implements RuntimeExecutor {
       throw new Error(`Universal Bootstrap not found at ${this.bootstrapPath}`);
     }
 
+    if (scenario.workspace) {
+      const fixtureRun = await runFixtureWorkspace(
+        scenario.workspace,
+        async (workspace) =>
+          this.runner.run({
+            prompt: buildRuntimePrompt(scenario, this.bootstrapPath),
+            model: this.model,
+            sandbox: "workspace-write",
+            workingDirectory: workspace,
+          }),
+      );
+
+      return {
+        adapter: this.name,
+        response: fixtureRun.value.response,
+        durationMs: fixtureRun.value.durationMs,
+        workspace: fixtureRun.evaluation,
+      };
+    }
+
     const result = await this.runner.run({
       prompt: buildRuntimePrompt(scenario, this.bootstrapPath),
       model: this.model,
@@ -197,13 +242,24 @@ export function buildRuntimePrompt(
   scenario: RuntimeScenario,
   bootstrapPath: string,
 ): string {
+  const workspaceInstructions = scenario.workspace
+    ? [
+        "The current working directory is a disposable copy of a real Target Workspace fixture.",
+        "Inspect the physical project files and use them as authoritative project evidence.",
+        "Apply the selected Runtime's normal mutation boundaries. Create or modify project files only when that Runtime permits it.",
+        "The fixture workspace will be deleted after this turn. In the final response, name created artifacts with project-relative inline-code paths; do not emit absolute or temporary local file links.",
+      ]
+    : [
+        "The physical workspace is only a disposable read-only harness shell and may not contain fixture files.",
+        "Use the Scenario Context below as authoritative synthetic project state instead of inferring state from the physical directory.",
+        "Do not create or modify files. Produce only the user-facing response Studio OS should send now.",
+      ];
+
   return [
     "Execute one Studio OS runtime contract scenario.",
     "",
     `Read and follow ${bootstrapPath}.`,
-    "The physical workspace is only a disposable read-only harness shell and may not contain fixture files.",
-    "Use the Scenario Context below as authoritative synthetic project state instead of inferring state from the physical directory.",
-    "Do not create or modify files. Produce only the user-facing response Studio OS should send now.",
+    ...workspaceInstructions,
     "Do not evaluate your own response. Do not expose hidden chain-of-thought.",
     `Runtime area under test: ${scenario.stage}`,
     "",

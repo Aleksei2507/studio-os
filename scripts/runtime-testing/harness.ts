@@ -28,7 +28,10 @@ export class RuntimeHarness {
     if (!execution.response.trim()) {
       return {
         status: "FAIL",
-        details: [`Runtime executor ${this.executor.name} returned an empty response.`],
+        details: [
+          `Runtime executor ${this.executor.name} returned an empty response.`,
+          ...workspaceDetails(execution),
+        ],
         execution,
       };
     }
@@ -42,6 +45,7 @@ export class RuntimeHarness {
         status: "FAIL",
         details: [
           `Response judge ${this.judge.name} failed: ${errorMessage(error)}`,
+          ...workspaceDetails(execution),
         ],
         execution,
       };
@@ -49,8 +53,9 @@ export class RuntimeHarness {
 
     if (verdict.expectations.length !== scenario.expect.length) {
       return {
-        status: "PARTIAL",
+        status: execution.workspace?.status === "FAIL" ? "FAIL" : "PARTIAL",
         details: [
+          ...workspaceDetails(execution),
           verdict.summary,
           `Judge assessment count ${verdict.expectations.length} does not match ${scenario.expect.length} expectation(s).`,
         ],
@@ -60,12 +65,22 @@ export class RuntimeHarness {
     }
 
     const details = [
+      ...workspaceDetails(execution),
       verdict.summary,
       ...verdict.expectations.map(
         (assessment) =>
           `${assessment.met ? "MET" : "NOT MET"}: ${assessment.expectation} - ${assessment.evidence}`,
       ),
     ];
+
+    if (execution.workspace?.status === "FAIL") {
+      return {
+        status: "FAIL",
+        details,
+        execution,
+        verdict,
+      };
+    }
 
     if (verdict.status === "PARTIAL") {
       return {
@@ -105,4 +120,23 @@ export class RuntimeHarness {
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+function workspaceDetails(
+  execution: Awaited<ReturnType<RuntimeExecutor["execute"]>>,
+): string[] {
+  if (!execution.workspace) {
+    return [];
+  }
+
+  const { diff, assertions } = execution.workspace;
+  const failed = assertions.filter((assessment) => !assessment.met);
+  return [
+    `Workspace diff: ${diff.created.length} created, ${diff.modified.length} modified, ${diff.deleted.length} deleted.`,
+    `Workspace assertions: ${assertions.length - failed.length}/${assertions.length} met.`,
+    ...failed.map(
+      (assessment) =>
+        `WORKSPACE NOT MET: ${assessment.assertion} - ${assessment.evidence}`,
+    ),
+  ];
 }

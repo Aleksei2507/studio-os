@@ -31,6 +31,54 @@ The runtime should enter the right stage and ask the next useful question.
 
 The Markdown body must describe the conversation, fixture, or scenario.
 
+## Fixture-Backed Scenarios
+
+A scenario may declare a real disposable Target Workspace:
+
+```yaml
+fixture: tests/fixtures/runtime/brownfield-web/input
+workspace_assertions: tests/fixtures/runtime/brownfield-web/assertions.json
+```
+
+Both paths are required together and resolve from the Studio OS repository
+root. They must remain inside the repository. Fixture trees cannot contain
+symlinks.
+
+The assertion manifest is stored outside the fixture input so the Runtime
+executor cannot read expected mutations:
+
+```json
+{
+  "version": 1,
+  "created": [".studio/project-state.md"],
+  "unchanged": ["package.json", "src/App.tsx"],
+  "absent": ["docs/roadmap.md"],
+  "allowedChanges": [".studio/project-state.md"],
+  "contains": {
+    ".studio/project-state.md": [
+      "Mode: Brownfield",
+      "Current Stage: Briefing"
+    ]
+  },
+  "notContains": {
+    ".studio/project-state.md": ["/Users/", "file://"]
+  }
+}
+```
+
+Supported assertions:
+
+- `created`, `modified`, and `deleted`: exact file changes required by the scenario;
+- `unchanged`: fixture files that must retain the same content hash;
+- `absent`: files or directories that must not exist after execution;
+- `allowedChanges`: an exact allowlist for all created, modified, or deleted files;
+- `contains` and `notContains`: literal content checks for generated text artifacts.
+
+The harness copies fixture input to a temporary workspace, snapshots it before
+and after execution, evaluates assertions, and deletes the copy. It never runs
+the model against the source fixture. A deterministic workspace failure makes
+the scenario fail even when the response judge accepts the user-facing text.
+
 ## Commands
 
 Runner and Studio OS structure tests:
@@ -86,7 +134,7 @@ npm run test:runtime -- \
   --tag severity:critical \
   --max-tests 10
 
-# A full 148-scenario run requires a second explicit signal.
+# A full 149-scenario run requires a second explicit signal.
 npm run test:runtime -- \
   --confirm-llm-cost \
   --all
@@ -107,6 +155,19 @@ npm run test:runtime -- \
 
 Use `--codex-command <path>` or `STUDIO_OS_CODEX_COMMAND` when `codex` is not on `PATH`.
 
+Run the first fixture-backed Brownfield contract with:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-001-brownfield-project-memory \
+  --timeout-ms 300000
+```
+
+Synthetic scenarios run in an empty read-only workspace. Fixture-backed
+scenarios run in a disposable `workspace-write` copy and still use exactly two
+model calls: one Runtime executor and one response judge.
+
 Commands print per-test status and a final summary:
 
 - `PASS`: every test passed structural validation or judge evaluation.
@@ -119,7 +180,7 @@ Generated artifacts under `test-results/latest/` include:
 
 - `summary.md`: compact result table and assurance label;
 - `results.json`: machine-readable aggregate including executor and judge metadata;
-- `evaluations/<scenario-id>.json`: the final Runtime response, per-expectation evidence, adapter names, and durations.
+- `evaluations/<scenario-id>.json`: the final Runtime response, per-expectation evidence, adapter names, durations, and fixture diff/assertion evidence when applicable.
 
 These artifacts contain final responses and concise observable evidence only. They do not request or store hidden chain-of-thought.
 
@@ -127,15 +188,19 @@ These artifacts contain final responses and concise observable evidence only. Th
 
 1. `npm run test:runner` deterministically tests the TypeScript runner and repository structure.
 2. `npm run test:runtime:dry` deterministically validates Markdown scenario definitions only.
-3. `npm run test:runtime -- --confirm-llm-cost ...` executes Universal Bootstrap against synthetic one-turn scenario context and uses an LLM judge.
-4. `docs/MANUAL_TESTING.md` defines end-to-end multi-turn checks, file mutations, and installed Codex, Claude Code, and filesystem adapter behavior.
+3. `npm run test:runtime -- --confirm-llm-cost ...` executes Universal Bootstrap and uses an LLM judge. Synthetic scenarios evaluate one response; declared fixtures additionally evaluate deterministic file mutations in a real disposable workspace.
+4. `docs/MANUAL_TESTING.md` defines end-to-end multi-turn checks and installed Codex, Claude Code, and filesystem adapter behavior.
 
 Level 3 is nondeterministic and model-dependent. It does not prove:
 
-- that expected files were created or changed;
 - that state persists correctly across multiple turns;
 - that installed host adapters activate correctly;
-- that a real Brownfield fixture matches the synthetic scenario context.
+- that undeclared product behavior is correct;
+- that synthetic scenarios performed any file mutation;
+- that one fixture represents every Greenfield or Brownfield project shape.
+
+A passing fixture scenario proves only that its user-facing expectations and
+declared deterministic workspace assertions passed in that run.
 
 Use a different `--judge-model` when independent model judgment matters. Without it, executor and judge are separate sessions but may use the same default model.
 
@@ -158,6 +223,11 @@ The harness keeps four responsibilities separate:
 3. Response judge receives the response and evaluates every observable expectation in a separate session.
 4. Harness derives the final status, rejects malformed or incomplete verdicts, and writes diagnostic artifacts.
 
-The physical workspace is empty and read-only. The Markdown body is supplied as authoritative synthetic state for the turn. This makes contract checks practical without pretending they are full fixture or lifecycle tests.
+For a synthetic scenario, the physical workspace is empty and read-only and
+the Markdown body is authoritative state for the turn. For a fixture-backed
+scenario, the copied physical workspace is authoritative and the body supplies
+only test context. Workspace assertions remain outside the executor prompt.
+
+Neither mode is a multi-turn lifecycle or installed-adapter test.
 
 Manual end-to-end checks for existing and new projects are documented in `docs/MANUAL_TESTING.md`.

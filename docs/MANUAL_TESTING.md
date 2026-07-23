@@ -26,7 +26,28 @@ npm run test:runtime -- \
   --id bootstrap-001-explicit-greenfield-activation
 ```
 
-This executes Universal Bootstrap against synthetic scenario context and judges the final response in a separate model session. It does not verify file mutations, multi-turn state, or installed host-adapter activation, so it supplements rather than replaces the manual scenarios below.
+This executes Universal Bootstrap against synthetic scenario context and judges
+the final response in a separate model session. The synthetic scenario does not
+verify file mutations.
+
+For a bounded real-workspace check, run:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-001-brownfield-project-memory \
+  --timeout-ms 300000
+```
+
+The runner copies a small existing web project to a disposable writable
+workspace. Brownfield Onboarding must create the five initial Project Memory
+artifacts, leave source files unchanged, avoid roadmap and architecture output,
+and keep machine-specific paths out of generated artifacts. A separate model
+session still judges the user-facing completion response.
+
+Neither automated behavioral mode verifies multi-turn state or installed
+host-adapter activation, so both supplement rather than replace the manual
+scenarios below.
 
 ## Distribution Baseline
 

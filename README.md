@@ -74,6 +74,8 @@ The release archive contains the same runtime core and Universal Bootstrap as th
 The versioned release ZIP is a runtime distribution, not a development checkout. It includes hidden runtime entry points such as `.codex-plugin/`, `.claude-plugin/`, and `.agents/`, but intentionally omits `.github/`, `.gitattributes`, Node package files, release scripts, tests, and generated test results. Clone the Git repository when you need to develop Studio OS or run its test suites.
 
 Maintainer release steps and publication gates are documented in [`docs/RELEASING.md`](docs/RELEASING.md).
+Runtime regression levels, model-cost gates, and fixture-backed workspace checks
+are documented in [`docs/runtime-testing.md`](docs/runtime-testing.md).
 
 ---
 

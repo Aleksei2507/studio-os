@@ -1,0 +1,16 @@
+:root {
+  --color-surface: #ffffff;
+  --color-text: #1d252c;
+  --color-action: #0b6e4f;
+  --color-on-action: #ffffff;
+  --color-focus: #f0a202;
+  --space-4: 1rem;
+  --radius-control: 4px;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-surface);
+  font-family: Inter, system-ui, sans-serif;
+}

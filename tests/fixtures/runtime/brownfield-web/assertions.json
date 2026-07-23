@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "created": [
+    ".studio/active-context.md",
+    ".studio/design-system-profile.md",
+    ".studio/project-state.md",
+    ".studio/standards-profile.md",
+    "docs/discovery-summary.md"
+  ],
+  "unchanged": [
+    "README.md",
+    "package.json",
+    "src/App.tsx",
+    "src/styles/tokens.css",
+    "src/ui/Button.module.css",
+    "src/ui/Button.tsx"
+  ],
+  "absent": [
+    "docs/architecture.md",
+    "docs/roadmap.md"
+  ],
+  "allowedChanges": [
+    ".studio/active-context.md",
+    ".studio/design-system-profile.md",
+    ".studio/project-state.md",
+    ".studio/standards-profile.md",
+    "docs/discovery-summary.md"
+  ],
+  "contains": {
+    ".studio/active-context.md": [
+      "## Current Focus",
+      "## Confirmed Facts",
+      "## Current Decisions",
+      "## Unknowns",
+      "## References"
+    ],
+    ".studio/design-system-profile.md": [
+      "Status: Observed",
+      "Applicability: Active",
+      "Preservation Policy: Preserve And Extend",
+      "src/styles/tokens.css",
+      "src/ui/Button.tsx"
+    ],
+    ".studio/project-state.md": [
+      "Mode: Brownfield",
+      "Workflow: brownfield",
+      "Target Milestone: Not Selected",
+      "Product Readiness: Not Ready",
+      "Previous Stage: Brownfield Onboarding",
+      "Current Stage: Briefing",
+      "Status: Waiting Confirmation"
+    ],
+    ".studio/standards-profile.md": [
+      "Status: Observed",
+      "npm test"
+    ],
+    "docs/discovery-summary.md": [
+      "## Recommended Next Step",
+      "Briefing"
+    ]
+  },
+  "notContains": {
+    ".studio/active-context.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ],
+    ".studio/design-system-profile.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://",
+      "Status: Observed |",
+      "Applicability: Active |",
+      "Preservation Policy: Preserve And Extend |"
+    ],
+    ".studio/project-state.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ],
+    ".studio/standards-profile.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://",
+      "Status: Observed |"
+    ],
+    "docs/discovery-summary.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ]
+  }
+}

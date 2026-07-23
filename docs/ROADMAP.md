@@ -33,13 +33,16 @@ Delivered:
 - Project-Local Reference Contract;
 - Project Standards and Design System Profiles;
 - scoped Product Outcome and release-readiness gates;
-- deterministic structure tests and 148 Runtime scenario definitions;
-- cost-gated one-turn Runtime execution and LLM judgment.
+- deterministic structure tests and 149 Runtime scenario definitions;
+- cost-gated one-turn Runtime execution and LLM judgment;
+- a fixture-backed Brownfield workspace with deterministic Project Memory,
+  source-integrity, artifact-boundary, and portability assertions.
 
 Remaining before this milestone is considered stable:
 
 - dogfood the highest-risk scenarios across installed Codex, Claude Code, and Universal adapters;
-- add fixture-backed checks for file mutations and Project Memory transitions;
+- extend fixture-backed checks to Greenfield and existing Project Memory
+  transitions;
 - define a flake, retry, model-version, and evaluation-budget policy;
 - close or rewrite stale GitHub issues against the current architecture.
 
@@ -49,7 +52,7 @@ Remaining before this milestone is considered stable:
 
 Goal: verify observable Studio OS behavior beyond prompt contracts.
 
-- Fixture-backed Greenfield and Brownfield workspaces.
+- Additional fixture-backed Greenfield and Brownfield workspaces.
 - Multi-turn conversation replay.
 - File mutation and artifact-diff assertions.
 - Adapter activation matrix for Codex, Claude Code, and Universal Bootstrap.

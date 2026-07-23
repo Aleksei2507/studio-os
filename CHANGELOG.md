@@ -3,6 +3,9 @@
 ## Unreleased
 
 - Added a cost-gated one-turn Runtime Harness with isolated Codex CLI execution, separate structured response judgment, scenario filters, sequential runs, and per-scenario diagnostic artifacts.
+- Added fixture-backed Runtime execution with disposable writable workspaces,
+  before/after file snapshots, exact mutation allowlists, content assertions,
+  and a real Brownfield Project Memory regression scenario.
 
 ## 0.5.0-alpha.3
 

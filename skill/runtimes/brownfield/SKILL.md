@@ -420,5 +420,10 @@ After creating the five files:
 
 - do not start Briefing automatically;
 - say that Brownfield Onboarding is complete;
+- give a short evidence-based summary of the product purpose, current delivery
+  surface and stack, observed design system or uncertainty, and the most
+  important risk or unknown;
+- reference created artifacts with project-relative paths and do not expose
+  machine-specific or temporary paths in the completion response;
 - offer to proceed to Briefing;
 - wait for user confirmation.

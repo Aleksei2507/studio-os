@@ -1,0 +1,15 @@
+.button {
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  color: var(--color-on-action);
+  background: var(--color-action);
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-weight: 600;
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
