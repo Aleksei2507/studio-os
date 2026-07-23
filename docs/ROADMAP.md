@@ -1,117 +1,87 @@
-Studio OS Roadmap
+# Studio OS Roadmap
 
-Roadmap описывает развитие самой Studio OS как продукта.
+This roadmap describes the development of Studio OS itself.
 
-⸻
+## Delivered Foundation
 
-v0.1 — Foundation ✅
+### v0.1 - Product Foundation
 
-Цель:
+- Vision, principles, workflow model, stage boundaries, quality gates, and Project Memory.
 
-Создать фундамент Studio OS.
+### v0.2 - End-To-End Greenfield Workflow
 
-Сделано:
+- Interview, Discovery, Research, Briefing, Design Strategy, Planning, Architecture, Interface Design, Development, Validation, QA, Product Outcome, Release, and Retrospective.
 
-* Repository
-* Vision
-* Principles
-* How It Works
-* Navigator
-* Stage Boundaries
-* Quality Gates
-* Project Memory
+### v0.3 - Existing Projects
 
-⸻
+- Brownfield Onboarding, existing-project recovery, Project Memory migration, and design-system detection.
 
-v0.2 — Core Workflow
+### v0.4 - Composable Workflows
 
-Цель:
+- Work Item workflows, Interaction Layer, progressive Runtime loading, standards and capability registries, and Evolution input contracts.
 
-Научить Studio OS проводить новый проект от идеи до рабочего MVP.
+## Current Alpha Milestone
 
-Основные задачи:
+### v0.5 - Distribution And Delivery Assurance
 
-* Discovery
-* Research
-* Briefing
-* Design Strategy
-* Interface Design
-* Planning
-* Architecture
-* Development
-* Validation
-* QA
-* Product Outcome
-* Release
+Delivered:
 
-Результат:
+- Codex and Claude Code marketplace adapters;
+- Universal Bootstrap for filesystem-capable agents;
+- versioned GitHub Releases with checksummed runtime archives;
+- public website and GitHub Pages deployment;
+- Project-Local Reference Contract;
+- Project Standards and Design System Profiles;
+- scoped Product Outcome and release-readiness gates;
+- deterministic structure tests and 148 Runtime scenario definitions;
+- cost-gated one-turn Runtime execution and LLM judgment.
 
-Studio OS способна провести новый проект через полный жизненный цикл.
+Remaining before this milestone is considered stable:
 
-⸻
+- dogfood the highest-risk scenarios across installed Codex, Claude Code, and Universal adapters;
+- add fixture-backed checks for file mutations and Project Memory transitions;
+- define a flake, retry, model-version, and evaluation-budget policy;
+- close or rewrite stale GitHub issues against the current architecture.
 
-v0.3 — Existing Projects
+## Next Milestones
 
-Цель:
+### v0.6 - Behavioral Assurance
 
-Научить Studio OS работать с уже существующими проектами.
+Goal: verify observable Studio OS behavior beyond prompt contracts.
 
-Основные задачи:
+- Fixture-backed Greenfield and Brownfield workspaces.
+- Multi-turn conversation replay.
+- File mutation and artifact-diff assertions.
+- Adapter activation matrix for Codex, Claude Code, and Universal Bootstrap.
+- Critical-suite baselines, retry policy, and regression triage.
 
-* Brownfield Mode
-* Project Analysis
-* Existing Project Memory
-* Automatic Context Recovery
+### v0.7 - Dogfooding And Workflow UX
 
-Результат:
+Goal: reduce friction discovered in real project runs.
 
-Studio OS способна подключиться к существующему проекту и продолжить его развитие.
+- Discovery confidence and explicit completion evidence.
+- Compact Active Context consistency.
+- Clearer waiting, blocked, and readiness language.
+- Maintainer issue cleanup and acceptance criteria based on observed runs.
 
-⸻
+### v0.8 - Evolution And Feedback Intake
 
-v0.4 — Product Evolution
+Goal: turn project retrospectives into controlled Studio OS improvements.
 
-Цель:
+- Local feedback inbox with provenance and consent.
+- Deduplication and classification of recurring lessons.
+- Opt-in GitHub issue export without machine-specific paths or private project data.
+- Human-reviewed promotion from project feedback to Studio OS changes.
+- Traceability from accepted feedback to tests and release notes.
 
-Научить Studio OS сопровождать продукты после релиза.
+## Future Directions
 
-Основные задачи:
+- Provider-neutral executor and judge adapters.
+- Team and organization policy packs.
+- IDE integration.
+- Context synchronization across approved environments.
+- Multi-agent orchestration where evidence shows a clear benefit.
 
-* Work Item Workflows
-* Product Memory
-* Lessons Learned
-* RFC Generation
-* Evolution
+## North Star
 
-Результат:
-
-Studio OS умеет сохранять историю развития продукта и улучшать собственную методологию.
-
-⸻
-
-Future
-
-Возможные направления развития:
-
-* Multi-Agent Orchestration
-* Automatic Research
-* IDE Integration
-* GitHub Integration
-* Context Synchronization
-* Plugin System
-* Multi-language Support
-* Team Collaboration
-
-⸻
-
-North Star
-
-Studio OS считается успешной, если разработчик может пройти путь:
-
-Idea
-
-↓
-
-Working Product
-
-независимо от используемого AI-инструмента.
+Studio OS is successful when a person can bring an idea or an existing product to a filesystem-capable AI agent and move from product intent to a validated, supportable release without depending on one AI vendor.

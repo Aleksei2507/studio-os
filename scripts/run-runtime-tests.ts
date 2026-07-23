@@ -1,20 +1,29 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
-type TestStatus = "PASS" | "FAIL" | "PARTIAL";
+import {
+  CodexCliResponseJudge,
+  CodexCliRuntimeExecutor,
+} from "./runtime-testing/codex-cli.ts";
+import type {
+  BehavioralStatus,
+  HarnessEvaluation,
+  RuntimeScenario,
+} from "./runtime-testing/contracts.ts";
+import { RuntimeHarness } from "./runtime-testing/harness.ts";
+
+type TestStatus = BehavioralStatus;
 type RuntimeTestMode = "scenario-structure" | "runtime-judge";
 
-interface RuntimeTest {
-  filePath: string;
-  id: string;
-  title: string;
-  stage: string;
-  prompt: string;
-  expect: string[];
-  tags: string[];
-  body: string;
-}
+type RuntimeTest = RuntimeScenario;
 
 interface TestResult {
   filePath: string;
@@ -23,6 +32,7 @@ interface TestResult {
   stage: string;
   status: TestStatus;
   details: string[];
+  evaluation?: HarnessEvaluation;
 }
 
 interface RuntimeJudge {
@@ -30,8 +40,31 @@ interface RuntimeJudge {
 }
 
 interface CliOptions {
+  codexCommand: string;
+  confirmLlmCost: boolean;
   dry: boolean;
+  ids: string[];
+  judgeModel?: string;
+  maxTests?: number;
+  model?: string;
+  runAll: boolean;
+  tags: string[];
   testsDir: string;
+  timeoutMs: number;
+}
+
+interface RuntimeTestSelection {
+  ids?: string[];
+  maxTests?: number;
+  tags?: string[];
+}
+
+interface RuntimeTestCallbacks {
+  onScenarioStart?: (
+    test: RuntimeTest,
+    index: number,
+    total: number,
+  ) => void;
 }
 
 interface RuntimeTestRun {
@@ -60,17 +93,26 @@ const RUN_MODES: Record<RuntimeTestMode, RuntimeTestRun> = {
   },
   "runtime-judge": {
     mode: "runtime-judge",
-    label: "Runtime judge placeholder",
+    label: "One-turn Runtime contract evaluation",
     assurance:
-      "Behavioral evaluation is not implemented; scenarios report PARTIAL without executing Studio OS or calling an LLM judge.",
-    executesStudioOs: false,
-    usesLlmJudge: false,
+      "Executes Universal Bootstrap against synthetic one-turn scenario context and uses an LLM judge; it does not validate file mutations or multi-turn state.",
+    executesStudioOs: true,
+    usesLlmJudge: true,
   },
 };
 
 function parseArgs(argv: string[]): CliOptions {
+  let codexCommand = process.env.STUDIO_OS_CODEX_COMMAND ?? "codex";
+  let confirmLlmCost = false;
   let dry = false;
+  const ids: string[] = [];
+  let judgeModel: string | undefined;
+  let maxTests: number | undefined;
+  let model: string | undefined;
+  let runAll = false;
+  const tags: string[] = [];
   let testsDir = "tests/runtime";
+  let timeoutMs = 180_000;
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -80,12 +122,60 @@ function parseArgs(argv: string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--confirm-llm-cost") {
+      confirmLlmCost = true;
+      continue;
+    }
+
+    if (arg === "--all") {
+      runAll = true;
+      continue;
+    }
+
     if (arg === "--tests-dir") {
-      const value = argv[index + 1];
-      if (!value) {
-        throw new Error("--tests-dir requires a path");
-      }
-      testsDir = value;
+      testsDir = requiredOptionValue(argv, index, arg);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--id") {
+      ids.push(requiredOptionValue(argv, index, arg));
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--tag") {
+      tags.push(requiredOptionValue(argv, index, arg));
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--max-tests") {
+      maxTests = positiveInteger(requiredOptionValue(argv, index, arg), arg);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--model") {
+      model = requiredOptionValue(argv, index, arg);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--judge-model") {
+      judgeModel = requiredOptionValue(argv, index, arg);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--timeout-ms") {
+      timeoutMs = positiveInteger(requiredOptionValue(argv, index, arg), arg);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--codex-command") {
+      codexCommand = requiredOptionValue(argv, index, arg);
       index += 1;
       continue;
     }
@@ -93,7 +183,65 @@ function parseArgs(argv: string[]): CliOptions {
     throw new Error(`Unknown argument: ${arg}`);
   }
 
-  return { dry, testsDir };
+  return {
+    codexCommand,
+    confirmLlmCost,
+    dry,
+    ids,
+    judgeModel,
+    maxTests,
+    model,
+    runAll,
+    tags,
+    testsDir,
+    timeoutMs,
+  };
+}
+
+function requiredOptionValue(
+  argv: string[],
+  index: number,
+  option: string,
+): string {
+  const value = argv[index + 1];
+  if (!value || value.startsWith("--")) {
+    throw new Error(`${option} requires a value`);
+  }
+  return value;
+}
+
+function positiveInteger(value: string, option: string): number {
+  const parsed = Number(value);
+  if (!Number.isSafeInteger(parsed) || parsed <= 0) {
+    throw new Error(`${option} must be a positive integer`);
+  }
+  return parsed;
+}
+
+function assertBehavioralRunAuthorized(options: CliOptions): void {
+  if (!options.dry && !options.confirmLlmCost) {
+    throw new Error(
+      "Runtime evaluation makes two LLM calls per scenario. Re-run with --confirm-llm-cost and use --id, --tag, --max-tests, or an explicit --all.",
+    );
+  }
+
+  if (options.dry) {
+    return;
+  }
+
+  const hasBound =
+    options.ids.length > 0 ||
+    options.tags.length > 0 ||
+    options.maxTests !== undefined;
+  if (!options.runAll && !hasBound) {
+    throw new Error(
+      "Behavioral runs require --id, --tag, --max-tests, or an explicit --all.",
+    );
+  }
+
+  if (options.runAll && hasBound) {
+    throw new Error("--all cannot be combined with scenario filters or --max-tests.");
+  }
 }
 
 function findMarkdownFiles(directory: string): string[] {
@@ -341,25 +489,32 @@ function loadValidRuntimeTests(testsDir: string): { tests: RuntimeTest[]; result
   return { tests, results };
 }
 
-class TodoRuntimeJudge implements RuntimeJudge {
+class HarnessRuntimeJudge implements RuntimeJudge {
+  constructor(private readonly harness: RuntimeHarness) {}
+
   async judge(test: RuntimeTest): Promise<TestResult> {
+    const evaluation = await this.harness.evaluate(test);
+
     return {
       filePath: test.filePath,
       id: test.id,
       title: test.title,
       stage: test.stage,
-      status: "PARTIAL",
+      status: evaluation.status,
       details: [
         `${test.expect.length} expectation(s), stage: ${test.stage}`,
-        "LLM judge is not implemented yet. Replace TodoRuntimeJudge with an API-backed judge.",
+        ...evaluation.details,
       ],
+      evaluation,
     };
   }
 }
 
 async function runLlmJudgedTests(
   testsDir: string,
-  judge: RuntimeJudge = new TodoRuntimeJudge(),
+  judge: RuntimeJudge,
+  selection: RuntimeTestSelection = {},
+  callbacks: RuntimeTestCallbacks = {},
 ): Promise<TestResult[]> {
   const { tests, results } = loadValidRuntimeTests(testsDir);
 
@@ -367,7 +522,44 @@ async function runLlmJudgedTests(
     return results;
   }
 
-  return [...results, ...(await Promise.all(tests.map((test) => judge.judge(test))))];
+  const selectedTests = selectRuntimeTests(tests, selection);
+  if (selectedTests.length === 0) {
+    return [
+      ...results,
+      {
+        filePath: testsDir,
+        id: "runtime-tests-selection",
+        title: "Runtime test selection",
+        stage: "runtime",
+        status: "PARTIAL",
+        details: ["No runtime scenarios matched the requested id and tag filters."],
+      },
+    ];
+  }
+
+  const judgedResults: TestResult[] = [];
+  for (const [index, test] of selectedTests.entries()) {
+    callbacks.onScenarioStart?.(test, index, selectedTests.length);
+    judgedResults.push(await judge.judge(test));
+  }
+
+  return [...results, ...judgedResults];
+}
+
+function selectRuntimeTests(
+  tests: RuntimeTest[],
+  selection: RuntimeTestSelection = {},
+): RuntimeTest[] {
+  const ids = selection.ids ?? [];
+  const tags = selection.tags ?? [];
+  const selected = tests.filter((test) => {
+    const matchesId = ids.length === 0 || ids.includes(test.id);
+    const matchesTags =
+      tags.length === 0 || tags.every((tag) => test.tags.includes(tag));
+    return matchesId && matchesTags;
+  });
+
+  return selection.maxTests ? selected.slice(0, selection.maxTests) : selected;
 }
 
 function summarize(results: TestResult[]): TestStatus {
@@ -413,6 +605,7 @@ function buildResultsJson(
       status: result.status,
       filePath: result.filePath,
       details: result.details,
+      evaluation: result.evaluation,
     })),
   };
 }
@@ -433,11 +626,11 @@ function buildSummaryMarkdown(
     `- Fail: ${counts.FAIL}`,
     `- Partial: ${counts.PARTIAL}`,
     "",
-    "| ID | Title | Stage | Status |",
-    "| --- | --- | --- | --- |",
+    "| ID | Title | Stage | Status | Evaluation |",
+    "| --- | --- | --- | --- | --- |",
     ...results.map(
       (result) =>
-        `| ${escapeMarkdownTable(result.id)} | ${escapeMarkdownTable(result.title)} | ${escapeMarkdownTable(result.stage)} | ${result.status} |`,
+        `| ${escapeMarkdownTable(result.id)} | ${escapeMarkdownTable(result.title)} | ${escapeMarkdownTable(result.stage)} | ${result.status} | ${result.evaluation ? `evaluations/${evaluationFileName(result.id)}` : ""} |`,
     ),
     "",
   ];
@@ -455,11 +648,42 @@ function writeResultArtifacts(
   mode: RuntimeTestMode = "scenario-structure",
 ): void {
   mkdirSync(outputDir, { recursive: true });
+  const evaluationsDir = path.join(outputDir, "evaluations");
+  rmSync(evaluationsDir, { recursive: true, force: true });
+
+  for (const result of results) {
+    if (!result.evaluation) {
+      continue;
+    }
+
+    mkdirSync(evaluationsDir, { recursive: true });
+    writeFileSync(
+      path.join(evaluationsDir, evaluationFileName(result.id)),
+      `${JSON.stringify(
+        {
+          id: result.id,
+          title: result.title,
+          stage: result.stage,
+          status: result.status,
+          filePath: result.filePath,
+          details: result.details,
+          ...result.evaluation,
+        },
+        null,
+        2,
+      )}\n`,
+    );
+  }
+
   writeFileSync(path.join(outputDir, "summary.md"), buildSummaryMarkdown(results, mode));
   writeFileSync(
     path.join(outputDir, "results.json"),
     `${JSON.stringify(buildResultsJson(results, mode), null, 2)}\n`,
   );
+}
+
+function evaluationFileName(id: string): string {
+  return `${id.replaceAll(/[^a-zA-Z0-9._-]/g, "_")}.json`;
 }
 
 function printResults(results: TestResult[], mode: RuntimeTestMode): void {
@@ -484,16 +708,50 @@ function printResults(results: TestResult[], mode: RuntimeTestMode): void {
 async function main(): Promise<void> {
   try {
     const options = parseArgs(process.argv.slice(2));
-    const results = options.dry
-      ? loadRuntimeTests(options.testsDir)
-      : await runLlmJudgedTests(options.testsDir);
+    let results: TestResult[];
+
+    if (options.dry) {
+      results = loadRuntimeTests(options.testsDir);
+    } else {
+      assertBehavioralRunAuthorized(options);
+
+      const harness = new RuntimeHarness(
+        new CodexCliRuntimeExecutor({
+          executable: options.codexCommand,
+          model: options.model,
+          studioOsRoot: process.cwd(),
+          timeoutMs: options.timeoutMs,
+        }),
+        new CodexCliResponseJudge({
+          executable: options.codexCommand,
+          model: options.judgeModel ?? options.model,
+          timeoutMs: options.timeoutMs,
+        }),
+      );
+      results = await runLlmJudgedTests(
+        options.testsDir,
+        new HarnessRuntimeJudge(harness),
+        {
+          ids: options.ids,
+          maxTests: options.maxTests,
+          tags: options.tags,
+        },
+        {
+          onScenarioStart(test, index, total) {
+            console.log(`RUN ${index + 1}/${total} ${test.id}`);
+          },
+        },
+      );
+    }
+
     const mode: RuntimeTestMode = options.dry ? "scenario-structure" : "runtime-judge";
 
     printResults(results, mode);
     writeResultArtifacts(results, "test-results/latest", mode);
 
     const summary = summarize(results);
-    process.exitCode = summary === "FAIL" ? 1 : 0;
+    process.exitCode =
+      summary === "FAIL" || (!options.dry && summary !== "PASS") ? 1 : 0;
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 1;
@@ -505,15 +763,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 }
 
 export {
+  assertBehavioralRunAuthorized,
   findMarkdownFiles,
   buildResultsJson,
   buildSummaryMarkdown,
+  HarnessRuntimeJudge,
   loadRuntimeTests,
+  parseArgs,
   parseFrontmatter,
   parseMinimalYaml,
   runLlmJudgedTests,
+  selectRuntimeTests,
   summarize,
-  TodoRuntimeJudge,
   validateRuntimeTest,
   writeResultArtifacts,
 };

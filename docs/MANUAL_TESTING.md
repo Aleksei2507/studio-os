@@ -17,6 +17,17 @@ Both commands must pass before manual testing.
 
 Runtime dry tests validate scenario definitions only. They do not execute Studio OS or call an AI judge, so manual behavior checks remain required.
 
+For a bounded one-turn behavioral check, verify that Codex CLI is authenticated and run:
+
+```bash
+codex login status
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id bootstrap-001-explicit-greenfield-activation
+```
+
+This executes Universal Bootstrap against synthetic scenario context and judges the final response in a separate model session. It does not verify file mutations, multi-turn state, or installed host-adapter activation, so it supplements rather than replaces the manual scenarios below.
+
 ## Distribution Baseline
 
 Before creating a release tag, run:

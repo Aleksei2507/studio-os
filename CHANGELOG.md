@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a cost-gated one-turn Runtime Harness with isolated Codex CLI execution, separate structured response judgment, scenario filters, sequential runs, and per-scenario diagnostic artifacts.
+
 ## 0.5.0-alpha.3
 
 - Made release archive fixtures use the active release version so tagged GitHub Actions runs validate the same tag as local checks.
