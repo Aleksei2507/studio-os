@@ -22,6 +22,9 @@ import {
 const root = process.cwd();
 const read = (relativePath: string): string =>
   readFileSync(path.join(root, relativePath), "utf8");
+const currentReleaseTag = expectedReleaseTag(
+  readReleaseMetadata().packageVersion,
+);
 
 const releaseFixtureFiles: Record<string, string> = {
   ".agents/plugins/marketplace.json": "{}\n",
@@ -84,7 +87,7 @@ function createReleaseFixture(omit: string[] = []): string {
     "-m",
     "Create release fixture",
   ]);
-  git(repoRoot, ["tag", "v0.5.0-alpha.1"]);
+  git(repoRoot, ["tag", currentReleaseTag]);
 
   return repoRoot;
 }
@@ -226,9 +229,9 @@ describe("Studio OS GitHub distribution", () => {
   it("builds a checksummed archive only from a clean tagged checkout", () => {
     const repoRoot = createReleaseFixture();
 
-    const artifacts = buildReleaseArchive(repoRoot, "v0.5.0-alpha.1");
+    const artifacts = buildReleaseArchive(repoRoot, currentReleaseTag);
     const archiveName = path.basename(artifacts.archivePath);
-    const prefix = "studio-os-v0.5.0-alpha.1/";
+    const prefix = `studio-os-${currentReleaseTag}/`;
     const entries = listZipEntries(artifacts.archivePath);
     const digest = createHash("sha256")
       .update(readFileSync(artifacts.archivePath))
@@ -260,7 +263,7 @@ describe("Studio OS GitHub distribution", () => {
       "# Changed Bootstrap\n",
     );
     assert.throws(
-      () => buildReleaseArchive(repoRoot, "v0.5.0-alpha.1"),
+      () => buildReleaseArchive(repoRoot, currentReleaseTag),
       /clean Git checkout/,
     );
   });
@@ -269,7 +272,7 @@ describe("Studio OS GitHub distribution", () => {
     const repoRoot = createReleaseFixture([".codex-plugin/plugin.json"]);
 
     assert.throws(
-      () => buildReleaseArchive(repoRoot, "v0.5.0-alpha.1"),
+      () => buildReleaseArchive(repoRoot, currentReleaseTag),
       /Required release file is missing: \.codex-plugin\/plugin\.json/,
     );
   });
@@ -278,7 +281,7 @@ describe("Studio OS GitHub distribution", () => {
     const repoRoot = createReleaseFixture([".claude-plugin/plugin.json"]);
 
     assert.throws(
-      () => buildReleaseArchive(repoRoot, "v0.5.0-alpha.1"),
+      () => buildReleaseArchive(repoRoot, currentReleaseTag),
       /Required release file is missing: \.claude-plugin\/plugin\.json/,
     );
   });

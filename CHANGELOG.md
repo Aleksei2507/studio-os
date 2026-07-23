@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.5.0-alpha.3
+
+- Made release archive fixtures use the active release version so tagged GitHub Actions runs validate the same tag as local checks.
+
 ## 0.5.0-alpha.2
 
 - Fixed Claude Code marketplace installation on clean machines by using an explicit HTTPS release source instead of transport auto-selection.
