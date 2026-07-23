@@ -128,8 +128,9 @@ describe("Studio OS GitHub distribution", () => {
 
   it("keeps package, host plugins, marketplaces, and release tag aligned", () => {
     const metadata = readReleaseMetadata();
+    const releaseTag = expectedReleaseTag(metadata.packageVersion);
 
-    assert.equal(validateReleaseMetadata(metadata), "v0.5.0-alpha.1");
+    assert.equal(validateReleaseMetadata(metadata), releaseTag);
     assert.equal(metadata.packageLockVersion, metadata.packageVersion);
     assert.equal(metadata.packageLockRootVersion, metadata.packageVersion);
     assert.equal(metadata.marketplaceSource, "url");
@@ -138,9 +139,12 @@ describe("Studio OS GitHub distribution", () => {
       "https://github.com/Aleksei2507/studio-os.git",
     );
     assert.equal(metadata.claudePluginVersion, metadata.packageVersion);
-    assert.equal(metadata.claudeMarketplaceSource, "github");
-    assert.equal(metadata.claudeMarketplaceRepo, "Aleksei2507/studio-os");
-    assert.equal(metadata.claudeMarketplaceRef, "v0.5.0-alpha.1");
+    assert.equal(metadata.claudeMarketplaceSource, "url");
+    assert.equal(
+      metadata.claudeMarketplaceUrl,
+      "https://github.com/Aleksei2507/studio-os.git",
+    );
+    assert.equal(metadata.claudeMarketplaceRef, releaseTag);
   });
 
   it("rejects a package lock version that does not match the package", () => {
@@ -179,6 +183,20 @@ describe("Studio OS GitHub distribution", () => {
           claudeMarketplaceRef: "main",
         }),
       /Claude marketplace ref must match the release tag/,
+    );
+  });
+
+  it("rejects a Claude marketplace source that can select SSH transport", () => {
+    const metadata = readReleaseMetadata();
+
+    assert.throws(
+      () =>
+        validateReleaseMetadata({
+          ...metadata,
+          claudeMarketplaceSource: "github",
+          claudeMarketplaceUrl: undefined,
+        }),
+      /Claude plugin source must use an explicit HTTPS URL/,
     );
   });
 

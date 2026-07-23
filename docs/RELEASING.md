@@ -62,14 +62,14 @@ claude plugin validate .claude-plugin/plugin.json
 5. Create an annotated tag that exactly matches the marketplace ref:
 
 ```bash
-git tag -a v0.5.0-alpha.1 -m "Studio OS v0.5.0-alpha.1"
+git tag -a v0.5.0-alpha.2 -m "Studio OS v0.5.0-alpha.2"
 ```
 
 6. Push the reviewed commit and tag:
 
 ```bash
 git push origin main
-git push origin v0.5.0-alpha.1
+git push origin v0.5.0-alpha.2
 ```
 
 Pushing the tag starts `.github/workflows/release.yml`. The workflow reruns all required tests, rejects inconsistent release metadata, a mismatched checkout, or a tagged tree missing a runtime entry point, builds a versioned ZIP from the tag, writes a SHA-256 checksum, and creates the GitHub release.

@@ -62,7 +62,7 @@ export interface ReleaseMetadata {
   claudeMarketplaceName: string;
   claudeMarketplacePluginName: string;
   claudeMarketplaceSource: string;
-  claudeMarketplaceRepo?: string;
+  claudeMarketplaceUrl?: string;
   claudeMarketplaceRef?: string;
 }
 
@@ -173,13 +173,13 @@ export function validateReleaseMetadata(metadata: ReleaseMetadata): string {
   );
   assert.equal(
     metadata.claudeMarketplaceSource,
-    "github",
-    "Claude plugin source must use GitHub",
+    "url",
+    "Claude plugin source must use an explicit HTTPS URL",
   );
   assert.equal(
-    metadata.claudeMarketplaceRepo,
-    "Aleksei2507/studio-os",
-    "Claude marketplace must use the canonical GitHub repository",
+    metadata.claudeMarketplaceUrl,
+    "https://github.com/Aleksei2507/studio-os.git",
+    "Claude marketplace must use the canonical HTTPS GitHub repository",
   );
   assert.equal(
     metadata.claudeMarketplaceRef,
@@ -236,7 +236,7 @@ export function readReleaseMetadata(): ReleaseMetadata {
     claudeMarketplaceName: claudeMarketplace.name,
     claudeMarketplacePluginName: claudeMarketplacePlugin.name,
     claudeMarketplaceSource: claudeMarketplacePlugin.source.source,
-    claudeMarketplaceRepo: claudeMarketplacePlugin.source.repo,
+    claudeMarketplaceUrl: claudeMarketplacePlugin.source.url,
     claudeMarketplaceRef: claudeMarketplacePlugin.source.ref,
   };
 }

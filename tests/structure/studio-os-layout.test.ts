@@ -91,24 +91,27 @@ describe("Studio OS progressive skill layout", () => {
         name: string;
         source: {
           source: string;
-          repo: string;
+          url: string;
           ref: string;
         };
       }>;
+    };
+    const packageManifest = JSON.parse(read("package.json")) as {
+      version: string;
     };
 
     assert.equal(codexPlugin.name, "studio-os");
     assert.equal(codexPlugin.skills, "./skills/");
     assert.equal(claudePlugin.name, "studio-os");
     assert.equal(claudePlugin.displayName, "Studio OS");
-    assert.equal(claudePlugin.version, "0.5.0-alpha.1");
+    assert.equal(claudePlugin.version, packageManifest.version);
     assert.equal(claudePlugin.skills, "./skills/");
     assert.equal(claudeMarketplace.name, "studio-os");
     assert.equal(claudeMarketplace.plugins[0]?.name, "studio-os");
     assert.deepEqual(claudeMarketplace.plugins[0]?.source, {
-      source: "github",
-      repo: "Aleksei2507/studio-os",
-      ref: "v0.5.0-alpha.1",
+      source: "url",
+      url: "https://github.com/Aleksei2507/studio-os.git",
+      ref: `v${packageManifest.version}`,
     });
     assert.match(hostSkill, /^---\nname: studio-os\n/);
     assert.match(hostSkill, /universal\/BOOTSTRAP\.md/);

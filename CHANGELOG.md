@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.5.0-alpha.2
+
+- Fixed Claude Code marketplace installation on clean machines by using an explicit HTTPS release source instead of transport auto-selection.
+
 ## 0.5.0-alpha.1
 
 - Added Claude Code distribution through a GitHub marketplace, a shared host-neutral adapter, version-pinned release metadata, and public installation instructions.
