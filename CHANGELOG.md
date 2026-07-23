@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0-alpha.1
+
 - Added Claude Code distribution through a GitHub marketplace, a shared host-neutral adapter, version-pinned release metadata, and public installation instructions.
 - Added a self-contained public landing page, responsive product workflow explorer, installation guide, and GitHub Pages deployment workflow.
 - Added a Project-Local Reference Contract and Artifact Portability Gate that prevent machine-specific absolute, Downloads, temporary attachment, and sibling-workspace paths from entering persisted project artifacts while preserving stable external web citations.
