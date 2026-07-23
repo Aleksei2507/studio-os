@@ -1,0 +1,26 @@
+{
+  "name": "studio-os",
+  "version": "0.5.0-alpha.1",
+  "description": "Run a model-independent product studio workflow from idea through validated release.",
+  "author": {
+    "name": "Aleksei2507",
+    "url": "https://github.com/Aleksei2507"
+  },
+  "homepage": "https://github.com/Aleksei2507/studio-os",
+  "repository": "https://github.com/Aleksei2507/studio-os",
+  "license": "MIT",
+  "keywords": ["product", "workflow", "development", "studio"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Studio OS",
+    "shortDescription": "Run a complete product studio workflow.",
+    "longDescription": "Guide a new idea, existing product, or bounded change through Studio OS discovery, planning, design, implementation, validation, product outcome, and release gates.",
+    "developerName": "Aleksei2507",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "Use Studio OS to develop my product idea.",
+      "Use Studio OS to continue this product project."
+    ]
+  }
+}

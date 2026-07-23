@@ -12,6 +12,18 @@ Failure: introducing microservices, event systems, or complex infrastructure bec
 
 Recovery: require a concrete boundary, scale, reliability, ownership, or deployment need.
 
+## Skill Profiling
+
+Failure: asking what the user can code or maintain and using the answer to transfer architecture or support responsibility to the client.
+
+Recovery: restore the default studio-owned delivery model and select technology from product, project, Studio OS capability, operations, and lifecycle evidence.
+
+## Familiarity Only
+
+Failure: choosing or replacing a stack only because the user requests or recognizes it.
+
+Recovery: compare product fit, existing architecture, Studio OS supportability, total ownership cost, and migration risk.
+
 ## Brownfield Rewrite
 
 Failure: replacing working architecture instead of integrating a bounded change.

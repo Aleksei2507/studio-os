@@ -259,6 +259,11 @@ For a Go outcome, update `.studio/project-state.md` to show:
 Mode: <preserve Greenfield or Brownfield>
 Workflow: <preserve selected workflow>
 Work Type: <preserve selected work type>
+Target Milestone: <accepted MVP, first release, or Work Item outcome>
+Product Readiness: Not Ready
+Current Increment: None
+Increment Status: None
+Increment Progress: 0/Unknown
 Previous Stage: Briefing
 Current Stage: Planning
 Status: Waiting Confirmation

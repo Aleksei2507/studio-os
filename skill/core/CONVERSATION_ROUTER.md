@@ -8,7 +8,7 @@
 
 Stage: Conversation Router
 
-Version: 1.0
+Version: 1.1
 
 Optional: No
 
@@ -38,6 +38,7 @@ Before classifying a message, use:
 - current interaction strategy, if one has been inferred;
 - `.studio/project-state.md` if available;
 - `.studio/active-context.md` if available;
+- Target Milestone, Product Readiness, current increment, and increment progress when available;
 - current stage Runtime;
 - recent stage question, if one exists.
 
@@ -63,6 +64,40 @@ Do not ask the user to choose an interaction mode.
 
 ---
 
+# Readiness Context Check
+
+Before routing a message, consider whether the user's observable behavior shows that delivery status may be unclear. This applies when the user:
+
+- reports incorrect or missing behavior;
+- questions whether the product, milestone, or increment is ready;
+- continues after a task, remediation, check, or stage completion;
+- treats planned future scope as already delivered;
+- asks for a completion or next-step summary.
+
+When the context may be unclear, state concisely:
+
+- Target Milestone and Product Readiness;
+- current increment and progress;
+- current stage;
+- whether the message concerns current accepted behavior, future roadmap scope, or a milestone-level gap.
+
+Do not repeat unchanged readiness context in every nearby message. Always include it when a completion statement could otherwise be mistaken for milestone completion.
+
+Infer this need from behavior and project state, not from fixed language-specific phrases.
+
+## Defect Versus Planned Scope
+
+Classify the reported outcome against accepted artifacts before selecting Bugfix:
+
+- behavior required by the current or already accepted increment but working incorrectly -> Bugfix;
+- capability assigned to an incomplete future roadmap increment -> planned scope, not a Bugfix;
+- accepted Target Milestone capability missing after all responsible increments were reported accepted -> milestone gap; route to Product Outcome or the Runtime that owns the missing evidence;
+- requested behavior outside accepted scope -> Feature candidate or Scope Change.
+
+A Bugfix must preserve the parent Target Milestone and Product Readiness. Completing the fix changes neither automatically.
+
+---
+
 # Intent Types
 
 Classify the message as one of:
@@ -74,6 +109,8 @@ The user requests a Feature, Bugfix, Research task, or Refactor in an existing S
 Action:
 
 Pass the request to `skill/runtimes/work-item/SKILL.md` for Work Type and workflow selection.
+
+For a reported bug, include the readiness context and the result of Defect Versus Planned Scope classification in the handoff.
 
 Project Mode, Work Type, and interaction strategy are independent. Do not restart Greenfield or Brownfield onboarding when Project Memory already exists.
 
@@ -203,6 +240,8 @@ Conversation Router must not:
 - create product artifacts;
 - update roadmap by itself;
 - change MVP scope by itself;
+- classify unfinished future roadmap scope as a defect;
+- imply that fixing one defect completes an increment or Target Milestone;
 - start a new project without confirmation;
 - silently ignore a user message;
 - assume every message belongs to the current stage.

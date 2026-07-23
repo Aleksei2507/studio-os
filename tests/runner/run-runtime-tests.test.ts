@@ -166,10 +166,15 @@ User asks to build a product.
     assert.equal(existsSync(summaryPath), true);
     assert.equal(existsSync(resultsPath), true);
     assert.match(summary, /Total tests: 2/);
+    assert.match(summary, /Mode: Scenario definition validation/);
+    assert.match(summary, /does not execute or judge Studio OS responses/);
     assert.match(summary, /Pass: 1/);
     assert.match(summary, /Fail: 1/);
     assert.match(summary, /loader-001-greenfield-start/);
     assert.equal(results.summary.total, 2);
+    assert.equal(results.run.mode, "scenario-structure");
+    assert.equal(results.run.executesStudioOs, false);
+    assert.equal(results.run.usesLlmJudge, false);
     assert.equal(results.summary.pass, 1);
     assert.equal(results.summary.fail, 1);
     assert.equal(results.tests[0].stage, "Loader");

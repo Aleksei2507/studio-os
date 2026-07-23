@@ -2,21 +2,23 @@
   "version": 1,
   "runtimeRoot": "skill/runtimes",
   "runtimes": {
-    "interview": { "path": "skill/runtimes/interview/SKILL.md", "status": "active", "capabilities": [] },
-    "discovery": { "path": "skill/runtimes/discovery/SKILL.md", "status": "active", "capabilities": [] },
-    "briefing": { "path": "skill/runtimes/briefing/SKILL.md", "status": "active", "capabilities": [] },
-    "planning": { "path": "skill/runtimes/planning/SKILL.md", "status": "active", "capabilities": [] },
-    "brownfield": { "path": "skill/runtimes/brownfield/SKILL.md", "status": "active", "capabilities": ["codebase-analysis"] },
-    "research": { "path": "skill/runtimes/research/SKILL.md", "status": "active", "capabilities": ["external-research"] },
-    "design-strategy": { "path": "skill/runtimes/design-strategy/SKILL.md", "status": "active", "capabilities": ["ux-analysis"] },
-    "architecture": { "path": "skill/runtimes/architecture/SKILL.md", "status": "active", "capabilities": ["codebase-analysis", "architecture-design"] },
-    "development": { "path": "skill/runtimes/development/SKILL.md", "status": "active", "capabilities": ["codebase-analysis", "implementation"] },
-    "validation": { "path": "skill/runtimes/validation/SKILL.md", "status": "active", "capabilities": ["technical-validation"] },
-    "qa": { "path": "skill/runtimes/qa/SKILL.md", "status": "active", "capabilities": ["product-qa"] },
-    "release": { "path": "skill/runtimes/release/SKILL.md", "status": "active", "capabilities": ["release-operations"] },
-    "retrospective": { "path": "skill/runtimes/retrospective/SKILL.md", "status": "active", "capabilities": [] },
-    "evolution": { "path": "skill/runtimes/evolution/SKILL.md", "status": "active", "capabilities": [] },
-    "work-item": { "path": "skill/runtimes/work-item/SKILL.md", "status": "active", "capabilities": [] }
+    "interview": { "path": "skill/runtimes/interview/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "discovery": { "path": "skill/runtimes/discovery/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "briefing": { "path": "skill/runtimes/briefing/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "planning": { "path": "skill/runtimes/planning/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "brownfield": { "path": "skill/runtimes/brownfield/SKILL.md", "status": "active", "capabilities": ["codebase-analysis"], "standards": ["code-quality", "testing", "security-privacy"] },
+    "research": { "path": "skill/runtimes/research/SKILL.md", "status": "active", "capabilities": ["external-research"], "standards": [] },
+    "design-strategy": { "path": "skill/runtimes/design-strategy/SKILL.md", "status": "active", "capabilities": ["ux-analysis"], "standards": ["accessibility", "product-design"] },
+    "architecture": { "path": "skill/runtimes/architecture/SKILL.md", "status": "active", "capabilities": ["codebase-analysis", "architecture-design"], "standards": ["code-quality", "testing", "security-privacy"] },
+    "interface-design": { "path": "skill/runtimes/interface-design/SKILL.md", "status": "active", "capabilities": ["interface-modeling", "design-system-definition", "platform-design"], "standards": ["accessibility", "product-design"] },
+    "development": { "path": "skill/runtimes/development/SKILL.md", "status": "active", "capabilities": ["codebase-analysis", "implementation"], "standards": ["code-quality", "testing", "security-privacy"] },
+    "validation": { "path": "skill/runtimes/validation/SKILL.md", "status": "active", "capabilities": ["technical-validation"], "standards": ["code-quality", "testing", "security-privacy"] },
+    "qa": { "path": "skill/runtimes/qa/SKILL.md", "status": "active", "capabilities": ["product-qa"], "standards": ["security-privacy", "accessibility", "product-design"] },
+    "product-outcome": { "path": "skill/runtimes/product-outcome/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "release": { "path": "skill/runtimes/release/SKILL.md", "status": "active", "capabilities": ["release-operations"], "standards": ["security-privacy"] },
+    "retrospective": { "path": "skill/runtimes/retrospective/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "evolution": { "path": "skill/runtimes/evolution/SKILL.md", "status": "active", "capabilities": [], "standards": [] },
+    "work-item": { "path": "skill/runtimes/work-item/SKILL.md", "status": "active", "capabilities": [], "standards": [] }
   },
   "workflows": [
     {
@@ -31,9 +33,11 @@
         { "runtime": "design-strategy", "policy": "conditional" },
         { "runtime": "planning", "policy": "required" },
         { "runtime": "architecture", "policy": "required" },
+        { "runtime": "interface-design", "policy": "conditional" },
         { "runtime": "development", "policy": "required" },
         { "runtime": "validation", "policy": "required" },
         { "runtime": "qa", "policy": "required" },
+        { "runtime": "product-outcome", "policy": "required" },
         { "runtime": "release", "policy": "required" },
         { "runtime": "retrospective", "policy": "conditional" }
       ]
@@ -46,11 +50,14 @@
         { "runtime": "brownfield", "policy": "required" },
         { "runtime": "briefing", "policy": "required" },
         { "runtime": "research", "policy": "conditional" },
+        { "runtime": "design-strategy", "policy": "conditional" },
         { "runtime": "planning", "policy": "required" },
         { "runtime": "architecture", "policy": "required" },
+        { "runtime": "interface-design", "policy": "conditional" },
         { "runtime": "development", "policy": "required" },
         { "runtime": "validation", "policy": "required" },
         { "runtime": "qa", "policy": "required" },
+        { "runtime": "product-outcome", "policy": "required" },
         { "runtime": "release", "policy": "required" },
         { "runtime": "retrospective", "policy": "conditional" }
       ]
@@ -62,11 +69,14 @@
       "stages": [
         { "runtime": "work-item", "policy": "required" },
         { "runtime": "briefing", "policy": "conditional" },
+        { "runtime": "design-strategy", "policy": "conditional" },
         { "runtime": "planning", "policy": "conditional" },
         { "runtime": "architecture", "policy": "conditional" },
+        { "runtime": "interface-design", "policy": "conditional" },
         { "runtime": "development", "policy": "required" },
         { "runtime": "validation", "policy": "required" },
         { "runtime": "qa", "policy": "required" },
+        { "runtime": "product-outcome", "policy": "required" },
         { "runtime": "release", "policy": "required" }
       ]
     },

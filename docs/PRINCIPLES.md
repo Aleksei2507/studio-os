@@ -74,11 +74,14 @@ Examples:
 - Interview → Project Memory update
 - Discovery → `docs/discovery-summary.md`
 - Briefing → `docs/project-brief.md`
+- Design Strategy → `docs/design-strategy.md`
 - Planning → `docs/roadmap.md`
 - Architecture → `docs/architecture.md` and ADRs
+- Interface Design → `docs/interface-design.md`
 - Development → working increment
 - Validation → validation report
 - QA → QA report
+- Product Outcome → milestone evidence and readiness decision
 - Release → release notes
 - Retrospective → `.studio/runtime-retrospective.md`
 
@@ -95,6 +98,8 @@ Studio OS must not rely on hidden chat context or model memory.
 # Principle 9 — Small Stable Steps
 
 Prefer several small finished steps over one large unfinished step.
+
+A finished step must be named precisely. Completion of a task, stage, check, or increment must not be presented as completion of the Target Milestone.
 
 Every iteration should reduce uncertainty or produce user-visible value.
 
@@ -125,6 +130,10 @@ Studio OS stores project knowledge inside the project.
 The source of truth is not the chat history and not the model memory.
 
 Project Memory must reflect the current state and point to the latest artifacts.
+
+Local file references must remain valid when the project is moved to another machine. Store project-relative paths only; never make a user's home, Downloads, temporary attachment directory, or sibling checkout part of project truth.
+
+For existing interfaces, the Project Design System Profile records the system to preserve, including mixed and legacy boundaries. A new framework or component library does not replace that truth without evidence and an accepted decision.
 
 ---
 

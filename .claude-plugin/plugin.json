@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "studio-os",
+  "displayName": "Studio OS",
+  "version": "0.5.0-alpha.1",
+  "description": "Run a model-independent product studio workflow from idea through validated release.",
+  "author": {
+    "name": "Aleksei2507",
+    "url": "https://github.com/Aleksei2507"
+  },
+  "homepage": "https://aleksei2507.github.io/studio-os/",
+  "repository": "https://github.com/Aleksei2507/studio-os",
+  "license": "MIT",
+  "keywords": [
+    "product",
+    "workflow",
+    "development",
+    "studio"
+  ],
+  "skills": "./skills/"
+}

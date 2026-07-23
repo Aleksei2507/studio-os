@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+- Added Claude Code distribution through a GitHub marketplace, a shared host-neutral adapter, version-pinned release metadata, and public installation instructions.
+- Added a self-contained public landing page, responsive product workflow explorer, installation guide, and GitHub Pages deployment workflow.
+- Added a Project-Local Reference Contract and Artifact Portability Gate that prevent machine-specific absolute, Downloads, temporary attachment, and sibling-workspace paths from entering persisted project artifacts while preserving stable external web citations.
+- Added an evidence-based Project Design System Profile: Brownfield Onboarding detects existing interface systems, Interface Design confirms or extends them, and Architecture, Development, and QA consume the profile progressively.
+- Added GitHub distribution through a Codex repository marketplace, tag-gated release workflow, versioned universal ZIP, SHA-256 checksum, and release contract tests.
+- Added explicit runtime-test assurance metadata, package-lock version validation, required hidden archive-entry checks, and a documented separation between source checkouts and runtime release archives.
+- Removed the redundant root `VERSION` file so release versioning has one enforced contract.
+
+- Added a vendor-neutral Universal Bootstrap, a validated Codex plugin adapter, and activation regression coverage that prevents host agents from bypassing Loader and Interview.
+
+- Added Product Outcome Gate, milestone and increment readiness state, roadmap iteration routing, bug readiness context, and scoped completion rules that prevent bounded task success from being reported as completed MVP delivery.
+
+- Added a conditional Interface Design Runtime between Architecture and Development with implementation-ready Markdown artifacts, platform-aware Web, Mobile, and Desktop guidance, design-system capabilities, Standards integration, and regression coverage.
+
+- Added progressive Standards Layer for code quality, testing, security, accessibility, product design, web frontend, backend, mobile, and desktop delivery.
+- Added Project Standards Profile with observed, provisional, and accepted states.
+- Added Architecture-owned technology selection using product, Studio OS delivery and support, operational, lifecycle-cost, and Brownfield evidence independently from user proficiency and Interaction Strategy.
+- Added standards evidence to Development, Validation, QA, and Release gates.
+
 End-to-end studio workflow completion.
 
 - Added environment-independent capability contracts and registry.

@@ -47,6 +47,7 @@ Navigator answers:
 - Which Runtime should handle the next message?
 - Which artifact is missing?
 - Which Quality Gate applies?
+- Which accepted standards apply to the active Runtime?
 - Is the user's message part of the current stage or a new intent?
 
 ---
@@ -73,6 +74,8 @@ Brownfield Onboarding analyzes the existing project and creates initial Project 
 
 - `.studio/project-state.md`
 - `.studio/active-context.md`
+- `.studio/standards-profile.md` with Observed status
+- `.studio/design-system-profile.md` with Observed status and evidence-bounded applicability
 - `docs/discovery-summary.md`
 
 Brownfield does not develop, refactor, plan, or write architecture.
@@ -131,13 +134,17 @@ Before handling a message, Studio OS should classify intent:
 
 For a bounded change, it should also classify Work Type from observable requested behavior, not fixed phrases.
 
+When the user reports a defect, missing capability, or uncertainty about readiness, routing should first state Target Milestone, Product Readiness, current increment and progress, and current stage. Behavior required now may be a Bugfix; accepted future scope is not.
+
 If unclear, ask one clarification question.
 
 ---
 
 # Project Completion
 
-After Release, Studio Navigator recommends Retrospective.
+After QA, Product Outcome decides whether to continue with another roadmap increment or advance to Release.
+
+Only after Product Outcome `PASS` and Release does Studio Navigator recommend Retrospective for the completed Target Milestone.
 
 Retrospective stores experience in:
 

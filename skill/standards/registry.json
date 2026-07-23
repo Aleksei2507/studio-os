@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "baseline": ["code-quality", "testing", "security-privacy"],
+  "standards": {
+    "code-quality": {
+      "path": "skill/standards/core/code-quality.md",
+      "kind": "core",
+      "appliesTo": ["architecture", "development", "validation"]
+    },
+    "testing": {
+      "path": "skill/standards/core/testing.md",
+      "kind": "core",
+      "appliesTo": ["architecture", "development", "validation"]
+    },
+    "security-privacy": {
+      "path": "skill/standards/core/security-privacy.md",
+      "kind": "core",
+      "appliesTo": ["architecture", "development", "validation", "qa", "release"]
+    },
+    "accessibility": {
+      "path": "skill/standards/core/accessibility.md",
+      "kind": "core",
+      "appliesTo": ["design-strategy", "architecture", "interface-design", "development", "qa"]
+    },
+    "product-design": {
+      "path": "skill/standards/domains/product-design.md",
+      "kind": "domain",
+      "appliesTo": ["design-strategy", "architecture", "interface-design", "development", "qa"]
+    },
+    "web-frontend": {
+      "path": "skill/standards/domains/web-frontend.md",
+      "kind": "domain",
+      "appliesTo": ["architecture", "interface-design", "development", "validation", "qa"]
+    },
+    "backend": {
+      "path": "skill/standards/domains/backend.md",
+      "kind": "domain",
+      "appliesTo": ["architecture", "development", "validation", "qa", "release"]
+    },
+    "mobile": {
+      "path": "skill/standards/domains/mobile.md",
+      "kind": "domain",
+      "appliesTo": ["design-strategy", "architecture", "interface-design", "development", "validation", "qa", "release"]
+    },
+    "desktop": {
+      "path": "skill/standards/domains/desktop.md",
+      "kind": "domain",
+      "appliesTo": ["architecture", "interface-design", "development", "validation", "qa", "release"]
+    }
+  }
+}

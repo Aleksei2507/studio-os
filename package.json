@@ -1,13 +1,15 @@
 {
   "name": "studio-os",
-  "version": "0.4.0-alpha",
+  "version": "0.5.0-alpha.1",
   "private": true,
   "type": "module",
   "scripts": {
-    "test:runtime": "tsx scripts/run-runtime-tests.ts",
-    "test:runtime:dry": "tsx scripts/run-runtime-tests.ts --dry",
+    "test:runtime": "node --import tsx scripts/run-runtime-tests.ts",
+    "test:runtime:dry": "node --import tsx scripts/run-runtime-tests.ts --dry",
     "test:runner": "node --import tsx --test tests/runner/*.test.ts tests/structure/*.test.ts",
-    "test:structure": "node --import tsx --test tests/structure/*.test.ts"
+    "test:structure": "node --import tsx --test tests/structure/*.test.ts",
+    "release:check": "node --import tsx scripts/build-release.ts --check",
+    "release:build": "node --import tsx scripts/build-release.ts --build"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

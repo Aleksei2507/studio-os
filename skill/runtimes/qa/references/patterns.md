@@ -27,7 +27,8 @@ For user-facing work, inspect:
 - error recovery;
 - content clarity;
 - keyboard, focus, contrast, and responsive behavior when relevant;
-- consistency with accepted Design Strategy.
+- consistency with accepted Design Strategy;
+- conformance to accepted Interface Design flows, states, platform variants, and design-system rules when available.
 
 ## Scope Pattern
 

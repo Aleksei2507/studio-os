@@ -190,6 +190,13 @@ Mode: Greenfield
 Workflow: greenfield
 Work Type: New Product
 Active Work Item: None
+Parent Workflow: None
+Return Stage: None
+Target Milestone: Not Selected
+Product Readiness: Not Ready
+Current Increment: None
+Increment Status: None
+Increment Progress: 0/Unknown
 Previous Stage: Interview
 Current Stage: Discovery
 Status: Waiting Confirmation

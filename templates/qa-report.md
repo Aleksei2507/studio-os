@@ -1,5 +1,12 @@
 # QA Report
 
+## Delivery Context
+
+Target Milestone:
+Product Readiness:
+Current Increment:
+Increment Progress:
+
 ## QA Target And Environment
 
 ## Inputs And Validation Status
@@ -8,7 +15,13 @@
 
 ## Acceptance Criteria Coverage
 
+## Interface Design Conformance
+
+## Design System Profile Conformance
+
 ## Findings And Evidence
+
+## Standards Coverage
 
 ## UX And Accessibility Observations
 

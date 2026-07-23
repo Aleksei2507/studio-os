@@ -7,17 +7,20 @@ Safely edit the project, execute development commands, and produce a working inc
 ## Procedure
 
 1. Detect project stack, local instructions, and existing conventions.
-2. Resolve relevant technical skills through the current environment.
-3. Make the smallest coherent change that satisfies accepted scope.
-4. Add or update tests in proportion to risk.
-5. Run focused checks during implementation.
-6. Preserve unrelated user changes.
+2. Load the accepted Project Standards Profile and relevant contracts.
+3. Resolve relevant technical skills through the current environment.
+4. Make the smallest coherent change that satisfies accepted scope and Interface Design when selected.
+5. Add or update tests in proportion to risk.
+6. Run focused checks during implementation.
+7. Preserve unrelated user changes.
 
 ## Evidence
 
 - Changed file list.
 - Tests or checks added and executed.
 - Accepted behavior implemented.
+- Accepted Interface Design conformance when applicable.
+- Applicable standards satisfied or approved deviations recorded.
 - Known limitations and validation handoff.
 
 ## Unavailable Behavior

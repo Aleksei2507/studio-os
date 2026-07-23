@@ -40,12 +40,31 @@ Each workflow Markdown file defines:
 
 The registry controls paths and ordering. Runtime files control stage behavior.
 
+Runtime entries also declare required capability IDs and direct standard IDs. Capabilities describe available execution ability; standards describe quality constraints. Neither changes workflow selection.
+
+Technology selection and support ownership are Architecture concerns, not interaction or routing axes.
+
 ## Stage Policies
 
 - `required`: run unless already completed with a current accepted artifact.
 - `conditional`: run only when its documented condition applies.
 
 Skipping a conditional stage is a routing decision, not a quality-gate override.
+
+## Iteration Control
+
+A workflow may repeat a bounded group of Runtimes when its accepted Roadmap contains multiple increments.
+
+Development, Validation, and QA evaluate the current increment. Product Outcome evaluates the Target Milestone and controls the loop:
+
+- `PASS` advances to Release;
+- `CONTINUE` selects the next accepted increment and routes to its earliest required Runtime;
+- `BLOCKED` preserves the current target and records the unblock condition;
+- `RE-SCOPE` routes to Briefing and requires explicit confirmation.
+
+The registry lists Product Outcome once because it declares Runtime availability and base ordering. The selected workflow Markdown defines its repeat and branch behavior.
+
+Stage completion never implies milestone completion. A workflow must not infer Product Readiness from its current stage index.
 
 ## State
 

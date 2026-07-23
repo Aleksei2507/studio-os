@@ -1,5 +1,13 @@
 # Release Notes
 
+## Delivery Context
+
+Released Unit:
+Target Milestone:
+Product Readiness:
+Current Increment:
+Increment Progress:
+
 ## Release Identifier And Date
 
 ## Scope
@@ -11,6 +19,10 @@
 ## Compatibility And Migration
 
 ## Validation And QA Evidence
+
+## Product Outcome Evidence
+
+## Standards And Release Conditions
 
 ## Known Issues
 

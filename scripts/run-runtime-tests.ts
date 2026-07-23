@@ -3,6 +3,7 @@ import path from "node:path";
 import process from "node:process";
 
 type TestStatus = "PASS" | "FAIL" | "PARTIAL";
+type RuntimeTestMode = "scenario-structure" | "runtime-judge";
 
 interface RuntimeTest {
   filePath: string;
@@ -33,7 +34,39 @@ interface CliOptions {
   testsDir: string;
 }
 
-const REQUIRED_FIELDS = ["id", "title", "stage", "prompt", "expect"] as const;
+interface RuntimeTestRun {
+  mode: RuntimeTestMode;
+  label: string;
+  assurance: string;
+  executesStudioOs: boolean;
+  usesLlmJudge: boolean;
+}
+
+const REQUIRED_FIELDS = [
+  "id",
+  "title",
+  "stage",
+  "prompt",
+  "expect",
+] as const;
+const RUN_MODES: Record<RuntimeTestMode, RuntimeTestRun> = {
+  "scenario-structure": {
+    mode: "scenario-structure",
+    label: "Scenario definition validation",
+    assurance:
+      "Validates Markdown scenario definitions only; it does not execute or judge Studio OS responses.",
+    executesStudioOs: false,
+    usesLlmJudge: false,
+  },
+  "runtime-judge": {
+    mode: "runtime-judge",
+    label: "Runtime judge placeholder",
+    assurance:
+      "Behavioral evaluation is not implemented; scenarios report PARTIAL without executing Studio OS or calling an LLM judge.",
+    executesStudioOs: false,
+    usesLlmJudge: false,
+  },
+};
 
 function parseArgs(argv: string[]): CliOptions {
   let dry = false;
@@ -357,11 +390,15 @@ function countStatuses(results: TestResult[]): Record<TestStatus, number> {
   };
 }
 
-function buildResultsJson(results: TestResult[]): object {
+function buildResultsJson(
+  results: TestResult[],
+  mode: RuntimeTestMode = "scenario-structure",
+): object {
   const counts = countStatuses(results);
 
   return {
     generatedAt: new Date().toISOString(),
+    run: RUN_MODES[mode],
     summary: {
       status: summarize(results),
       total: results.length,
@@ -380,11 +417,17 @@ function buildResultsJson(results: TestResult[]): object {
   };
 }
 
-function buildSummaryMarkdown(results: TestResult[]): string {
+function buildSummaryMarkdown(
+  results: TestResult[],
+  mode: RuntimeTestMode = "scenario-structure",
+): string {
   const counts = countStatuses(results);
+  const run = RUN_MODES[mode];
   const lines = [
-    "# Runtime Test Summary",
+    `# Runtime Test Summary: ${run.label}`,
     "",
+    `- Mode: ${run.label}`,
+    `- Assurance: ${run.assurance}`,
     `- Total tests: ${results.length}`,
     `- Pass: ${counts.PASS}`,
     `- Fail: ${counts.FAIL}`,
@@ -406,14 +449,26 @@ function escapeMarkdownTable(value: string): string {
   return value.replaceAll("|", "\\|").replaceAll("\n", " ");
 }
 
-function writeResultArtifacts(results: TestResult[], outputDir = "test-results/latest"): void {
+function writeResultArtifacts(
+  results: TestResult[],
+  outputDir = "test-results/latest",
+  mode: RuntimeTestMode = "scenario-structure",
+): void {
   mkdirSync(outputDir, { recursive: true });
-  writeFileSync(path.join(outputDir, "summary.md"), buildSummaryMarkdown(results));
-  writeFileSync(path.join(outputDir, "results.json"), `${JSON.stringify(buildResultsJson(results), null, 2)}\n`);
+  writeFileSync(path.join(outputDir, "summary.md"), buildSummaryMarkdown(results, mode));
+  writeFileSync(
+    path.join(outputDir, "results.json"),
+    `${JSON.stringify(buildResultsJson(results, mode), null, 2)}\n`,
+  );
 }
 
-function printResults(results: TestResult[]): void {
+function printResults(results: TestResult[], mode: RuntimeTestMode): void {
   const summary = summarize(results);
+  const run = RUN_MODES[mode];
+
+  console.log(`Mode: ${run.label}`);
+  console.log(`Assurance: ${run.assurance}`);
+  console.log("");
 
   for (const result of results) {
     console.log(`${result.status} ${result.id} - ${result.title}`);
@@ -423,7 +478,7 @@ function printResults(results: TestResult[]): void {
   }
 
   console.log("");
-  console.log(`Summary: ${summary} (${results.length} test file(s))`);
+  console.log(`${run.label} summary: ${summary} (${results.length} test file(s))`);
 }
 
 async function main(): Promise<void> {
@@ -432,9 +487,10 @@ async function main(): Promise<void> {
     const results = options.dry
       ? loadRuntimeTests(options.testsDir)
       : await runLlmJudgedTests(options.testsDir);
+    const mode: RuntimeTestMode = options.dry ? "scenario-structure" : "runtime-judge";
 
-    printResults(results);
-    writeResultArtifacts(results);
+    printResults(results, mode);
+    writeResultArtifacts(results, "test-results/latest", mode);
 
     const summary = summarize(results);
     process.exitCode = summary === "FAIL" ? 1 : 0;

@@ -75,7 +75,7 @@ Protect the Project Brief.
 
 Do not accept scope changes silently.
 
-Create a roadmap that can guide Architecture and Development.
+Create a roadmap that can guide Architecture, Interface Design when selected, and Development.
 
 ---
 
@@ -283,6 +283,11 @@ Update `.studio/project-state.md` to show:
 Mode: <preserve Greenfield or Brownfield>
 Workflow: <preserve selected workflow>
 Work Type: <preserve selected work type>
+Target Milestone: <preserve accepted target>
+Product Readiness: Not Ready
+Current Increment: <first accepted roadmap increment>
+Increment Status: Planned
+Increment Progress: 0/<accepted roadmap increment count>
 Previous Stage: Planning
 Current Stage: Architecture
 Status: Waiting Confirmation
@@ -300,6 +305,8 @@ Latest Artifacts:
 ```
 
 Do not overwrite the canonical Roadmap during an intermediate Work Item stage.
+
+Planning defines delivery units but does not mark the Target Milestone ready. For an updated roadmap, preserve accepted increment evidence and recalculate progress without counting planned work as accepted.
 
 ---
 

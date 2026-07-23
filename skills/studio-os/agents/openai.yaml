@@ -1,0 +1,7 @@
+interface:
+  display_name: "Studio OS"
+  short_description: "Run the Studio OS product workflow"
+  default_prompt: "Use $studio-os to start this product project."
+
+policy:
+  allow_implicit_invocation: true

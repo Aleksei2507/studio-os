@@ -1,0 +1,24 @@
+{
+  "name": "studio-os",
+  "owner": {
+    "name": "Aleksei2507"
+  },
+  "description": "Studio OS product development workflows for Claude Code.",
+  "plugins": [
+    {
+      "name": "studio-os",
+      "source": {
+        "source": "github",
+        "repo": "Aleksei2507/studio-os",
+        "ref": "v0.5.0-alpha.1"
+      },
+      "description": "Run a product studio workflow from idea through validated release.",
+      "category": "Productivity",
+      "tags": [
+        "product",
+        "workflow",
+        "development"
+      ]
+    }
+  ]
+}

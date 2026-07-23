@@ -55,9 +55,9 @@ Dry mode validates test structure without calling an LLM API:
 npm run test:runtime:dry
 ```
 
-Runtime mode uses the same loader and validation path. The LLM judge interface
-is reserved, but not implemented yet, so valid tests currently report
-`PARTIAL`:
+This command does not start Studio OS, produce a Runtime response, or judge behavior. A result such as `137/137 PASS` means that 137 scenario definitions have valid frontmatter, expectations, and bodies. It is not evidence that 137 conversations were executed successfully.
+
+Runtime judge mode uses the same loader and validation path. The judge interface is reserved, but not implemented yet. It does not currently call an LLM or execute Studio OS, so valid tests report `PARTIAL`:
 
 ```bash
 npm run test:runtime
@@ -69,6 +69,15 @@ Both commands print per-test status and a final summary:
 - `FAIL`: at least one test is invalid or failed evaluation.
 - `PARTIAL`: no runtime tests exist yet, or tests are structurally valid but
   judge evaluation is not complete.
+
+Generated Markdown and JSON reports identify the mode and state whether Studio OS was executed or an LLM judge was used.
+
+## Assurance Levels
+
+1. `npm run test:runner` deterministically tests the TypeScript runner and repository structure.
+2. `npm run test:runtime:dry` deterministically validates Markdown scenario definitions only.
+3. `npm run test:runtime` is a reserved behavioral layer and remains `PARTIAL` until a real Runtime executor and judge are implemented.
+4. `docs/MANUAL_TESTING.md` defines the current end-to-end behavioral checks for installed and filesystem adapters.
 
 ## Custom Test Directory
 

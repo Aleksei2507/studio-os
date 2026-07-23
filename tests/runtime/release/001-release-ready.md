@@ -4,7 +4,8 @@ title: "release ready"
 stage: "Release"
 prompt: "Prepare the release."
 expect:
-  - "Release should create release notes, record version/limitations, and suggest Retrospective."
+  - "Release should require Product Outcome PASS for a lifecycle milestone, create release notes, record version/limitations, and suggest Retrospective."
+  - "Release should set Product Readiness to Released only after the named milestone release is verified."
   - "Should not: Skip release notes."
 tags: ["release", "severity:high", "risk:high"]
 ---
@@ -21,7 +22,7 @@ Verify Studio OS behavior in this scenario.
 
 ## Initial State
 
-QA passed.
+QA passed and Product Outcome set the named Target Milestone to Ready for Release.
 
 ## User Message
 
@@ -31,7 +32,7 @@ Prepare the release.
 
 ## Expected Behavior
 
-Release should create release notes, record version/limitations, and suggest Retrospective.
+Release should verify the Product Outcome Report, create release notes, record version/limitations, set the named Target Milestone to Released after verified delivery, and suggest Retrospective.
 
 ## Should Not
 

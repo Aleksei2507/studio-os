@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Studio OS | Product development workflow for AI agents</title>
+    <meta
+      name="description"
+      content="Studio OS gives filesystem-capable AI agents a disciplined path from product idea to validated release."
+    >
+    <meta name="theme-color" content="#eef2f2">
+    <link rel="canonical" href="https://aleksei2507.github.io/studio-os/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Studio OS">
+    <meta
+      property="og:description"
+      content="A development-studio workflow for AI agents, from idea to validated release."
+    >
+    <meta property="og:url" content="https://aleksei2507.github.io/studio-os/">
+    <meta
+      property="og:image"
+      content="https://aleksei2507.github.io/studio-os/assets/studio-workbench.jpg"
+    >
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Studio OS home">
+        <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>Studio OS</span>
+        <small>alpha</small>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="nav-wide" href="#process">Process</a>
+        <a class="nav-wide" href="#principles">Principles</a>
+        <a href="#install">Install</a>
+        <a
+          class="nav-github"
+          href="https://github.com/Aleksei2507/studio-os"
+          target="_blank"
+          rel="noreferrer"
+        >GitHub</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <img
+          class="hero-media"
+          src="./assets/studio-workbench.jpg"
+          alt="A structured product studio workbench with a physical delivery rail"
+          width="1672"
+          height="941"
+          fetchpriority="high"
+        >
+        <div class="hero-content shell">
+          <p class="eyebrow"><span aria-hidden="true"></span>Open source / Alpha</p>
+          <h1 id="hero-title">Studio OS</h1>
+          <p class="hero-deck">A development studio, encoded for AI agents.</p>
+          <p class="hero-copy">
+            Bring a product request. Studio OS gives your agent a disciplined path
+            through discovery, architecture, interface design, implementation,
+            validation, QA, and release.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#install">Install Studio OS</a>
+            <a
+              class="button button-secondary"
+              href="https://github.com/Aleksei2507/studio-os"
+              target="_blank"
+              rel="noreferrer"
+            >View repository</a>
+          </div>
+          <p class="hero-note">Vendor-neutral. Project-local. No npm required at runtime.</p>
+        </div>
+
+        <div class="hero-route" aria-label="Studio OS product route">
+          <div class="shell route-layout">
+            <p>From request to evidence</p>
+            <ol>
+              <li><span>Understand</span></li>
+              <li><span>Decide</span></li>
+              <li><span>Design</span></li>
+              <li><span>Build</span></li>
+              <li><span>Verify</span></li>
+              <li><span>Ship</span></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="section definition" id="about" aria-labelledby="about-title">
+        <div class="shell section-layout">
+          <p class="section-label">What it is</p>
+          <div>
+            <h2 id="about-title">Bring a product request. Get a product process.</h2>
+            <p class="section-lead">
+              Studio OS is an instruction-driven operating layer for AI agents with
+              filesystem access. It turns an open-ended request into a sequence of
+              explicit decisions, project artifacts, working increments, and quality
+              evidence.
+            </p>
+
+            <div class="definition-grid">
+              <div>
+                <h3>A studio workflow</h3>
+                <p>
+                  Each Runtime owns one job and one stop condition. The agent asks,
+                  recommends, builds, or verifies only when that stage requires it.
+                </p>
+              </div>
+              <div>
+                <h3>Not a hosted agent</h3>
+                <p>
+                  Studio OS does not replace the AI host or hide work in a remote
+                  service. It guides the host agent and keeps accepted decisions in
+                  the project repository.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section process" id="process" aria-labelledby="process-title">
+        <div class="shell">
+          <div class="section-layout process-heading">
+            <p class="section-label">Entry paths</p>
+            <div>
+              <h2 id="process-title">Start with an idea or an existing codebase.</h2>
+              <p class="section-lead">
+                Studio OS detects the project mode, then composes the right workflow
+                for the product and the current work item.
+              </p>
+            </div>
+          </div>
+
+          <div class="flow-control">
+            <div class="segmented" role="tablist" aria-label="Project entry path">
+              <button
+                id="flow-tab-greenfield"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="flow-panel"
+                data-flow="greenfield"
+              >Greenfield</button>
+              <button
+                id="flow-tab-brownfield"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="flow-panel"
+                data-flow="brownfield"
+              >Brownfield</button>
+            </div>
+            <p class="flow-summary" id="flow-summary">
+              A new product moves from problem understanding to verified outcome.
+            </p>
+          </div>
+
+          <div
+            class="flow-panel"
+            id="flow-panel"
+            role="tabpanel"
+            aria-labelledby="flow-tab-greenfield"
+          >
+            <ol class="stage-track" id="stage-track" aria-label="Greenfield workflow">
+              <li><span>Interview</span></li>
+              <li><span>Discovery</span></li>
+              <li><span>Briefing</span></li>
+              <li><span>Planning</span></li>
+              <li><span>Architecture</span></li>
+              <li><span>Interface Design</span></li>
+              <li><span>Development</span></li>
+              <li><span>Validation</span></li>
+              <li><span>QA</span></li>
+              <li><span>Product Outcome</span></li>
+              <li><span>Release</span></li>
+              <li><span>Retrospective</span></li>
+            </ol>
+          </div>
+
+          <div class="work-types" aria-label="Supported work types">
+            <p>Once the project exists, work routes independently:</p>
+            <ul>
+              <li>Feature</li>
+              <li>Bugfix</li>
+              <li>Research</li>
+              <li>Refactor</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section principles" id="principles" aria-labelledby="principles-title">
+        <div class="shell section-layout">
+          <p class="section-label">How it works</p>
+          <div>
+            <h2 id="principles-title">Enough context for the current decision.</h2>
+            <p class="section-lead">
+              The Loader selects one workflow and one active Runtime. Relevant
+              standards and project memory join only when the stage needs them.
+            </p>
+
+            <div class="runtime-composition" aria-label="Runtime composition model">
+              <div><small>Project mode</small><strong>Greenfield / Brownfield</strong></div>
+              <span aria-hidden="true">+</span>
+              <div><small>Work type</small><strong>Product / Feature / Bugfix</strong></div>
+              <span aria-hidden="true">+</span>
+              <div><small>Interaction</small><strong>Adaptive strategy</strong></div>
+              <span aria-hidden="true">=</span>
+              <div class="runtime-result"><small>Loaded now</small><strong>Active Runtime</strong></div>
+            </div>
+
+            <div class="principle-list">
+              <article>
+                <h3>Progressive loading</h3>
+                <p>
+                  The agent reads the core contract, project memory, selected
+                  workflow, active Runtime, and only the standards that apply.
+                </p>
+              </article>
+              <article>
+                <h3>Durable decisions</h3>
+                <p>
+                  Accepted scope, architecture, design-system evidence, status, and
+                  quality reports stay in project-local Markdown artifacts.
+                </p>
+              </article>
+              <article>
+                <h3>Honest readiness</h3>
+                <p>
+                  Passing implementation tests is not enough to call an MVP ready.
+                  Validation, QA, Product Outcome, and Release have separate gates.
+                </p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section interaction" aria-labelledby="interaction-title">
+        <div class="shell section-layout">
+          <p class="section-label">Interaction layer</p>
+          <div>
+            <h2 id="interaction-title">It adapts to how you work, not who you are.</h2>
+            <p class="section-lead">
+              The strategy is inferred from observable behavior and can change as
+              the conversation changes. You never have to configure a mode.
+            </p>
+
+            <div class="strategy-grid">
+              <article>
+                <span>Delegated decisions</span>
+                <h3>Advisor</h3>
+                <p>Recommends a clear approach, explains briefly, and reduces decision load.</p>
+              </article>
+              <article>
+                <span>Compared options</span>
+                <h3>Collaborator</h3>
+                <p>Makes trade-offs visible and treats challenges as part of the decision.</p>
+              </article>
+              <article>
+                <span>Bounded instruction</span>
+                <h3>Executor</h3>
+                <p>Implements the accepted change directly and keeps discussion focused.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section standards" aria-labelledby="standards-title">
+        <div class="shell section-layout">
+          <p class="section-label">Delivery standards</p>
+          <div>
+            <h2 id="standards-title">Flexible stack. Fixed quality floor.</h2>
+            <p class="section-lead">
+              Architecture chooses technology for product fit and long-term delivery.
+              Brownfield projects preserve evidence from the existing stack and design
+              system. Quality gates still apply across every platform.
+            </p>
+
+            <div class="standards-rail">
+              <div>
+                <span>01</span>
+                <h3>Read the product</h3>
+                <p>Goals, constraints, current code, operations, and interface evidence.</p>
+              </div>
+              <div>
+                <span>02</span>
+                <h3>Select what applies</h3>
+                <p>Architecture, security, accessibility, testing, platform, and stack rules.</p>
+              </div>
+              <div>
+                <span>03</span>
+                <h3>Verify the outcome</h3>
+                <p>Implementation evidence remains separate from product readiness.</p>
+              </div>
+            </div>
+
+            <ul class="platform-list" aria-label="Product platforms">
+              <li>Web</li>
+              <li>Backend</li>
+              <li>iOS</li>
+              <li>Android</li>
+              <li>Cross-platform</li>
+              <li>Desktop</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section install" id="install" aria-labelledby="install-title">
+        <div class="shell section-layout">
+          <p class="section-label">Install</p>
+          <div>
+            <h2 id="install-title">Add the studio to your agent.</h2>
+            <p class="section-lead">
+              Install the packaged plugin for Codex or Claude Code, or use the
+              universal Bootstrap with another filesystem-capable agent.
+            </p>
+
+            <div class="install-tabs" role="tablist" aria-label="Installation method">
+              <button
+                id="install-tab-codex"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="install-codex"
+                data-install-tab="codex"
+              >Codex</button>
+              <button
+                id="install-tab-claude"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="install-claude"
+                data-install-tab="claude"
+              >Claude Code</button>
+              <button
+                id="install-tab-universal"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="install-universal"
+                data-install-tab="universal"
+              >Other agents</button>
+            </div>
+
+            <div
+              class="install-panel"
+              id="install-codex"
+              role="tabpanel"
+              aria-labelledby="install-tab-codex"
+              data-install-panel="codex"
+            >
+              <p>Add the GitHub marketplace, then install Studio OS:</p>
+              <div class="command-row">
+                <code id="command-marketplace">codex plugin marketplace add Aleksei2507/studio-os</code>
+                <button
+                  type="button"
+                  aria-label="Copy marketplace command"
+                  data-copy-target="command-marketplace"
+                >Copy</button>
+              </div>
+              <div class="command-row">
+                <code id="command-plugin">codex plugin add studio-os@studio-os</code>
+                <button
+                  type="button"
+                  aria-label="Copy plugin command"
+                  data-copy-target="command-plugin"
+                >Copy</button>
+              </div>
+              <p class="install-footnote">
+                Start a new Codex session, then use <code>Use Studio OS</code> with a product request.
+              </p>
+            </div>
+
+            <div
+              class="install-panel"
+              id="install-claude"
+              role="tabpanel"
+              aria-labelledby="install-tab-claude"
+              data-install-panel="claude"
+              hidden
+            >
+              <p>Add the GitHub marketplace, install Studio OS, then reload plugins:</p>
+              <div class="command-row">
+                <code id="command-claude-marketplace">/plugin marketplace add Aleksei2507/studio-os</code>
+                <button
+                  type="button"
+                  aria-label="Copy Claude marketplace command"
+                  data-copy-target="command-claude-marketplace"
+                >Copy</button>
+              </div>
+              <div class="command-row">
+                <code id="command-claude-plugin">/plugin install studio-os@studio-os</code>
+                <button
+                  type="button"
+                  aria-label="Copy Claude plugin command"
+                  data-copy-target="command-claude-plugin"
+                >Copy</button>
+              </div>
+              <div class="command-row">
+                <code id="command-claude-reload">/reload-plugins</code>
+                <button
+                  type="button"
+                  aria-label="Copy Claude reload command"
+                  data-copy-target="command-claude-reload"
+                >Copy</button>
+              </div>
+              <p class="install-footnote">
+                Start with <code>/studio-os:studio-os</code>, then add your product request.
+              </p>
+            </div>
+
+            <div
+              class="install-panel"
+              id="install-universal"
+              role="tabpanel"
+              aria-labelledby="install-tab-universal"
+              data-install-panel="universal"
+              hidden
+            >
+              <p>
+                Download the latest release archive, verify its checksum, extract it,
+                and give the agent this entry contract:
+              </p>
+              <div class="command-row command-row-multiline">
+                <code id="command-universal">Read and follow &lt;studio-os-root&gt;/adapters/universal/BOOTSTRAP.md.
+
+Use Studio OS.
+I want to build...</code>
+                <button
+                  type="button"
+                  aria-label="Copy universal Bootstrap prompt"
+                  data-copy-target="command-universal"
+                >Copy</button>
+              </div>
+              <p class="install-footnote">
+                The release archive contains the Runtime core. It does not require npm at runtime.
+              </p>
+            </div>
+
+            <div class="install-links">
+              <a href="https://github.com/Aleksei2507/studio-os/releases">Download latest release</a>
+              <a href="https://github.com/Aleksei2507/studio-os#installation">Read installation details</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq" aria-labelledby="faq-title">
+        <div class="shell section-layout">
+          <p class="section-label">Questions</p>
+          <div>
+            <h2 id="faq-title">Before you install.</h2>
+            <div class="faq-list">
+              <details>
+                <summary>Does Studio OS write the product?</summary>
+                <p>
+                  The host AI agent performs the work. Studio OS supplies the workflow,
+                  stage boundaries, decision contracts, standards, and quality gates that
+                  keep that work coherent.
+                </p>
+              </details>
+              <details>
+                <summary>Is it tied to Codex?</summary>
+                <p>
+                  No. Codex and Claude Code have packaged adapters. Other agents with
+                  filesystem access can enter through the universal Bootstrap included
+                  in each release.
+                </p>
+              </details>
+              <details>
+                <summary>Will it replace an existing stack or design system?</summary>
+                <p>
+                  Not by default. Brownfield onboarding records evidence from the current
+                  codebase and interface system so later stages can preserve or deliberately
+                  revise accepted constraints.
+                </p>
+              </details>
+              <details>
+                <summary>Is it production-ready?</summary>
+                <p>
+                  Studio OS is currently alpha software. Its contracts and regressions are
+                  actively evolving, so use versioned releases and review project decisions.
+                </p>
+              </details>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-layout">
+        <div>
+          <strong>Studio OS</strong>
+          <p>A product development workflow for AI agents.</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/Aleksei2507/studio-os">GitHub</a>
+          <a href="https://github.com/Aleksei2507/studio-os/releases">Releases</a>
+          <a href="https://github.com/Aleksei2507/studio-os/blob/main/LICENSE">MIT License</a>
+        </div>
+        <p class="copyright">&copy; <span id="current-year">2026</span> Studio OS</p>
+      </div>
+    </footer>
+  </body>
+</html>

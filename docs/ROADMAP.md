@@ -35,10 +35,13 @@ v0.2 — Core Workflow
 * Research
 * Briefing
 * Design Strategy
+* Interface Design
 * Planning
 * Architecture
 * Development
+* Validation
 * QA
+* Product Outcome
 * Release
 
 Результат:
@@ -91,7 +94,6 @@ Future
 Возможные направления развития:
 
 * Multi-Agent Orchestration
-* Design Agent
 * Automatic Research
 * IDE Integration
 * GitHub Integration

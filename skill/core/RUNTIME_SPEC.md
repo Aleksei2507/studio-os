@@ -81,7 +81,9 @@ Before running a Runtime, load only:
 2. Stored Project Memory.
 3. The selected workflow.
 4. The active Runtime `SKILL.md`.
-5. Optional Runtime references required by the current situation.
+5. Capability contracts declared by the active Runtime.
+6. Direct and profile-selected standard contracts applicable to the active Runtime.
+7. Optional Runtime references required by the current situation.
 
 Do not load all Runtime files or all user documentation at startup.
 
@@ -106,6 +108,20 @@ Describe the capability, not a vendor-specific tool. Adapters decide how Codex, 
 
 If a required capability is unavailable, stop and report the limitation instead of pretending the work was completed.
 
+## Standards Independence
+
+A Runtime may declare direct standard IDs in `skill/workflows/registry.json`.
+
+Resolve them through `skill/standards/registry.json`. Also apply standards selected in the canonical and active Work Item Standards Profiles when their `appliesTo` includes the active Runtime.
+
+Built-in standards use registry IDs. Project and stack standards use explicit profile references with source, version scope, applicable Runtime stages, and evidence requirements.
+
+Architecture selects domain and stack standards through `skill/standards/STANDARD_SPEC.md`. Other Runtimes consume the accepted profile; they must not silently choose a different stack or quality policy.
+
+Describe stable quality constraints in Studio OS standards. Keep framework- and version-specific guidance in project instructions or stack adapters loaded only when relevant.
+
+Do not duplicate a standard inside multiple Runtime contracts.
+
 ## Localization
 
 Use `Project Language` from `.studio/project-state.md`.
@@ -116,11 +132,38 @@ Do not mix languages in `docs/` or `.studio/` unless the user explicitly changes
 
 When using a template, preserve its semantic sections but translate headings and content to Project Language.
 
+## Artifact Portability Gate
+
+Every Runtime that creates or updates a persisted artifact must apply the Project-Local Reference Contract before completion.
+
+Verify that:
+
+- every local file reference resolves inside the Target Workspace;
+- project files use project-relative paths instead of machine-specific absolute paths;
+- no home, Downloads, Desktop, temporary, attachment-cache, `file://`, sibling-workspace, or escaping traversal path was persisted;
+- external local evidence was either imported into a project-managed location with appropriate confirmation or recorded descriptively without its host path;
+- stable `http` and `https` citations remain explicitly external and are not rewritten as project files.
+
+If the gate fails, repair the changed artifacts or mark required evidence unavailable. Do not claim the Runtime completed with non-portable references.
+
 ## Interaction Layer
 
 Read `skill/core/INTERACTION.md` before asking questions, making recommendations, or executing changes.
 
 Interaction strategy changes explanation, challenge, and autonomy. It does not change Runtime boundaries or workflow gates.
+
+## Completion Communication
+
+When a Runtime completes work, its user-facing response must identify:
+
+- the exact completed unit: task, remediation, stage, increment, milestone, or release;
+- the current increment and progress when a Roadmap exists;
+- `Product Readiness` for the Target Milestone;
+- the next recommended stage and any remaining increments or blockers.
+
+This rule is behavior-based and applies in every Project Language. Do not depend on matching a fixed completion phrase.
+
+Successful checks describe their bounded target only. A Runtime must not promote its own success into Product Outcome or Release readiness.
 
 ## Compatibility Entries
 

@@ -2,7 +2,11 @@
 
 ## Scope And Inputs
 
+## Studio Delivery And Support Model
+
 ## System Context
+
+## Technology Selection And Alternatives
 
 ## Architecture Overview
 
@@ -22,10 +26,16 @@
 
 ## Migration And Compatibility
 
+## Design System Compatibility
+
 ## Testing Strategy
+
+## Applied Standards And Quality Gates
 
 ## Architecture Decisions And ADRs
 
 ## Risks And Unknowns
+
+## Interface Design Handoff
 
 ## Development Handoff

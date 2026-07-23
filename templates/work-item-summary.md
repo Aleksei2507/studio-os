@@ -6,6 +6,10 @@
 
 ## Product Outcome
 
+Parent Target Milestone:
+Parent Product Readiness:
+Returned Workflow And Stage:
+
 ## Scope Delivered
 
 ## Decisions And Artifact Updates

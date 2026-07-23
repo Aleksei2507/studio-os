@@ -1,6 +1,6 @@
 ---
 name: design-strategy
-description: Define the product's user experience, interaction model, trust requirements, and visual direction before Planning or implementation. Use conditionally when interface decisions materially affect product value, usability, or Architecture.
+description: Define the product's user experience, interaction model, trust requirements, and visual direction before Planning, Architecture, and detailed Interface Design. Use conditionally when experience decisions materially affect product value or usability.
 ---
 
 # Design Strategy Runtime
@@ -11,7 +11,7 @@ description: Define the product's user experience, interaction model, trust requ
 
 Stage: Design Strategy
 
-Version: 1.0
+Version: 1.2
 
 Optional: Conditional
 
@@ -31,7 +31,7 @@ Next Stage: Planning
 
 ## Goal
 
-Translate accepted user scenarios and constraints into a coherent UX and visual direction that Planning and Architecture can preserve.
+Translate accepted user scenarios and constraints into a coherent UX and visual direction that Planning, Architecture, and Interface Design can preserve.
 
 Design Strategy decides experience principles. It does not produce detailed screens, component specifications, CSS, or implementation architecture.
 
@@ -40,6 +40,18 @@ Design Strategy decides experience principles. It does not produce detailed scre
 - `ux-analysis`
 
 Load `skill/capabilities/ux-analysis.md`.
+
+## Required Standards
+
+- `accessibility`;
+- `product-design`.
+
+Load:
+
+- `skill/standards/core/accessibility.md`;
+- `skill/standards/domains/product-design.md`.
+
+When the accepted product surface is mobile, also load `skill/standards/domains/mobile.md`. For an existing project, apply relevant standards selected in `.studio/standards-profile.md`.
 
 ## Entry Gate
 
@@ -51,7 +63,7 @@ Run Design Strategy when one or more are true:
 - visual direction affects positioning;
 - a Brownfield change introduces a new interaction model.
 
-Skip it with a recorded reason when existing design conventions and accepted scenarios are sufficient.
+Skip it with a recorded reason when the existing Project Design System Profile, design conventions, and accepted scenarios are sufficient.
 
 ## Inputs
 
@@ -62,7 +74,9 @@ Read:
 - `docs/research-summary.md` when available;
 - existing product screens or design artifacts for Brownfield;
 - `.studio/project-state.md`;
-- `.studio/active-context.md`.
+- `.studio/active-context.md`;
+- `.studio/standards-profile.md` when available;
+- `.studio/design-system-profile.md` and an active Work Item Design System Profile when available.
 
 ## Required Decisions
 
@@ -82,13 +96,14 @@ Define:
 
 ## Procedure
 
-1. Start from accepted user scenarios and product positioning.
+1. Start from accepted user scenarios, product positioning, and the observed or accepted Design System Profile.
 2. Identify the highest-risk user interaction.
 3. Recommend one primary UX direction.
 4. Explain why it fits the user context and product constraints.
 5. Present alternatives only when they represent real trade-offs.
-6. Record Brownfield conventions that must be preserved.
-7. Confirm the direction before updating Project Memory.
+6. Record Brownfield conventions and design-system boundaries that must be preserved.
+7. Identify applicable accessibility, product-design, and platform constraints for Architecture and later Interface Design.
+8. Confirm the direction before updating Project Memory.
 
 ## Conditional References
 
@@ -119,8 +134,10 @@ Create the Design Strategy under `docs/` or the Active Work Item directory accor
 - UX Principles;
 - Visual Direction;
 - Existing Patterns To Preserve for Brownfield;
+- Project Design System Constraints;
 - Alternatives and Trade-offs;
 - Risks and Unknowns;
+- Applicable Standards and Architecture Inputs;
 - Accepted Decision.
 
 Use `templates/design-strategy.md` as the output structure.
@@ -135,13 +152,15 @@ Preserve Mode, Workflow, Work Type, and Project Language.
 
 ## Handoff
 
-Pass to Planning and Architecture:
+Pass to Planning, Architecture, and later Interface Design:
 
 - primary flow;
 - UX principles;
 - primary device;
 - trust and accessibility constraints;
 - design decisions that create technical requirements;
+- Project Design System Profile constraints and any accepted reason to revise them;
+- applicable accessibility, product-design, and platform standards;
 - unresolved design risks.
 
 ## Forbidden
@@ -152,7 +171,9 @@ Design Strategy must not:
 - write CSS or product code;
 - select application architecture or database;
 - choose style without product rationale;
+- ignore applicable accessibility or platform behavior;
 - replace existing Brownfield patterns without an accepted reason;
+- contradict the observed or accepted Project Design System Profile without recording evidence and routing the detailed decision to Interface Design;
 - start Planning automatically.
 
 ## Completion Checklist
@@ -160,7 +181,9 @@ Design Strategy must not:
 - user context explicit;
 - primary flow and device defined;
 - UX and visual direction recommended;
+- Project Design System Profile preserved or an evidence-backed revision need recorded;
 - trust and accessibility addressed when relevant;
+- applicable standards identified for Architecture;
 - alternatives limited to real trade-offs;
 - decision accepted;
 - artifact and Project Memory updated.

@@ -68,12 +68,15 @@ Retrospective не создаёт proposals.
 
 - docs/discovery-summary.md
 - docs/project-brief.md
+- docs/design-strategy.md
 - docs/roadmap.md
 - docs/architecture.md
+- docs/interface-design.md
 - docs/qa-report.md
 - docs/release-notes.md
+- .studio/telemetry/product-outcome-report.md
 
-Для Work Item также прочитай его активные Brief, Roadmap, Architecture, Development Report, Validation Report, QA Report, Release Notes и Summary при наличии.
+Для Work Item также прочитай его активные Brief, Roadmap, Design Strategy, Architecture, Interface Design, Development Report, Validation Report, QA Report, Product Outcome Report, Release Notes и Summary при наличии.
 
 Если существуют telemetry-файлы, прочитай:
 

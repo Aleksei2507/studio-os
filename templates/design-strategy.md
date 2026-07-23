@@ -22,8 +22,12 @@
 
 ## Existing Patterns To Preserve
 
+## Project Design System Constraints
+
 ## Alternatives And Trade-offs
 
 ## Risks And Unknowns
+
+## Applicable Standards And Architecture Inputs
 
 ## Accepted Decision

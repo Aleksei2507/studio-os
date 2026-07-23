@@ -16,6 +16,12 @@
 
 ## Acceptance Evidence
 
+## Parent Target Milestone And Current Increment
+
+## Parent Workflow And Return Stage
+
+## Product Readiness Impact
+
 ## Unknowns
 
 ## Recommended Next Runtime

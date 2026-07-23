@@ -10,7 +10,7 @@
 
 ## Dependencies And Critical Path
 
-## Validation, QA, Migration, And Release Effort
+## Interface Design, Validation, QA, Migration, And Release Effort
 
 ## Operational Cost Drivers
 

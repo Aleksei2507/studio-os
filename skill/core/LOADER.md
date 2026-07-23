@@ -6,7 +6,7 @@
 
 Stage: Loader
 
-Version: 2.0
+Version: 2.2
 
 Creates: None
 
@@ -16,9 +16,9 @@ Next: Selected workflow and active Runtime
 
 ## Goal
 
-Determine project mode, work type, workflow, current stage, and active Runtime.
+Determine project mode, work type, workflow, current stage, current increment, Product Readiness, and active Runtime.
 
-Loader routes work. It does not perform Interview, Discovery, Planning, Architecture, Development, or other stage work.
+Loader routes work. It does not perform Interview, Discovery, Planning, Architecture, Interface Design, Development, or other stage work.
 
 ## Progressive Startup Loading
 
@@ -32,11 +32,14 @@ Then read only what the current request requires:
 
 1. `skill/core/PROJECT_MEMORY.md` when Project Memory exists or must be created.
 2. `.studio/project-state.md` and `.studio/active-context.md` when available.
-3. The selected workflow Markdown file.
-4. `skill/core/CONVERSATION_ROUTER.md` for a message inside an active project.
-5. The active Runtime `SKILL.md` from the registry.
-6. `skill/capabilities/registry.json` and only capability contracts declared by the active Runtime.
-7. Optional Runtime references only when the Runtime says they are needed.
+3. The canonical and active Work Item Standards Profiles only when the active Runtime uses standards.
+4. The canonical and active Work Item Project Design System Profiles only when the active Runtime needs design-system evidence.
+5. The selected workflow Markdown file.
+6. `skill/core/CONVERSATION_ROUTER.md` for a message inside an active project.
+7. The active Runtime `SKILL.md` from the registry.
+8. `skill/capabilities/registry.json` and only capability contracts declared by the active Runtime.
+9. `skill/standards/registry.json`, direct standards declared by the active Runtime, and applicable standards listed in the loaded profiles only when the stage uses them.
+10. Optional Runtime references only when the Runtime says they are needed.
 
 Do not load README, user documentation, every workflow, or every Runtime at startup.
 
@@ -98,10 +101,19 @@ When `.studio/project-state.md` has Mode and Current Stage but lacks new routing
 4. Use `Work Type: New Product` for Greenfield.
 5. Use `Work Type: Not Selected` for Brownfield unless the current request provides a bounded Work Type.
 6. Add `Active Work Item: None` unless an existing Work Item path is confirmed.
-7. Preserve completed stages, artifacts, Project Language, and current stage.
-8. Show the proposed migration and request confirmation before writing because Project Memory mutation is non-obvious.
+7. Add `Parent Workflow: None` and `Return Stage: None` unless an interrupted lifecycle is confirmed.
+8. Preserve completed stages, artifacts, Project Language, and current stage.
+9. Show the proposed migration and request confirmation before writing because Project Memory mutation is non-obvious.
+
+When milestone fields are absent, also derive a proposed `Target Milestone`, `Current Increment`, `Increment Status`, and `Increment Progress` from accepted artifacts. Use `Product Readiness: Not Ready` while accepted work remains. Never infer readiness from stage completion. If evidence is ambiguous, preserve the current stage, mark readiness `Not Ready`, and report the ambiguity instead of asking the user to reconstruct technical history.
 
 Do not restart Interview or Brownfield Onboarding merely because new routing fields are absent.
+
+A legacy project may also lack `.studio/standards-profile.md`. Do not restart onboarding or invent a profile in Loader. Route to the stored active Runtime; Architecture creates an Accepted profile, while a bounded existing-stack change follows the Provisional bootstrap rule in `skill/standards/STANDARD_SPEC.md`.
+
+A legacy project may also lack `.studio/design-system-profile.md`. Do not restart onboarding and do not infer one in Loader. Load the active Runtime normally; a Runtime that needs design-system evidence follows the Project Memory bootstrap rule.
+
+A legacy project may contain machine-specific paths in Project Memory or loaded artifacts. Do not restart onboarding and do not preload every artifact to scan for them. Preserve valid state, apply the Project-Local Reference Contract to currently loaded references, and let the responsible Runtime migrate additional references when their artifacts become active.
 
 ## Workflow Selection
 
@@ -137,7 +149,7 @@ Do not ask the user to select a mode.
 
 For an active project message, use `skill/core/CONVERSATION_ROUTER.md` before stage handling.
 
-The router may keep the current workflow, select a Work Item workflow, answer an unrelated question without mutation, or ask one clarification question.
+The router may keep the current workflow, select a Work Item workflow, answer an unrelated question without mutation, or ask one clarification question. Pass Target Milestone, Product Readiness, current increment, increment progress, and current stage to the router.
 
 ## Runtime Loading
 
@@ -151,6 +163,12 @@ Check its registry status before execution.
 For an active Runtime, load a reference only when its `SKILL.md` gives a condition that applies to the current situation.
 
 Resolve declared capability IDs through `skill/capabilities/registry.json`. Load only their contracts. If a required capability is unavailable, follow the capability and Runtime blocked behavior.
+
+Resolve declared standard IDs through `skill/standards/registry.json`. When a Project or active Work Item Standards Profile exists, load only selected standards whose `appliesTo` includes the active Runtime. Architecture may load an additional domain standard while forming or revising the profile.
+
+Resolve project or stack standard references only from an accepted profile and only for their recorded Runtime stages. If a recorded path or adapter is unavailable, report the limitation instead of substituting an unrelated guide.
+
+Load `.studio/design-system-profile.md` and an active `work-items/<id>/design-system-profile.md` for Design Strategy, Architecture, Interface Design, Development, or QA when interface-system evidence affects the active work. Release loads an accepted Work Item profile only when it may merge a successfully released design-system change. Do not load either profile for unrelated stages merely because the files exist.
 
 Do not read other Runtime folders preemptively.
 
@@ -173,9 +191,11 @@ Loader must not:
 - create product artifacts;
 - write product code;
 - choose product or architecture decisions;
+- infer milestone readiness from a completed task, stage, or successful check;
 - skip quality gates;
 - execute a Runtime marked `planned`;
 - load every Runtime at startup;
+- load every standard or stack guide at startup;
 - start a new stage automatically after completion.
 
 ## Stop Condition

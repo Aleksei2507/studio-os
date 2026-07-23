@@ -10,6 +10,15 @@
     "ux-analysis": {
       "path": "skill/capabilities/ux-analysis.md"
     },
+    "interface-modeling": {
+      "path": "skill/capabilities/interface-modeling.md"
+    },
+    "design-system-definition": {
+      "path": "skill/capabilities/design-system-definition.md"
+    },
+    "platform-design": {
+      "path": "skill/capabilities/platform-design.md"
+    },
     "architecture-design": {
       "path": "skill/capabilities/architecture-design.md"
     },

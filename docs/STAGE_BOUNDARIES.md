@@ -1,414 +1,486 @@
 # Stage Boundaries
 
-> Каждая стадия Studio OS имеет чёткие границы ответственности.
+> Every Studio OS stage has a clear responsibility boundary.
 
-Главное правило:
+Main rule:
 
-> Стадия должна решать только свои задачи.
+> A stage must perform only its own work.
 
-Если стадия начинает выполнять работу следующей стадии — это считается ошибкой Studio OS.
+When a stage starts performing the next stage's work, Studio OS is behaving incorrectly.
 
-Этот документ является пользовательским обзором. Канонические исполняемые границы находятся в `skill/runtimes/*/SKILL.md`.
+This document is a user-facing overview. Canonical executable boundaries live in `skill/runtimes/*/SKILL.md`.
 
 ---
 
 # Idea
 
-## Цель
+## Goal
 
-Получить первоначальную идею продукта.
+Capture the initial product idea.
 
-## Разрешено
+## Allowed
 
-- Свободное описание идеи.
-- Любой уровень детализации.
+- Describe the idea freely.
+- Provide any level of detail.
 
-## Запрещено
+## Forbidden
 
-- Анализ.
-- Проектирование.
-- Выбор технологий.
+- Analyze the idea.
+- Design the product.
+- Select technology.
 
-## Результат
+## Result
 
-Есть идея продукта.
+A product idea exists.
 
 ---
 
 # Interview
 
-## Цель
+## Goal
 
-Понять замысел автора.
+Understand the author's intent.
 
-## Разрешено
+## Allowed
 
-- Задавать вопросы.
-- Уточнять ответы.
-- Формировать гипотезы.
-- Проверять понимание.
+- Ask focused questions.
+- Clarify answers.
+- Form hypotheses.
+- Verify understanding.
 
-## Запрещено
+## Forbidden
 
-- Искать технологии.
-- Искать конкурентов.
-- Делать выводы за пользователя.
-- Создавать Project Brief.
+- Research technology.
+- Research competitors.
+- Make product conclusions without user confirmation.
+- Create Project Brief.
 
-## Результат
+## Result
 
-Есть ответы пользователя.
+The initial product intent is understood.
 
 ---
 
 # Discovery
 
-## Цель
+## Goal
 
-Понять продукт.
+Build a coherent understanding of the product.
 
-## Разрешено
+## Allowed
 
-- Описывать проблему.
-- Описывать пользователя.
-- Формулировать ценность.
-- Определять ограничения.
-- Определять риски.
-- Формулировать критерии успеха.
-- Фиксировать открытые вопросы.
+- Describe the problem and target user.
+- Define product value.
+- Identify constraints and risks.
+- Define success criteria.
+- Record open questions.
 
-## Запрещено
+## Forbidden
 
-- Выбирать стек.
-- Выбирать базы данных.
-- Выбирать библиотеки.
-- Проектировать API.
-- Проектировать архитектуру.
-- Планировать разработку.
+- Select stack, databases, or libraries.
+- Design APIs or architecture.
+- Plan implementation.
 
-## Артефакт
+## Artifact
 
-docs/discovery-summary.md
+`docs/discovery-summary.md`
 
 ---
 
 # Research
 
-## Цель
+## Goal
 
-Исследовать внешнюю информацию.
+Collect external evidence that can affect a product decision.
 
-## Разрешено
+## Allowed
 
-- Искать конкурентов.
-- Искать похожие продукты.
-- Анализировать рынок.
-- Искать идеи монетизации.
-- Искать лучшие практики.
-- Предлагать идеи для усиления продукта.
+- Research competitors and substitutes.
+- Analyze the market.
+- Research monetization approaches and domain practices.
+- Recommend evidence-based improvements.
 
-## Запрещено
+## Forbidden
 
-- Менять идею продукта самостоятельно.
-- Навязывать решения.
-- Принимать продуктовые решения вместо пользователя.
-- Представлять память модели как актуальное исследование.
-- Выдумывать источники, рынок, конкурентов, цены или регулирование.
+- Change the product idea without confirmation.
+- Force a recommendation without evidence.
+- Make irreversible product decisions for the user.
+- Present model memory as current research.
+- Invent sources, competitors, prices, market data, or regulations.
 
-## Артефакт
+## Artifact
 
-docs/research-summary.md
+`docs/research-summary.md`
 
 ---
 
 # Briefing
 
-## Цель
+## Goal
 
-Преобразовать понимание продукта в требования.
+Turn accepted product understanding into requirements.
 
-## Разрешено
+## Allowed
 
-- Формировать Project Brief.
-- Определять MVP.
-- Определять Non Goals.
-- Формировать Acceptance Criteria.
-- Формулировать пользовательские сценарии.
+- Create Project Brief.
+- Define MVP or current product scope.
+- Define Non Goals.
+- Define Acceptance Criteria.
+- Define user scenarios.
 
-## Запрещено
+## Forbidden
 
-- Проектировать архитектуру.
-- Выбирать технологии.
-- Планировать реализацию.
+- Design architecture.
+- Select technology.
+- Plan implementation.
 
-## Артефакт
+## Artifact
 
-docs/project-brief.md
+`docs/project-brief.md`
 
 ---
 
 # Design Strategy
 
-## Цель
+## Goal
 
-Определить UX-направление и визуальную стратегию продукта.
+Define the product's UX and visual direction.
 
-## Разрешено
+## Allowed
 
-- Определять primary device.
+- Define the primary device and interaction model.
+- Recommend a UX and visual direction.
+- Present material alternatives and trade-offs.
+- Explain why the direction fits the product.
+- Record the accepted decision.
+- Apply product-design and accessibility standards.
+- Account for mobile platform constraints when relevant.
+- Preserve observed Project Design System Profile constraints for Brownfield work.
 
-- Определять UX strategy.
+## Forbidden
 
-- Рекомендовать UI style.
+- Design detailed components or screens.
+- Implement layout or CSS.
+- Select technical architecture.
+- Impose a visual style without product rationale.
+- Replace existing design-system boundaries without evidence and an accepted reason.
 
-- Предлагать 2–3 альтернативы.
+## Artifact
 
-- Объяснять, почему стратегия подходит продукту.
-
-- Фиксировать решение пользователя.
-
-## Запрещено
-
-- Проектировать компоненты подробно.
-
-- Верстать интерфейс.
-
-- Писать CSS.
-
-- Выбирать техническую архитектуру.
-
-- Навязывать стиль без объяснения.
-
-## Артефакт
-
-docs/design-strategy.md
+`docs/design-strategy.md`
 
 ---
 
 # Planning
 
-## Цель
+## Goal
 
-Разбить проект на небольшие независимые итерации.
+Split accepted scope into small, valuable iterations.
 
-## Разрешено
+## Allowed
 
-- Создавать Roadmap.
-- Делить работу на этапы.
-- Определять зависимости.
+- Create Roadmap.
+- Define iterations and dependencies.
+- Sequence work by product value and risk.
 
-## Запрещено
+## Forbidden
 
-- Проектировать архитектуру.
-- Реализовывать код.
+- Design architecture.
+- Implement code.
 
-## Артефакт
+## Artifact
 
-docs/roadmap.md
+`docs/roadmap.md`
 
 ---
 
 # Architecture
 
-## Цель
+## Goal
 
-Определить техническое устройство проекта.
+Define the technical system needed to deliver and support the product.
 
-## Разрешено
+## Allowed
 
-- Выбирать стек.
-- Выбирать базы данных.
-- Выбирать библиотеки.
-- Проектировать API.
-- Проектировать модули.
-- Создавать ADR.
+- Select stack, databases, and libraries.
+- Design APIs, components, data ownership, and deployment.
+- Create ADRs.
+- Select applicable engineering and domain standards.
+- Evaluate whether Studio OS can implement, validate, operate, and support the solution.
+- Make evidence-based technical decisions for the client.
+- Create `.studio/standards-profile.md`.
+- Check the observed Project Design System Profile for technical compatibility.
 
-## Запрещено
+## Forbidden
 
-- Реализовывать код.
+- Implement product code.
+- Select a stack from Interaction Strategy, profession, or inferred user proficiency.
+- Transfer stack selection or support responsibility to the client by default.
+- Replace an observed design system as a side effect of stack selection.
 
-## Артефакты
+## Artifacts
 
-docs/architecture.md
+- `docs/architecture.md`
+- `docs/delivery-estimate.md`
+- `docs/adr/`
+- `.studio/standards-profile.md`
 
-docs/delivery-estimate.md
+---
 
-docs/adr/
+# Interface Design
+
+## Goal
+
+Turn accepted product experience and Architecture into an implementation-ready interface specification.
+
+## Allowed
+
+- Define detailed user flows, surfaces, navigation, and state behavior.
+- Define responsive or adaptive behavior.
+- Define semantic design-system foundations and reusable component patterns.
+- Apply Web, Mobile, or Desktop conventions from the accepted delivery surface and stack.
+- Preserve and extend Brownfield design systems.
+- Verify, create, or update the applicable Project or Work Item Design System Profile.
+- Create or reference inspectable wireframes and visual designs when the environment supports them.
+- Create `docs/interface-design.md` or the active Work Item equivalent.
+
+## Forbidden
+
+- Select or change the technology stack.
+- Ask the client to choose a framework for Studio OS.
+- Change accepted scope, Design Strategy, or Architecture silently.
+- Write production code, CSS, or application components.
+- Apply the same controls and navigation to every platform without evidence.
+- Claim visual validation that did not occur.
+- Generate an HTML review representation.
+
+## Artifacts
+
+- `docs/interface-design.md`
+- `.studio/design-system-profile.md` or the active Work Item equivalent
 
 ---
 
 # Development
 
-## Цель
+## Goal
 
-Реализовать функциональность.
+Implement the accepted product increment.
 
-## Разрешено
+## Allowed
 
-- Писать код.
-- Делать рефакторинг.
-- Исправлять ошибки.
+- Write code.
+- Refactor within accepted boundaries.
+- Fix defects.
+- Apply the active Project Standards Profile.
+- Implement the accepted Interface Design when selected.
+- Implement against the applicable Design System Profile when interface code is affected.
 
-## Запрещено
+## Forbidden
 
-- Менять продуктовые требования.
-- Самостоятельно менять архитектуру без ADR.
+- Change product requirements.
+- Change accepted architecture without an ADR and confirmation.
+- Change stack or standards policy independently.
+- Invent or revise material interface decisions inside implementation.
+- Introduce a parallel component library, token set, or theme without an accepted design decision.
 
-## Артефакт
+## Artifacts
 
-Работающий инкремент продукта.
-
-.studio/telemetry/development-report.md
+- Working product increment.
+- `.studio/telemetry/development-report.md`
 
 ---
 
 # Work Item Intake
 
-## Цель
+## Goal
 
-Классифицировать ограниченное изменение существующего Studio OS проекта и выбрать Feature, Bugfix, Research или Refactor workflow.
+Classify a bounded change to an existing Studio OS project and select Feature, Bugfix, Research, or Refactor workflow.
 
-## Разрешено
+## Allowed
 
-- Проверять соответствие текущей цели продукта.
-- Определять затронутые артефакты.
-- Создавать `work-items/*/request.md`.
-- Выбирать workflow.
+- Check alignment with the current product goal.
+- Identify affected artifacts.
+- Create `work-items/*/request.md`.
+- Select the matching workflow.
 
-## Запрещено
+## Forbidden
 
-- Писать код.
-- Выполнять исследование.
-- Проектировать архитектуру.
-- Незаметно менять scope продукта.
+- Write code.
+- Perform Research.
+- Design architecture.
+- Change product scope silently.
 
-## Артефакт
+## Artifact
 
-work-items/*/request.md
+`work-items/*/request.md`
 
 ---
 
 # Validation
 
-## Цель
+## Goal
 
-Собрать объективные технические доказательства качества инкремента.
+Collect objective technical evidence for the increment.
 
-## Разрешено
+## Allowed
 
-- Выполнять install, lint, typecheck, tests, build и smoke checks.
-- Фиксировать точные команды и результаты.
-- Блокировать переход при провале обязательной проверки.
+- Run install, lint, typecheck, test, build, and smoke checks.
+- Record exact commands and results.
+- Map the active Standards Profile to reproducible evidence.
+- Block transition when a required check fails.
 
-## Запрещено
+## Forbidden
 
-- Объявлять проверку успешной без выполнения.
-- Подменять QA техническими тестами.
-- Игнорировать ошибку ради перехода к следующей стадии.
+- Report an unexecuted check as successful.
+- Replace QA with technical checks.
+- Ignore a failure to advance the workflow.
+- Report PASS without required standards evidence.
 
-## Артефакт
+## Artifact
 
-.studio/telemetry/validation-report.md
+`.studio/telemetry/validation-report.md`
 
 ---
 
 # QA
 
-## Цель
+## Goal
 
-Проверить качество результата.
+Evaluate the increment as the intended product.
 
-## Разрешено
+## Allowed
 
-- Проверять сценарии.
-- Проверять ошибки.
-- Проверять Build.
-- Проверять Acceptance Criteria.
+- Test accepted user scenarios and error paths.
+- Verify Acceptance Criteria.
+- Inspect the relevant build and real interface.
+- Check applicable design, accessibility, privacy, and domain standards.
+- Check observable Design System Profile conformance and approved deviations.
 
-## Запрещено
+## Forbidden
 
-- Добавлять новые функции.
+- Add new product features.
+- Fix code inside QA.
+- Treat passing technical tests as automatic product PASS.
 
-## Артефакт
+## Artifact
 
-QA Report
+`docs/qa-report.md`
+
+---
+
+# Product Outcome
+
+## Goal
+
+Compare accepted Target Milestone criteria with evidence from all required roadmap increments.
+
+## Allowed
+
+- Build a milestone evidence matrix.
+- Audit approved and unapproved scope changes.
+- Return `PASS`, `CONTINUE`, `BLOCKED`, or `RE-SCOPE`.
+- Route an incomplete milestone to the next accepted increment.
+- Set `Product Readiness: Ready for Release` only on `PASS`.
+
+## Forbidden
+
+- Implement or repair code.
+- Replace Validation or QA.
+- Treat one accepted increment as the complete milestone.
+- Remove accepted scope without explicit confirmation.
+- Start Release or the next increment automatically.
+
+## Artifact
+
+`.studio/telemetry/product-outcome-report.md` or the active Work Item equivalent.
 
 ---
 
 # Release
 
-## Цель
+## Goal
 
-Подготовить результат к передаче пользователю.
+Decide release readiness and prepare safe delivery.
 
-## Разрешено
+## Allowed
 
-- Проверять готовность.
-- Подписывать релиз.
-- Отказывать в релизе.
+- Review readiness evidence.
+- Prepare release notes and operational steps.
+- Mark the release READY, CONDITIONAL, or BLOCKED.
+- Execute only explicitly authorized external release actions.
 
-## Запрещено
+## Forbidden
 
-- Исправлять код самостоятельно.
+- Fix code inside Release.
+- Override failed required gates.
+- Release a lifecycle milestone without Product Outcome `PASS`.
+- Describe a bounded increment or Work Item release as completion of the whole product.
+- Deploy, publish, tag, or notify without explicit authorization.
 
-## Артефакт
+## Artifact
 
-Release Notes
+`docs/release-notes.md`
 
 ---
 
 # Maintenance
 
-## Цель
+## Goal
 
-Поддерживать продукт после релиза.
+Continue Studio OS-owned product support after Release.
 
-## Разрешено
+## Allowed
 
-- Исправлять ошибки.
-- Выпускать обновления.
-- Поддерживать документацию.
+- Route product changes through Feature, Bugfix, Research, or Refactor Work Item workflows.
+- Release updates.
+- Maintain product documentation and accepted project truth.
+
+## Forbidden
+
+- Apply untracked production changes outside a Work Item workflow.
+- Transfer support responsibility to the client without an explicit ownership change.
 
 ---
 
 # Retrospective
 
-## Цель
+## Goal
 
-Зафиксировать опыт использования Studio OS после проекта, релиза или Work Item.
+Record the experience of using Studio OS after a project, Release, or Work Item.
 
-## Разрешено
+## Allowed
 
-- Собирать объективные наблюдения.
-- Запрашивать краткий пользовательский feedback.
-- Фиксировать Candidate Improvements.
+- Collect objective observations.
+- Request concise user feedback.
+- Record Candidate Improvements.
 
-## Запрещено
+## Forbidden
 
-- Автоматически менять Studio OS.
-- Создавать patches вместо наблюдений.
-- Защищать прошлое поведение Studio OS от критики пользователя.
+- Change Studio OS automatically.
+- Create patches instead of observations.
+- Defend previous Studio OS behavior against user criticism.
 
-## Артефакт
+## Artifact
 
-.studio/runtime-retrospective.md
+`.studio/runtime-retrospective.md`
 
 ---
 
 # Evolution
 
-## Цель
+## Goal
 
-Развивать Studio OS.
+Improve Studio OS deliberately.
 
-## Разрешено
+## Allowed
 
-- Анализировать обратную связь.
-- Создавать RFC.
-- Предлагать изменения.
+- Analyze feedback.
+- Create RFCs.
+- Propose changes.
 
-## Запрещено
+## Forbidden
 
-- Менять Studio OS автоматически.
+- Change Studio OS automatically.
 
-Все изменения проходят через RFC и утверждаются владельцем проекта.
+All changes go through an RFC and require project-owner approval.

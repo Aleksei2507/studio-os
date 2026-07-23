@@ -14,9 +14,9 @@ Recovery: classify it as a future Work Item unless it violates accepted criteria
 
 ## QA Fixes Findings
 
-Failure: editing code while evaluating it.
+Failure: editing code or revising accepted design artifacts while evaluating the increment.
 
-Recovery: record reproducible evidence and route to Development.
+Recovery: record reproducible evidence and route to Development for implementation defects or the owning design Runtime for accepted-design defects.
 
 ## Missing Evidence
 

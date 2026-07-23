@@ -6,6 +6,7 @@ prompt: Continue this Studio OS project after updating Studio OS.
 expect:
   - preserves stored Greenfield or Brownfield mode, language, artifacts, and current stage
   - proposes workflow, work type, and active work item fields using existing evidence
+  - proposes Target Milestone, Product Readiness, current increment, and progress without inferring release readiness
   - requests confirmation before writing the non-obvious memory migration
   - does not restart Interview or Brownfield Onboarding
 tags: [loader, migration, project-memory, regression]

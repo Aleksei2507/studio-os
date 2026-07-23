@@ -86,6 +86,9 @@ Behavior:
 - Strategy can change during a project.
 - Do not classify the user by profession.
 - Classify the current interaction by behavior.
+- Do not infer technical proficiency from interaction strategy, profession, language, grammar, confidence, message length, or question sophistication.
+- Interaction strategy must not select the technology stack or reduce engineering quality requirements.
+- Technology selection remains Architecture responsibility under the default Studio OS-owned delivery and support model.
 - Do not rely on language-specific phrases.
 - Use Project Language for communication and artifacts.
 - Use the current strategy to decide how much to explain, challenge, or ask.

@@ -30,6 +30,7 @@ Examples:
 
 - Research: source links and access dates.
 - Codebase analysis: repository files and symbol paths.
+- Interface design: flow, state, design-system, platform, and inspected visual evidence when applicable.
 - Validation: commands, exit status, and relevant output.
 - QA: acceptance scenario evidence.
 - Release: readiness decision and authorization record.

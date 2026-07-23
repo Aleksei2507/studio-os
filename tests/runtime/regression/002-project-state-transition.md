@@ -5,6 +5,7 @@ stage: "All"
 prompt: "Complete the stage."
 expect:
   - "Studio OS should update Previous Stage, Current Stage, and Status consistently."
+  - "Studio OS should update increment status without promoting Target Milestone readiness."
   - "Should not: Leave ambiguous Current Stage: Completed forever."
 tags: ["regression", "severity:high", "risk:high"]
 ---

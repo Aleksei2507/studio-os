@@ -9,7 +9,7 @@ description: Classify and initialize a bounded change in an existing Studio OS p
 
 Stage: Work Item Intake
 
-Version: 1.0
+Version: 1.2
 
 Requires Confirmation: Only when classification or scope is unclear
 
@@ -38,6 +38,7 @@ Read:
 - `skill/core/PROJECT_MEMORY.md`;
 - `.studio/project-state.md`;
 - `.studio/active-context.md`;
+- stored Target Milestone, Product Readiness, current increment, and increment progress;
 - accepted product artifacts affected by the request;
 - the current user request.
 
@@ -53,6 +54,8 @@ Classify from the requested outcome:
 If the request combines types, choose the type that controls acceptance and record the secondary concerns.
 
 If classification changes the workflow materially and confidence is low, ask one focused question.
+
+Before classifying Bugfix, compare the reported behavior with the accepted current increment and Roadmap. Incorrect accepted behavior is a Bugfix. A capability assigned to a future incomplete increment is planned scope. A new or expanded outcome is a Feature or Scope Change.
 
 ## Scope Check
 
@@ -89,12 +92,17 @@ Create `request.md` with:
 - Affected Artifacts;
 - Known Constraints;
 - Acceptance Evidence;
+- Parent Target Milestone And Current Increment;
+- Parent Workflow And Return Stage;
+- Product Readiness Impact;
 - Unknowns;
 - Recommended Next Runtime.
 
 For Bugfix include observed behavior, expected behavior, and available reproduction evidence.
 
 Use `templates/work-item-request.md` as the output structure.
+
+Apply the Project-Local Reference Contract to affected artifacts and supplied evidence. A document, attachment, or sibling repository outside the Target Workspace may be described as external input, but its machine path must not be written to `request.md` or Active Context.
 
 ## Project Memory Update
 
@@ -105,10 +113,14 @@ Mode: <preserve Greenfield or Brownfield>
 Workflow: <selected-workflow>
 Work Type: <work-type>
 Active Work Item: <work-item-path>
+Parent Workflow: <workflow interrupted by this Work Item>
+Return Stage: <stage interrupted by this Work Item>
 Previous Stage: <previous-stage>
 Current Stage: <next-runtime>
 Status: Waiting Confirmation | In Progress
 ```
+
+Preserve `Target Milestone`, `Product Readiness`, `Current Increment`, `Increment Status`, and `Increment Progress`. Work Item intake must not promote product readiness. Record the parent workflow and return stage so a Bugfix returns to the interrupted lifecycle stage or increment after its own required gates.
 
 Reference the Work Item request from Active Context without copying it.
 
@@ -120,7 +132,10 @@ Work Item Intake must not:
 - perform diagnosis or research;
 - create a roadmap or architecture;
 - silently change accepted product scope;
+- classify planned future roadmap scope as a Bugfix;
+- imply that Work Item completion completes the parent increment or Target Milestone;
 - classify from language-specific phrases;
+- persist a machine-specific path for supplied evidence or an affected artifact;
 - restart Greenfield or Brownfield onboarding when Project Memory exists.
 
 ## Handoff
@@ -133,6 +148,7 @@ Pass the request, Work Type, selected workflow, affected artifacts, constraints,
 - Work Type explicit;
 - workflow selected;
 - affected artifacts identified;
+- local file references are project-relative and portable;
 - Project Memory updated;
 - next Runtime identified.
 

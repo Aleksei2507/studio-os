@@ -11,7 +11,7 @@ description: Investigate current market, competitor, domain, regulatory, monetiz
 
 Stage: Research
 
-Version: 1.0
+Version: 1.1
 
 Optional: Conditional in product workflows, required in `work-item-research`
 
@@ -159,6 +159,8 @@ Use `templates/research-summary.md` as the output structure.
 
 Use direct links near material claims and a compact source list. Do not pad the report with irrelevant sources.
 
+Stable `http` and `https` citations are intentionally external and remain valid. For local documents or exports, apply the Project-Local Reference Contract: reference a project-local imported copy, or record a descriptive source entry with `Availability: External, not stored` and no machine path.
+
 ## Recommendation Outcomes
 
 - Confirm: evidence supports the current assumption or direction.
@@ -198,6 +200,7 @@ Research must not:
 
 - present model memory as current external evidence;
 - fabricate competitors, citations, market size, pricing, or regulation;
+- persist a home, Downloads, temporary, attachment-cache, or other machine-specific local source path;
 - use language-specific phrase matching as evidence;
 - choose product scope or architecture by itself;
 - hide weak or contradictory evidence;
