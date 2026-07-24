@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "automaticRetries": 0,
+  "baselineTrials": 3,
+  "exploratoryScenarioLimit": 10,
+  "requireExplicitCostConfirmation": true,
+  "requireExplicitModelIdentity": true,
+  "fullSuiteRequiresExplicitAll": true,
+  "classification": {
+    "compatiblePasses": 3,
+    "flakyMinimumPasses": 1,
+    "flakyMaximumPasses": 2,
+    "incompatiblePasses": 0
+  },
+  "criticalFailureDisposition": "incompatible",
+  "infrastructureErrorsCountAsBehavioralFailure": false,
+  "remoteProjectDataRequiresExplicitAuthorization": true
+}

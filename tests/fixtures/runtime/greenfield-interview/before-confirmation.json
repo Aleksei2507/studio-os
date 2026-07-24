@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "unchanged": [
+    "idea-notes.md"
+  ],
+  "absent": [
+    ".studio",
+    "docs",
+    "src",
+    "package.json"
+  ],
+  "allowedChanges": [],
+  "contains": {
+    "idea-notes.md": [
+      "browser Snake game",
+      "single-player",
+      "works offline"
+    ]
+  }
+}

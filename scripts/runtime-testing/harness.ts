@@ -9,6 +9,8 @@ import {
   runtimeTurns,
 } from "./scenario.ts";
 
+const MAX_WORKSPACE_FAILURE_DETAILS = 12;
+
 export class RuntimeHarness {
   constructor(
     private readonly executor: RuntimeExecutor,
@@ -142,12 +144,19 @@ function workspaceDetails(
 
   const { diff, assertions } = execution.workspace;
   const failed = assertions.filter((assessment) => !assessment.met);
+  const visibleFailures = failed.slice(0, MAX_WORKSPACE_FAILURE_DETAILS);
+  const hiddenFailureCount = failed.length - visibleFailures.length;
   return [
     `Workspace diff: ${diff.created.length} created, ${diff.modified.length} modified, ${diff.deleted.length} deleted.`,
     `Workspace assertions: ${assertions.length - failed.length}/${assertions.length} met.`,
-    ...failed.map(
+    ...visibleFailures.map(
       (assessment) =>
         `WORKSPACE NOT MET: ${assessment.assertion} - ${assessment.evidence}`,
     ),
+    ...(hiddenFailureCount > 0
+      ? [
+          `WORKSPACE NOT MET: ${hiddenFailureCount} additional failure(s); see the evaluation artifact for complete evidence.`,
+        ]
+      : []),
   ];
 }

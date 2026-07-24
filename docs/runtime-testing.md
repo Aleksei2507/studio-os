@@ -118,6 +118,25 @@ OS messages to each fresh executor session. Expectations and assertion
 manifests are never included in executor prompts. One separate judge evaluates
 all turn responses in declared order.
 
+## Behavioral Assurance Policy
+
+`docs/BEHAVIORAL_ASSURANCE.md` defines the normative trial, retry,
+compatibility, budget, and privacy rules. Its machine-readable constants live
+in `tests/runtime/behavioral-policy.json` and are covered by deterministic
+tests.
+
+Important rules:
+
+- automatic retries are disabled;
+- exploratory runs are limited to 10 scenarios;
+- tag-only selection requires `--max-tests`;
+- three independent valid trials are required for a compatibility baseline;
+- a baseline trial requires an explicit model, trial number, clean Git tree,
+  and a new result directory;
+- infrastructure errors remain separate from behavioral failures;
+- critical prohibited mutations and safety or scope violations cannot be
+  averaged away.
+
 ## Commands
 
 Runner and Studio OS structure tests:
@@ -143,8 +162,8 @@ npm run test:runtime:dry
 ```
 
 This command does not start Studio OS, produce a Runtime response, or judge
-behavior. A result such as `150/150 PASS` means that 150 scenario definitions
-have valid frontmatter, expectations, and bodies. It is not evidence that 150
+behavior. A result such as `151/151 PASS` means that 151 scenario definitions
+have valid frontmatter, expectations, and bodies. It is not evidence that 151
 conversations were executed successfully.
 
 Runtime contract evaluation executes Universal Bootstrap in a disposable
@@ -161,6 +180,7 @@ Behavioral mode requires:
 
 - an installed and authenticated Codex CLI;
 - an explicit `--confirm-llm-cost` flag;
+- a bounded selection of no more than 10 exploratory scenarios;
 - one Runtime executor call per declared turn, plus one response-judge call per
   scenario.
 
@@ -179,7 +199,7 @@ npm run test:runtime -- \
   --tag severity:critical \
   --max-tests 10
 
-# A full 150-scenario run requires a second explicit signal.
+# A full 151-scenario run requires a second explicit signal.
 npm run test:runtime -- \
   --confirm-llm-cost \
   --all
@@ -199,6 +219,28 @@ npm run test:runtime -- \
 ```
 
 Use `--codex-command <path>` or `STUDIO_OS_CODEX_COMMAND` when `codex` is not on `PATH`.
+
+To retain one identified baseline trial instead of overwriting
+`test-results/latest`, use an explicit model, trial number, and new
+project-relative output directory:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-003-greenfield-interview-replay \
+  --model <executor-model> \
+  --judge-model <judge-model> \
+  --trial 1 \
+  --output-dir test-results/baselines/<adapter-model>/trial-1 \
+  --timeout-ms 300000
+```
+
+`--trial` accepts `1`, `2`, or `3`. The runner refuses to overwrite an existing
+trial directory. The report records the policy version, Studio OS version, Git
+revision and dirty state, engine, executor and judge models, timeout, trial
+number, baseline eligibility, and planned model-call count. An implicit
+host-default model or dirty working tree makes the result exploratory rather
+than baseline-eligible.
 
 To keep executor and judge inference on the local machine, use the direct
 Ollama engine and an installed local model:
@@ -241,6 +283,19 @@ npm run test:runtime -- \
   --timeout-ms 300000
 ```
 
+Run the Greenfield Interview confirmation replay with:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-003-greenfield-interview-replay \
+  --timeout-ms 300000
+```
+
+The initial turn must leave the workspace unchanged. After confirmation, only
+`.studio/project-state.md` and `.studio/active-context.md` may be created, and
+the Runtime must stop at `Discovery / Waiting Confirmation`.
+
 Synthetic scenarios run in an empty read-only workspace. Fixture-backed
 scenarios run in a disposable `workspace-write` copy. A single-turn scenario
 uses two model calls. A replay with `N` declared turns uses `N + 1` calls.
@@ -253,13 +308,25 @@ Commands print per-test status and a final summary:
 
 `FAIL` and `PARTIAL` both return a non-zero exit code in behavioral mode.
 
-Generated artifacts under `test-results/latest/` include:
+Generated artifacts under `test-results/latest/`, or the selected
+`--output-dir`, include:
 
 - `summary.md`: compact result table and assurance label;
 - `results.json`: machine-readable aggregate including executor and judge metadata;
 - `evaluations/<scenario-id>.json`: the final Runtime response, per-expectation evidence, adapter names, durations, and fixture diff/assertion evidence when applicable.
 
 These artifacts contain final responses and concise observable evidence only. They do not request or store hidden chain-of-thought.
+
+Behavioral results also record `validTrial`. Executor or judge infrastructure
+errors and incomplete judge contracts set it to `false`. Such a result may
+still have overall status `FAIL` when deterministic workspace evidence proves a
+violation, but it is excluded from compatibility pass counts. Console and
+summary output cap repeated workspace failures; the evaluation JSON retains
+the complete assertion list.
+
+One run is evidence for that recorded model and revision only. Use the
+three-trial classification rules in `docs/BEHAVIORAL_ASSURANCE.md` before
+publishing a compatibility claim.
 
 ## Assurance Levels
 

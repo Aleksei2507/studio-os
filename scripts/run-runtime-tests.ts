@@ -6,6 +6,7 @@ import {
   rmSync,
   writeFileSync,
 } from "node:fs";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
 
@@ -14,6 +15,12 @@ import {
   CodexCliRuntimeExecutor,
 } from "./runtime-testing/codex-cli.ts";
 import type { CodexLocalProvider } from "./runtime-testing/codex-cli.ts";
+import {
+  loadBehavioralAssurancePolicy,
+} from "./runtime-testing/assurance-policy.ts";
+import type {
+  BehavioralAssurancePolicy,
+} from "./runtime-testing/assurance-policy.ts";
 import type {
   BehavioralStatus,
   FixtureWorkspaceSpec,
@@ -45,6 +52,7 @@ interface TestResult {
   details: string[];
   fixtureBacked?: boolean;
   turnCount?: number;
+  validTrial?: boolean;
   evaluation?: HarnessEvaluation;
 }
 
@@ -62,10 +70,13 @@ interface CliOptions {
   localProvider?: CodexLocalProvider;
   maxTests?: number;
   model?: string;
+  outputDir: string;
+  outputDirExplicit: boolean;
   runAll: boolean;
   tags: string[];
   testsDir: string;
   timeoutMs: number;
+  trial?: number;
 }
 
 interface RuntimeTestSelection {
@@ -90,8 +101,26 @@ interface RuntimeTestRun {
   fixtureBackedScenarios?: number;
   replayScenarios?: number;
   runtimeTurns?: number;
+  plannedModelCalls?: number;
+  validBehavioralTrials?: number;
+  invalidBehavioralTrials?: number;
+  identity?: BehavioralRunIdentity;
   usesLlmJudge: boolean;
   validatesWorkspaceMutations?: boolean;
+}
+
+interface BehavioralRunIdentity {
+  policyVersion: number;
+  studioOsVersion: string;
+  gitRevision: string;
+  workingTreeDirty: boolean;
+  engine: RuntimeEngine;
+  adapter: string;
+  executorModel: string;
+  judgeModel: string;
+  timeoutMs: number;
+  trial?: number;
+  baselineEligible: boolean;
 }
 
 const REQUIRED_FIELDS = [
@@ -130,10 +159,13 @@ function parseArgs(argv: string[]): CliOptions {
   let localProvider: CodexLocalProvider | undefined;
   let maxTests: number | undefined;
   let model: string | undefined;
+  let outputDir = "test-results/latest";
+  let outputDirExplicit = false;
   let runAll = false;
   const tags: string[] = [];
   let testsDir = "tests/runtime";
   let timeoutMs = 180_000;
+  let trial: number | undefined;
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -199,6 +231,19 @@ function parseArgs(argv: string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--trial") {
+      trial = positiveInteger(requiredOptionValue(argv, index, arg), arg);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--output-dir") {
+      outputDir = requiredOptionValue(argv, index, arg);
+      outputDirExplicit = true;
+      index += 1;
+      continue;
+    }
+
     if (arg === "--local-provider") {
       const provider = requiredOptionValue(argv, index, arg);
       if (provider !== "ollama" && provider !== "lmstudio") {
@@ -236,10 +281,13 @@ function parseArgs(argv: string[]): CliOptions {
     localProvider,
     maxTests,
     model,
+    outputDir,
+    outputDirExplicit,
     runAll,
     tags,
     testsDir,
     timeoutMs,
+    trial,
   };
 }
 
@@ -263,7 +311,10 @@ function positiveInteger(value: string, option: string): number {
   return parsed;
 }
 
-function assertBehavioralRunAuthorized(options: CliOptions): void {
+function assertBehavioralRunAuthorized(
+  options: CliOptions,
+  policy = loadBehavioralAssurancePolicy(process.cwd()),
+): void {
   if (!options.dry && !options.confirmLlmCost) {
     throw new Error(
       "Runtime evaluation makes one executor call per turn plus one judge call per scenario. Re-run with --confirm-llm-cost and use --id, --tag, --max-tests, or an explicit --all.",
@@ -282,6 +333,50 @@ function assertBehavioralRunAuthorized(options: CliOptions): void {
       "--local-provider configures Codex CLI and cannot be combined with --engine ollama.",
     );
   }
+  if (
+    options.maxTests !== undefined &&
+    options.maxTests > policy.exploratoryScenarioLimit &&
+    !options.runAll
+  ) {
+    throw new Error(
+      `Exploratory behavioral runs may select at most ${policy.exploratoryScenarioLimit} scenarios.`,
+    );
+  }
+  if (
+    options.ids.length > policy.exploratoryScenarioLimit &&
+    !options.runAll
+  ) {
+    throw new Error(
+      `Exploratory behavioral runs may select at most ${policy.exploratoryScenarioLimit} scenario ids.`,
+    );
+  }
+  if (
+    options.tags.length > 0 &&
+    options.ids.length === 0 &&
+    options.maxTests === undefined &&
+    !options.runAll
+  ) {
+    throw new Error(
+      `Tag-selected behavioral runs require --max-tests up to ${policy.exploratoryScenarioLimit}.`,
+    );
+  }
+  if (options.trial !== undefined) {
+    if (options.trial > policy.baselineTrials) {
+      throw new Error(
+        `--trial must be between 1 and ${policy.baselineTrials}.`,
+      );
+    }
+    if (policy.requireExplicitModelIdentity && !options.model) {
+      throw new Error(
+        "Baseline trials require an explicit --model identity.",
+      );
+    }
+    if (!options.outputDirExplicit) {
+      throw new Error(
+        "Baseline trials require an explicit immutable --output-dir.",
+      );
+    }
+  }
 
   const hasBound =
     options.ids.length > 0 ||
@@ -296,6 +391,30 @@ function assertBehavioralRunAuthorized(options: CliOptions): void {
   if (options.runAll && hasBound) {
     throw new Error("--all cannot be combined with scenario filters or --max-tests.");
   }
+}
+
+function resolveResultOutputDirectory(
+  requestedPath: string,
+  repositoryRoot = process.cwd(),
+): string {
+  if (path.isAbsolute(requestedPath)) {
+    throw new Error("Result --output-dir must be project-relative.");
+  }
+
+  const allowedRoot = path.resolve(repositoryRoot, "test-results");
+  const target = path.resolve(repositoryRoot, requestedPath);
+  const relative = path.relative(allowedRoot, target);
+  if (
+    target === allowedRoot ||
+    relative === ".." ||
+    relative.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relative)
+  ) {
+    throw new Error(
+      "Result --output-dir must remain inside test-results.",
+    );
+  }
+  return target;
 }
 
 function findMarkdownFiles(directory: string): string[] {
@@ -637,6 +756,13 @@ class HarnessRuntimeJudge implements RuntimeJudge {
 
   async judge(test: RuntimeTest): Promise<TestResult> {
     const evaluation = await this.harness.evaluate(test);
+    const expectedAssessmentCount = runtimeExpectationLabels(test).length;
+    const validTrial = Boolean(
+      evaluation.execution &&
+        evaluation.verdict &&
+        evaluation.verdict.status !== "PARTIAL" &&
+        evaluation.verdict.expectations.length === expectedAssessmentCount,
+    );
 
     return {
       filePath: test.filePath,
@@ -646,8 +772,10 @@ class HarnessRuntimeJudge implements RuntimeJudge {
       status: evaluation.status,
       fixtureBacked: Boolean(test.workspace),
       turnCount: runtimeTurns(test).length,
+      validTrial,
       details: [
-        `${runtimeExpectationLabels(test).length} expectation(s), ${runtimeTurns(test).length} turn(s), stage: ${test.stage}`,
+        `${expectedAssessmentCount} expectation(s), ${runtimeTurns(test).length} turn(s), stage: ${test.stage}`,
+        `Behavioral trial validity: ${validTrial ? "VALID" : "INVALID"}.`,
         ...evaluation.details,
       ],
       evaluation,
@@ -730,9 +858,10 @@ function countStatuses(results: TestResult[]): Record<TestStatus, number> {
 function buildResultsJson(
   results: TestResult[],
   mode: RuntimeTestMode = "scenario-structure",
+  identity?: BehavioralRunIdentity,
 ): object {
   const counts = countStatuses(results);
-  const run = buildRunMetadata(results, mode);
+  const run = buildRunMetadata(results, mode, identity);
 
   return {
     generatedAt: new Date().toISOString(),
@@ -752,6 +881,7 @@ function buildResultsJson(
       filePath: result.filePath,
       fixtureBacked: Boolean(result.fixtureBacked),
       turnCount: result.turnCount,
+      validTrial: result.validTrial,
       details: result.details,
       evaluation: result.evaluation,
     })),
@@ -761,9 +891,23 @@ function buildResultsJson(
 function buildSummaryMarkdown(
   results: TestResult[],
   mode: RuntimeTestMode = "scenario-structure",
+  identity?: BehavioralRunIdentity,
 ): string {
   const counts = countStatuses(results);
-  const run = buildRunMetadata(results, mode);
+  const run = buildRunMetadata(results, mode, identity);
+  const identityLines = run.identity
+    ? [
+        `- Assurance policy: v${run.identity.policyVersion}`,
+        `- Studio OS: ${run.identity.studioOsVersion} (${run.identity.gitRevision}${run.identity.workingTreeDirty ? ", dirty" : ""})`,
+        `- Engine: ${run.identity.engine} (${run.identity.adapter})`,
+        `- Executor model: ${run.identity.executorModel}`,
+        `- Judge model: ${run.identity.judgeModel}`,
+        `- Timeout: ${run.identity.timeoutMs} ms`,
+        `- Trial: ${run.identity.trial ?? "Exploratory"}`,
+        `- Baseline eligible: ${run.identity.baselineEligible ? "Yes" : "No"}`,
+        `- Planned model calls: ${run.plannedModelCalls}`,
+      ]
+    : [];
   const lines = [
     `# Runtime Test Summary: ${run.label}`,
     "",
@@ -773,6 +917,13 @@ function buildSummaryMarkdown(
     `- Replay scenarios: ${run.replayScenarios}`,
     `- Runtime turns: ${run.runtimeTurns}`,
     `- Workspace mutations evaluated: ${run.validatesWorkspaceMutations ? "Yes" : "No"}`,
+    ...(mode === "runtime-judge"
+      ? [
+          `- Valid behavioral trials: ${run.validBehavioralTrials}`,
+          `- Invalid behavioral trials: ${run.invalidBehavioralTrials}`,
+        ]
+      : []),
+    ...identityLines,
     `- Total tests: ${results.length}`,
     `- Pass: ${counts.PASS}`,
     `- Fail: ${counts.FAIL}`,
@@ -793,6 +944,7 @@ function buildSummaryMarkdown(
 function buildRunMetadata(
   results: TestResult[],
   mode: RuntimeTestMode,
+  identity?: BehavioralRunIdentity,
 ): RuntimeTestRun {
   const fixtureBackedScenarios = results.filter(
     (result) => result.fixtureBacked,
@@ -804,12 +956,29 @@ function buildRunMetadata(
     (total, result) => total + (result.turnCount ?? 0),
     0,
   );
+  const executedScenarioCount = results.filter(
+    (result) => (result.turnCount ?? 0) > 0,
+  ).length;
+  const validBehavioralTrials = results.filter(
+    (result) => result.validTrial === true,
+  ).length;
+  const invalidBehavioralTrials =
+    mode === "runtime-judge"
+      ? executedScenarioCount - validBehavioralTrials
+      : 0;
 
   return {
     ...RUN_MODES[mode],
     fixtureBackedScenarios,
     replayScenarios,
     runtimeTurns: declaredRuntimeTurns,
+    plannedModelCalls:
+      mode === "runtime-judge"
+        ? declaredRuntimeTurns + executedScenarioCount
+        : 0,
+    validBehavioralTrials,
+    invalidBehavioralTrials,
+    identity,
     validatesWorkspaceMutations:
       mode === "runtime-judge" && fixtureBackedScenarios > 0,
   };
@@ -823,6 +992,7 @@ function writeResultArtifacts(
   results: TestResult[],
   outputDir = "test-results/latest",
   mode: RuntimeTestMode = "scenario-structure",
+  identity?: BehavioralRunIdentity,
 ): void {
   mkdirSync(outputDir, { recursive: true });
   const evaluationsDir = path.join(outputDir, "evaluations");
@@ -852,10 +1022,13 @@ function writeResultArtifacts(
     );
   }
 
-  writeFileSync(path.join(outputDir, "summary.md"), buildSummaryMarkdown(results, mode));
+  writeFileSync(
+    path.join(outputDir, "summary.md"),
+    buildSummaryMarkdown(results, mode, identity),
+  );
   writeFileSync(
     path.join(outputDir, "results.json"),
-    `${JSON.stringify(buildResultsJson(results, mode), null, 2)}\n`,
+    `${JSON.stringify(buildResultsJson(results, mode, identity), null, 2)}\n`,
   );
 }
 
@@ -863,15 +1036,29 @@ function evaluationFileName(id: string): string {
   return `${id.replaceAll(/[^a-zA-Z0-9._-]/g, "_")}.json`;
 }
 
-function printResults(results: TestResult[], mode: RuntimeTestMode): void {
+function printResults(
+  results: TestResult[],
+  mode: RuntimeTestMode,
+  identity?: BehavioralRunIdentity,
+): void {
   const summary = summarize(results);
-  const run = buildRunMetadata(results, mode);
+  const run = buildRunMetadata(results, mode, identity);
 
   console.log(`Mode: ${run.label}`);
   console.log(`Assurance: ${run.assurance}`);
   console.log(`Fixture-backed scenarios: ${run.fixtureBackedScenarios}`);
   console.log(`Replay scenarios: ${run.replayScenarios}`);
   console.log(`Runtime turns: ${run.runtimeTurns}`);
+  if (run.identity) {
+    console.log(
+      `Behavioral identity: ${run.identity.engine}/${run.identity.executorModel}, trial ${run.identity.trial ?? "exploratory"}, baseline ${run.identity.baselineEligible ? "eligible" : "ineligible"}`,
+    );
+    console.log(`Planned model calls: ${run.plannedModelCalls}`);
+  }
+  if (mode === "runtime-judge") {
+    console.log(`Valid behavioral trials: ${run.validBehavioralTrials}`);
+    console.log(`Invalid behavioral trials: ${run.invalidBehavioralTrials}`);
+  }
   console.log(
     `Workspace mutations evaluated: ${run.validatesWorkspaceMutations ? "Yes" : "No"}`,
   );
@@ -888,15 +1075,97 @@ function printResults(results: TestResult[], mode: RuntimeTestMode): void {
   console.log(`${run.label} summary: ${summary} (${results.length} test file(s))`);
 }
 
+function buildBehavioralRunIdentity(
+  options: CliOptions,
+  policy: BehavioralAssurancePolicy,
+  repositoryRoot = process.cwd(),
+): BehavioralRunIdentity {
+  const packageSource = JSON.parse(
+    readFileSync(path.join(repositoryRoot, "package.json"), "utf8"),
+  ) as { version?: unknown };
+  if (
+    typeof packageSource.version !== "string" ||
+    !packageSource.version.trim()
+  ) {
+    throw new Error("package.json must contain a Studio OS version.");
+  }
+
+  const revision = gitOutput(repositoryRoot, ["rev-parse", "HEAD"]);
+  const status = gitOutput(repositoryRoot, [
+    "status",
+    "--porcelain",
+    "--untracked-files=normal",
+  ]);
+  const executorModel =
+    options.model ?? "host-default (unversioned)";
+  const judgeModel =
+    options.judgeModel ?? options.model ?? "host-default (unversioned)";
+  const adapter =
+    options.engine === "ollama"
+      ? "ollama-direct"
+      : options.localProvider
+        ? `codex-cli:${options.localProvider}`
+        : "codex-cli";
+  const baselineEligible = Boolean(
+    options.trial &&
+      options.model &&
+      revision &&
+      status !== undefined &&
+      !status,
+  );
+
+  return {
+    policyVersion: policy.version,
+    studioOsVersion: packageSource.version,
+    gitRevision: revision || "unavailable",
+    workingTreeDirty: Boolean(status),
+    engine: options.engine,
+    adapter,
+    executorModel,
+    judgeModel,
+    timeoutMs: options.timeoutMs,
+    trial: options.trial,
+    baselineEligible,
+  };
+}
+
+function gitOutput(
+  repositoryRoot: string,
+  args: string[],
+): string | undefined {
+  const result = spawnSync("git", args, {
+    cwd: repositoryRoot,
+    encoding: "utf8",
+  });
+  return result.status === 0 ? result.stdout.trim() : undefined;
+}
+
 async function main(): Promise<void> {
   try {
     const options = parseArgs(process.argv.slice(2));
+    const repositoryRoot = process.cwd();
+    const policy = loadBehavioralAssurancePolicy(repositoryRoot);
+    const outputDir = resolveResultOutputDirectory(
+      options.outputDir,
+      repositoryRoot,
+    );
     let results: TestResult[];
+    let identity: BehavioralRunIdentity | undefined;
 
     if (options.dry) {
       results = loadRuntimeTests(options.testsDir);
     } else {
-      assertBehavioralRunAuthorized(options);
+      assertBehavioralRunAuthorized(options, policy);
+      if (options.trial !== undefined && existsSync(outputDir)) {
+        throw new Error(
+          `Baseline result directory already exists: ${options.outputDir}`,
+        );
+      }
+      identity = buildBehavioralRunIdentity(
+        options,
+        policy,
+        repositoryRoot,
+      );
 
       const executorOptions = {
         adapterName:
@@ -959,8 +1228,8 @@ async function main(): Promise<void> {
 
     const mode: RuntimeTestMode = options.dry ? "scenario-structure" : "runtime-judge";
 
-    printResults(results, mode);
-    writeResultArtifacts(results, "test-results/latest", mode);
+    printResults(results, mode, identity);
+    writeResultArtifacts(results, outputDir, mode, identity);
 
     const summary = summarize(results);
     process.exitCode =
@@ -985,6 +1254,7 @@ export {
   parseArgs,
   parseFrontmatter,
   parseMinimalYaml,
+  resolveResultOutputDirectory,
   runLlmJudgedTests,
   selectRuntimeTests,
   summarize,

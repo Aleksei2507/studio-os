@@ -76,6 +76,9 @@ The versioned release ZIP is a runtime distribution, not a development checkout.
 Maintainer release steps and publication gates are documented in [`docs/RELEASING.md`](docs/RELEASING.md).
 Runtime regression levels, model-cost gates, and fixture-backed workspace checks
 are documented in [`docs/runtime-testing.md`](docs/runtime-testing.md).
+Model compatibility, retry, trial identity, privacy, and evidence
+classification rules are documented in
+[`docs/BEHAVIORAL_ASSURANCE.md`](docs/BEHAVIORAL_ASSURANCE.md).
 
 ---
 

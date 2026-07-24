@@ -13,6 +13,16 @@
   judgment, bounded filesystem actions, workspace inventory, recoverable tool
   errors, and read/write containment that keeps test expectations unavailable
   to the Runtime executor.
+- Added a Greenfield Interview replay that keeps the first turn read-only,
+  creates only compact Project Memory after confirmation, and stops before
+  Discovery.
+- Added a versioned behavioral assurance policy with zero automatic retries,
+  three-trial compatibility classification, bounded exploratory runs,
+  reproducible run identity, immutable trial outputs, and remote-data privacy
+  requirements.
+- Added exact judge-expectation anchoring, explicit valid/invalid trial
+  accounting, and bounded console diagnostics while preserving complete
+  workspace evidence in evaluation JSON.
 
 ## 0.5.0-alpha.3
 

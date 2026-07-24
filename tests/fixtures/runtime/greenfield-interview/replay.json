@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "turns": [
+    {
+      "id": "confirm-interview-understanding",
+      "prompt": "Yes, that understanding is correct. There is nothing important to change before Discovery. Complete Interview, create Project Memory, and stop before starting Discovery.",
+      "expect": [
+        "The response should confirm that Interview is complete and summarize the accepted Snake product understanding.",
+        "The response should state that Project Memory was created and name `.studio/project-state.md` and `.studio/active-context.md` using project-relative paths.",
+        "The response should recommend Discovery and make clear that it is waiting for confirmation before that stage starts.",
+        "Should not: Start Discovery, define detailed MVP scope, select technologies, create product source code, or claim the game is being implemented."
+      ],
+      "workspace_assertions": "tests/fixtures/runtime/greenfield-interview/after-confirmation.json"
+    }
+  ]
+}

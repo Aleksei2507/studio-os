@@ -17,6 +17,10 @@ Both commands must pass before manual testing.
 
 Runtime dry tests validate scenario definitions only. They do not execute Studio OS or call an AI judge, so manual behavior checks remain required.
 
+Use `docs/BEHAVIORAL_ASSURANCE.md` when recording model compatibility. It
+requires zero automatic retries, three valid trials, explicit model identity,
+and separate handling for infrastructure errors.
+
 For a bounded synthetic behavioral check, verify that Codex CLI is authenticated and run:
 
 ```bash
@@ -59,6 +63,20 @@ writing. The confirmation turn must update only `.studio/project-state.md`,
 preserve the QA delivery context and Not Ready milestone state, and stop before
 stage work.
 
+For the Greenfield Interview transition, run:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-003-greenfield-interview-replay \
+  --timeout-ms 300000
+```
+
+The first turn must summarize the Snake product hypothesis and leave the
+workspace unchanged. After confirmation, only `.studio/project-state.md` and
+`.studio/active-context.md` may be created. Project Memory must stop at
+`Discovery / Waiting Confirmation` without product code or Discovery output.
+
 To keep the same replay on the local machine, use an installed Ollama model:
 
 ```bash
@@ -74,6 +92,10 @@ npm run test:runtime -- \
 Local execution is model-dependent. A deterministic workspace or response
 failure is a valid compatibility result and must not be converted to PASS by
 weakening the scenario.
+
+For a retained baseline trial, also provide `--trial 1` and a new
+`--output-dir` below `test-results/`. Repeat with trials 2 and 3 only as
+independent runs; do not retry a failed trial automatically.
 
 Automated replay preserves the physical fixture and injects the prior
 observable transcript into fresh executor sessions. It does not verify hidden

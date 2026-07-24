@@ -221,7 +221,7 @@ export class CodexCliResponseJudge implements ResponseJudge {
     const result = await this.runner.run({
       prompt: buildJudgePrompt(scenario, execution),
       model: this.model,
-      outputSchema: buildJudgeSchema(expectations.length),
+      outputSchema: buildJudgeSchema(expectations),
     });
 
     return parseJudgeVerdict(
@@ -392,6 +392,7 @@ export function buildJudgePrompt(
     "Do not infer unshown actions or reward claims without observable evidence.",
     'For an expectation containing "Should not:", mark it met only when the prohibited behavior is absent in that turn.',
     "Return one assessment per expectation in turn order.",
+    "Copy each expectation label exactly into that assessment's expectation field.",
     "Use concise observable evidence. Do not provide chain-of-thought.",
     "PASS requires every expectation to be met.",
     "FAIL means at least one expectation is not met.",
@@ -577,9 +578,14 @@ export function parseJudgeVerdict(
     if (!isAssessment(item)) {
       throw new Error(`Judge expectation assessment ${index + 1} is invalid.`);
     }
+    if (item.expectation !== expectations[index]) {
+      throw new Error(
+        `Judge expectation assessment ${index + 1} does not match the declared expectation.`,
+      );
+    }
 
     return {
-      expectation: expectations[index] ?? `Unexpected assessment ${index + 1}`,
+      expectation: item.expectation,
       met: item.met,
       evidence: item.evidence.trim(),
     };
@@ -594,7 +600,7 @@ export function parseJudgeVerdict(
   };
 }
 
-function buildJudgeSchema(expectationCount: number): object {
+function buildJudgeSchema(expectations: string[]): object {
   return {
     type: "object",
     properties: {
@@ -607,11 +613,15 @@ function buildJudgeSchema(expectationCount: number): object {
       },
       expectations: {
         type: "array",
-        minItems: expectationCount,
-        maxItems: expectationCount,
+        minItems: expectations.length,
+        maxItems: expectations.length,
         items: {
           type: "object",
           properties: {
+            expectation: {
+              type: "string",
+              enum: expectations,
+            },
             met: {
               type: "boolean",
             },
@@ -619,7 +629,7 @@ function buildJudgeSchema(expectationCount: number): object {
               type: "string",
             },
           },
-          required: ["met", "evidence"],
+          required: ["expectation", "met", "evidence"],
           additionalProperties: false,
         },
       },
@@ -629,13 +639,22 @@ function buildJudgeSchema(expectationCount: number): object {
   };
 }
 
-function isAssessment(value: unknown): value is { met: boolean; evidence: string } {
+function isAssessment(value: unknown): value is {
+  expectation: string;
+  met: boolean;
+  evidence: string;
+} {
   if (!value || typeof value !== "object") {
     return false;
   }
 
-  const assessment = value as { met?: unknown; evidence?: unknown };
+  const assessment = value as {
+    expectation?: unknown;
+    met?: unknown;
+    evidence?: unknown;
+  };
   return (
+    typeof assessment.expectation === "string" &&
     typeof assessment.met === "boolean" &&
     typeof assessment.evidence === "string" &&
     Boolean(assessment.evidence.trim())

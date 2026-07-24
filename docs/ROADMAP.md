@@ -33,21 +33,24 @@ Delivered:
 - Project-Local Reference Contract;
 - Project Standards and Design System Profiles;
 - scoped Product Outcome and release-readiness gates;
-- deterministic structure tests and 150 Runtime scenario definitions;
+- deterministic structure tests and 151 Runtime scenario definitions;
 - cost-gated single-turn and multi-turn Runtime execution with LLM judgment;
 - a fixture-backed Brownfield workspace with deterministic Project Memory,
   source-integrity, artifact-boundary, and portability assertions;
 - an existing-project Project Memory replay with confirmation-gated migration
   and per-turn workspace checkpoints;
 - a direct local Ollama harness engine with bounded filesystem access and no
-  shell capability.
+  shell capability;
+- a Greenfield Interview replay that verifies confirmation-gated Project
+  Memory creation and the Discovery stop boundary;
+- a versioned behavioral assurance policy with explicit model identity,
+  immutable trial output, zero automatic retries, three-trial classification,
+  privacy rules, and evaluation-budget gates.
 
 Remaining before this milestone is considered stable:
 
 - dogfood the highest-risk scenarios across installed Codex, Claude Code, and Universal adapters;
-- extend fixture-backed checks to Greenfield and additional lifecycle
-  transitions;
-- define a flake, retry, model-version, and evaluation-budget policy;
+- extend fixture-backed checks to additional lifecycle transitions;
 - define behavioral compatibility baselines for remote and local models;
 - close or rewrite stale GitHub issues against the current architecture.
 
@@ -57,11 +60,11 @@ Remaining before this milestone is considered stable:
 
 Goal: verify observable Studio OS behavior beyond prompt contracts.
 
-- Additional fixture-backed Greenfield and Brownfield workspaces.
+- Additional fixture-backed lifecycle workspaces.
 - Additional multi-turn conversation replay suites.
 - Cross-turn artifact and lifecycle-state assertions.
 - Adapter activation matrix for Codex, Claude Code, and Universal Bootstrap.
-- Critical-suite baselines, retry policy, and regression triage.
+- Critical-suite compatibility baselines and regression triage.
 
 ### v0.7 - Dogfooding And Workflow UX
 

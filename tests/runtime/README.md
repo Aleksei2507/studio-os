@@ -23,3 +23,6 @@ fixture-backed replay evaluates a new workspace checkpoint after every turn.
 
 See `docs/runtime-testing.md` for the schema, assurance levels, fixture
 contract, replay contract, and report format.
+
+Compatibility trials additionally follow `docs/BEHAVIORAL_ASSURANCE.md` and
+the machine-readable `tests/runtime/behavioral-policy.json`.

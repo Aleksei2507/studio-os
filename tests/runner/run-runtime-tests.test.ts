@@ -11,6 +11,7 @@ import {
   loadRuntimeTests,
   parseArgs,
   parseFrontmatter,
+  resolveResultOutputDirectory,
   runLlmJudgedTests,
   summarize,
   validateRuntimeTest,
@@ -339,6 +340,10 @@ User asks to build a product.
       "judge-model",
       "--timeout-ms",
       "60000",
+      "--trial",
+      "2",
+      "--output-dir",
+      "test-results/baselines/local/trial-2",
     ]);
 
     assert.equal(options.confirmLlmCost, true);
@@ -350,6 +355,11 @@ User asks to build a product.
     assert.equal(options.judgeModel, "judge-model");
     assert.equal(options.localProvider, undefined);
     assert.equal(options.timeoutMs, 60_000);
+    assert.equal(options.trial, 2);
+    assert.equal(
+      options.outputDir,
+      "test-results/baselines/local/trial-2",
+    );
     assert.equal(options.runAll, false);
   });
 
@@ -376,6 +386,102 @@ User asks to build a product.
     assert.throws(
       () => parseArgs(["--engine", "unknown"]),
       /codex or ollama/,
+    );
+  });
+
+  it("enforces exploratory and baseline policy boundaries", () => {
+    const tagWithoutLimit = parseArgs([
+      "--confirm-llm-cost",
+      "--tag",
+      "severity:critical",
+    ]);
+    const oversized = parseArgs([
+      "--confirm-llm-cost",
+      "--max-tests",
+      "11",
+    ]);
+    const baselineWithoutIdentity = parseArgs([
+      "--confirm-llm-cost",
+      "--id",
+      "fixture-003-greenfield-interview-replay",
+      "--trial",
+      "1",
+      "--output-dir",
+      "test-results/baselines/greenfield/trial-1",
+    ]);
+    const baselineUsingLatest = parseArgs([
+      "--confirm-llm-cost",
+      "--id",
+      "fixture-003-greenfield-interview-replay",
+      "--model",
+      "pinned-model",
+      "--trial",
+      "1",
+    ]);
+    const baseline = parseArgs([
+      "--confirm-llm-cost",
+      "--id",
+      "fixture-003-greenfield-interview-replay",
+      "--model",
+      "pinned-model",
+      "--trial",
+      "1",
+      "--output-dir",
+      "test-results/baselines/greenfield/trial-1",
+    ]);
+
+    assert.throws(
+      () => assertBehavioralRunAuthorized(tagWithoutLimit),
+      /--max-tests/,
+    );
+    assert.throws(
+      () => assertBehavioralRunAuthorized(oversized),
+      /at most 10/,
+    );
+    assert.throws(
+      () => assertBehavioralRunAuthorized(baselineWithoutIdentity),
+      /explicit --model/,
+    );
+    assert.throws(
+      () => assertBehavioralRunAuthorized(baselineUsingLatest),
+      /--output-dir/,
+    );
+    assert.doesNotThrow(() => assertBehavioralRunAuthorized(baseline));
+  });
+
+  it("keeps result output inside the repository test-results directory", () => {
+    const repositoryRoot = mkdtempSync(
+      path.join(tmpdir(), "studio-runtime-output-"),
+    );
+
+    assert.equal(
+      resolveResultOutputDirectory(
+        "test-results/baselines/model/trial-1",
+        repositoryRoot,
+      ),
+      path.join(
+        repositoryRoot,
+        "test-results",
+        "baselines",
+        "model",
+        "trial-1",
+      ),
+    );
+    assert.throws(
+      () =>
+        resolveResultOutputDirectory(
+          "../outside",
+          repositoryRoot,
+        ),
+      /inside test-results/,
+    );
+    assert.throws(
+      () =>
+        resolveResultOutputDirectory(
+          path.join(repositoryRoot, "absolute"),
+          repositoryRoot,
+        ),
+      /project-relative/,
     );
   });
 
@@ -500,6 +606,7 @@ Runtime scenario.
           details: ["Passed."],
           fixtureBacked: true,
           turnCount: 2,
+          validTrial: true,
         },
       ],
       "runtime-judge",
@@ -512,6 +619,87 @@ Runtime scenario.
 
     assert.equal(report.run.replayScenarios, 1);
     assert.equal(report.run.runtimeTurns, 2);
+  });
+
+  it("records reproducible behavioral trial identity and call budget", () => {
+    const report = buildResultsJson(
+      [
+        {
+          filePath: "tests/runtime/fixtures/003.md",
+          id: "fixture-003",
+          title: "Greenfield replay",
+          stage: "Interview",
+          status: "PASS",
+          details: ["Passed."],
+          fixtureBacked: true,
+          turnCount: 2,
+          validTrial: true,
+        },
+      ],
+      "runtime-judge",
+      {
+        policyVersion: 1,
+        studioOsVersion: "0.5.0-alpha.3",
+        gitRevision: "abc123",
+        workingTreeDirty: false,
+        engine: "ollama",
+        adapter: "ollama-direct",
+        executorModel: "qwen:test",
+        judgeModel: "qwen:test",
+        timeoutMs: 300_000,
+        trial: 1,
+        baselineEligible: true,
+      },
+    ) as {
+      run: {
+        plannedModelCalls: number;
+        validBehavioralTrials: number;
+        invalidBehavioralTrials: number;
+        identity: {
+          policyVersion: number;
+          gitRevision: string;
+          trial: number;
+          baselineEligible: boolean;
+        };
+      };
+    };
+
+    assert.equal(report.run.plannedModelCalls, 3);
+    assert.equal(report.run.validBehavioralTrials, 1);
+    assert.equal(report.run.invalidBehavioralTrials, 0);
+    assert.equal(report.run.identity.policyVersion, 1);
+    assert.equal(report.run.identity.gitRevision, "abc123");
+    assert.equal(report.run.identity.trial, 1);
+    assert.equal(report.run.identity.baselineEligible, true);
+  });
+
+  it("keeps invalid judge trials out of compatibility evidence counts", () => {
+    const report = buildResultsJson(
+      [
+        {
+          filePath: "tests/runtime/fixtures/003.md",
+          id: "fixture-003",
+          title: "Greenfield replay",
+          stage: "Interview",
+          status: "FAIL",
+          details: ["Judge output is invalid."],
+          fixtureBacked: true,
+          turnCount: 2,
+          validTrial: false,
+        },
+      ],
+      "runtime-judge",
+    ) as {
+      run: {
+        validBehavioralTrials: number;
+        invalidBehavioralTrials: number;
+      };
+      tests: Array<{ validTrial: boolean }>;
+    };
+
+    assert.equal(report.run.validBehavioralTrials, 0);
+    assert.equal(report.run.invalidBehavioralTrials, 1);
+    assert.equal(report.tests[0].validTrial, false);
   });
 
   it("writes latest markdown summary and machine-readable JSON results", () => {

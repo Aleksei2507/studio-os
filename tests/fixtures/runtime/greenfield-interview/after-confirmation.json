@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "created": [
+    ".studio/active-context.md",
+    ".studio/project-state.md"
+  ],
+  "unchanged": [
+    "idea-notes.md"
+  ],
+  "absent": [
+    "docs",
+    "src",
+    "package.json"
+  ],
+  "allowedChanges": [
+    ".studio/active-context.md",
+    ".studio/project-state.md"
+  ],
+  "contains": {
+    ".studio/active-context.md": [
+      "## Current Focus",
+      "## Confirmed Facts",
+      "## Current Decisions",
+      "## Unknowns",
+      "## References",
+      "Snake",
+      "browser",
+      "keyboard",
+      "single-player",
+      "offline"
+    ],
+    ".studio/project-state.md": [
+      "Mode: Greenfield",
+      "Workflow: greenfield",
+      "Work Type: New Product",
+      "Active Work Item: None",
+      "Parent Workflow: None",
+      "Return Stage: None",
+      "Project Language: English",
+      "Target Milestone: Not Selected",
+      "Product Readiness: Not Ready",
+      "Current Increment: None",
+      "Increment Status: None",
+      "Increment Progress: 0/Unknown",
+      "Previous Stage: Interview",
+      "Current Stage: Discovery",
+      "Status: Waiting Confirmation",
+      "Next Recommended Stage: Discovery",
+      "Completed Stages:",
+      "- Interview"
+    ]
+  },
+  "notContains": {
+    ".studio/active-context.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ],
+    ".studio/project-state.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://",
+      "Current Stage: Planning",
+      "Current Stage: Development"
+    ]
+  }
+}

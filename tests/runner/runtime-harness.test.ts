@@ -247,6 +247,55 @@ describe("Runtime Harness", () => {
     assert.match(result.details.join("\n"), /src\/App\.tsx/);
   });
 
+  it("keeps workspace failure summaries bounded while retaining the failed status", async () => {
+    const executor: RuntimeExecutor = {
+      name: "fake-runtime",
+      async execute() {
+        return {
+          ...execution,
+          workspace: {
+            status: "FAIL" as const,
+            diff: {
+              created: [],
+              modified: [],
+              deleted: [],
+            },
+            assertions: Array.from({ length: 20 }, (_, index) => ({
+              assertion: `contains: artifact-${index}.md`,
+              met: false,
+              evidence: `artifact-${index}.md is missing.`,
+            })),
+          },
+        };
+      },
+    };
+    const judge: ResponseJudge = {
+      name: "fake-judge",
+      async evaluate() {
+        return {
+          adapter: "fake-judge",
+          status: "PASS",
+          summary: "Response expectations pass.",
+          durationMs: 5,
+          expectations: scenario.expect.map((expectation) => ({
+            expectation,
+            met: true,
+            evidence: "Observable in the response.",
+          })),
+        };
+      },
+    };
+
+    const result = await new RuntimeHarness(executor, judge).evaluate(scenario);
+    const failureDetails = result.details.filter((detail) =>
+      detail.startsWith("WORKSPACE NOT MET: contains:"),
+    );
+
+    assert.equal(result.status, "FAIL");
+    assert.equal(failureDetails.length, 12);
+    assert.match(result.details.join("\n"), /8 additional failure/);
+  });
+
   it("runs declared fixtures in a writable disposable workspace without leaking assertions", async () => {
     const repositoryRoot = mkdtempSync(
       path.join(tmpdir(), "studio-os-codex-fixture-"),
@@ -553,8 +602,16 @@ describe("Runtime Harness", () => {
         status: "PASS",
         summary: "All criteria are met.",
         expectations: [
-          { met: true, evidence: "Interview begins." },
-          { met: true, evidence: "No implementation promise." },
+          {
+            expectation: scenario.expect[0],
+            met: true,
+            evidence: "Interview begins.",
+          },
+          {
+            expectation: scenario.expect[1],
+            met: true,
+            evidence: "No implementation promise.",
+          },
         ],
       }),
       scenario.expect,
@@ -566,6 +623,34 @@ describe("Runtime Harness", () => {
     assert.deepEqual(
       verdict.expectations.map((item) => item.expectation),
       scenario.expect,
+    );
+  });
+
+  it("rejects judge assessments that are reordered or relabeled", () => {
+    assert.throws(
+      () =>
+        parseJudgeVerdict(
+          JSON.stringify({
+            status: "PASS",
+            summary: "All criteria are met.",
+            expectations: [
+              {
+                expectation: scenario.expect[1],
+                met: true,
+                evidence: "Wrong turn or expectation.",
+              },
+              {
+                expectation: scenario.expect[0],
+                met: true,
+                evidence: "Wrong turn or expectation.",
+              },
+            ],
+          }),
+          scenario.expect,
+          "codex-cli",
+          25,
+        ),
+      /does not match the declared expectation/,
     );
   });
 
