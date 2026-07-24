@@ -17,7 +17,7 @@ Both commands must pass before manual testing.
 
 Runtime dry tests validate scenario definitions only. They do not execute Studio OS or call an AI judge, so manual behavior checks remain required.
 
-For a bounded one-turn behavioral check, verify that Codex CLI is authenticated and run:
+For a bounded synthetic behavioral check, verify that Codex CLI is authenticated and run:
 
 ```bash
 codex login status
@@ -45,9 +45,40 @@ artifacts, leave source files unchanged, avoid roadmap and architecture output,
 and keep machine-specific paths out of generated artifacts. A separate model
 session still judges the user-facing completion response.
 
-Neither automated behavioral mode verifies multi-turn state or installed
-host-adapter activation, so both supplement rather than replace the manual
-scenarios below.
+For a bounded multi-turn workspace replay, run:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-002-existing-project-routing-replay \
+  --timeout-ms 300000
+```
+
+The first turn must propose a legacy Project Memory routing migration without
+writing. The confirmation turn must update only `.studio/project-state.md`,
+preserve the QA delivery context and Not Ready milestone state, and stop before
+stage work.
+
+To keep the same replay on the local machine, use an installed Ollama model:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --id fixture-002-existing-project-routing-replay \
+  --engine ollama \
+  --model <installed-model> \
+  --judge-model <installed-model> \
+  --timeout-ms 300000
+```
+
+Local execution is model-dependent. A deterministic workspace or response
+failure is a valid compatibility result and must not be converted to PASS by
+weakening the scenario.
+
+Automated replay preserves the physical fixture and injects the prior
+observable transcript into fresh executor sessions. It does not verify hidden
+host-session state or installed host-adapter activation, so it supplements
+rather than replaces the manual scenarios below.
 
 ## Distribution Baseline
 

@@ -4,6 +4,10 @@ import type {
   RuntimeExecutor,
   RuntimeScenario,
 } from "./contracts.ts";
+import {
+  runtimeExpectationLabels,
+  runtimeTurns,
+} from "./scenario.ts";
 
 export class RuntimeHarness {
   constructor(
@@ -25,11 +29,16 @@ export class RuntimeHarness {
       };
     }
 
-    if (!execution.response.trim()) {
+    const emptyTurn = execution.turns?.find(
+      (turn) => !turn.response.trim(),
+    );
+    if (!execution.response.trim() || emptyTurn) {
       return {
         status: "FAIL",
         details: [
-          `Runtime executor ${this.executor.name} returned an empty response.`,
+          emptyTurn
+            ? `Runtime executor ${this.executor.name} returned an empty response for turn ${emptyTurn.id}.`
+            : `Runtime executor ${this.executor.name} returned an empty response.`,
           ...workspaceDetails(execution),
         ],
         execution,
@@ -51,13 +60,14 @@ export class RuntimeHarness {
       };
     }
 
-    if (verdict.expectations.length !== scenario.expect.length) {
+    const expectations = runtimeExpectationLabels(scenario);
+    if (verdict.expectations.length !== expectations.length) {
       return {
         status: execution.workspace?.status === "FAIL" ? "FAIL" : "PARTIAL",
         details: [
           ...workspaceDetails(execution),
           verdict.summary,
-          `Judge assessment count ${verdict.expectations.length} does not match ${scenario.expect.length} expectation(s).`,
+          `Judge assessment count ${verdict.expectations.length} does not match ${expectations.length} expectation(s).`,
         ],
         execution,
         verdict,
@@ -65,6 +75,7 @@ export class RuntimeHarness {
     }
 
     const details = [
+      `Runtime turns: ${runtimeTurns(scenario).length}.`,
       ...workspaceDetails(execution),
       verdict.summary,
       ...verdict.expectations.map(

@@ -108,6 +108,83 @@ The physical project fixture is authoritative.
     );
   });
 
+  it("loads replay turns and reports their total without merging expectations", () => {
+    const repositoryRoot = mkdtempSync(
+      path.join(tmpdir(), "studio-runtime-replay-definition-"),
+    );
+    mkdirSync(path.join(repositoryRoot, "fixtures", "input"), {
+      recursive: true,
+    });
+    writeFileSync(
+      path.join(repositoryRoot, "fixtures", "input", "project.md"),
+      "# Project\n",
+    );
+    writeFileSync(
+      path.join(repositoryRoot, "fixtures", "first.json"),
+      JSON.stringify({
+        version: 1,
+        unchanged: ["project.md"],
+        allowedChanges: [],
+      }),
+    );
+    writeFileSync(
+      path.join(repositoryRoot, "fixtures", "second.json"),
+      JSON.stringify({
+        version: 1,
+        modified: ["project.md"],
+        allowedChanges: ["project.md"],
+      }),
+    );
+    writeFileSync(
+      path.join(repositoryRoot, "fixtures", "replay.json"),
+      JSON.stringify({
+        version: 1,
+        turns: [
+          {
+            id: "confirm",
+            prompt: "Apply the proposed update.",
+            expect: ["Confirms the update."],
+            workspace_assertions: "fixtures/second.json",
+          },
+        ],
+      }),
+    );
+    const scenarioPath = path.join(repositoryRoot, "scenario.md");
+    const source = `---
+id: fixture-replay
+title: Fixture replay
+stage: Loader
+prompt: Review current state
+expect:
+  - proposes an update
+fixture: fixtures/input
+workspace_assertions: fixtures/first.json
+replay: fixtures/replay.json
+---
+An existing project is resumed.
+`;
+    writeFileSync(scenarioPath, source);
+
+    const test = validateRuntimeTest(
+      scenarioPath,
+      source,
+      repositoryRoot,
+    );
+    const results = loadRuntimeTests(repositoryRoot, repositoryRoot);
+
+    assert.equal(test.expect.length, 1);
+    assert.equal(test.replay?.turns.length, 1);
+    assert.deepEqual(test.replay?.turns[0].expect, [
+      "Confirms the update.",
+    ]);
+    assert.match(
+      results
+        .find((result) => result.id === "fixture-replay")
+        ?.details.join("\n") ?? "",
+      /2 turn\(s\)/,
+    );
+  });
+
   it("rejects an incomplete fixture declaration", () => {
     assert.throws(
       () =>
@@ -248,6 +325,8 @@ User asks to build a product.
   it("parses bounded behavioral-run options", () => {
     const options = parseArgs([
       "--confirm-llm-cost",
+      "--engine",
+      "ollama",
       "--id",
       "bootstrap-001",
       "--tag",
@@ -263,13 +342,41 @@ User asks to build a product.
     ]);
 
     assert.equal(options.confirmLlmCost, true);
+    assert.equal(options.engine, "ollama");
     assert.deepEqual(options.ids, ["bootstrap-001"]);
     assert.deepEqual(options.tags, ["severity:critical"]);
     assert.equal(options.maxTests, 3);
     assert.equal(options.model, "executor-model");
     assert.equal(options.judgeModel, "judge-model");
+    assert.equal(options.localProvider, undefined);
     assert.equal(options.timeoutMs, 60_000);
     assert.equal(options.runAll, false);
+  });
+
+  it("rejects an unsupported local model provider", () => {
+    assert.throws(
+      () => parseArgs(["--local-provider", "unknown"]),
+      /ollama or lmstudio/,
+    );
+  });
+
+  it("requires a model for the direct Ollama engine", () => {
+    const options = parseArgs([
+      "--confirm-llm-cost",
+      "--engine",
+      "ollama",
+      "--max-tests",
+      "1",
+    ]);
+
+    assert.throws(
+      () => assertBehavioralRunAuthorized(options),
+      /explicit --model/,
+    );
+    assert.throws(
+      () => parseArgs(["--engine", "unknown"]),
+      /codex or ollama/,
+    );
   });
 
   it("runs selected Runtime scenarios sequentially", async () => {
@@ -379,6 +486,32 @@ Runtime scenario.
 
     assert.equal(report.run.fixtureBackedScenarios, 1);
     assert.equal(report.run.validatesWorkspaceMutations, true);
+  });
+
+  it("reports replay scenario and executor turn counts", () => {
+    const report = buildResultsJson(
+      [
+        {
+          filePath: "tests/runtime/fixtures/002.md",
+          id: "fixture-002",
+          title: "Fixture replay",
+          stage: "Loader",
+          status: "PASS",
+          details: ["Passed."],
+          fixtureBacked: true,
+          turnCount: 2,
+        },
+      ],
+      "runtime-judge",
+    ) as {
+      run: {
+        replayScenarios: number;
+        runtimeTurns: number;
+      };
+    };
+
+    assert.equal(report.run.replayScenarios, 1);
+    assert.equal(report.run.runtimeTurns, 2);
   });
 
   it("writes latest markdown summary and machine-readable JSON results", () => {

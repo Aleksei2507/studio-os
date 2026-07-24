@@ -13,17 +13,26 @@ import {
   CodexCliResponseJudge,
   CodexCliRuntimeExecutor,
 } from "./runtime-testing/codex-cli.ts";
+import type { CodexLocalProvider } from "./runtime-testing/codex-cli.ts";
 import type {
   BehavioralStatus,
   FixtureWorkspaceSpec,
   HarnessEvaluation,
+  RuntimeReplaySpec,
   RuntimeScenario,
 } from "./runtime-testing/contracts.ts";
 import { RuntimeHarness } from "./runtime-testing/harness.ts";
+import { OllamaPromptRunner } from "./runtime-testing/ollama.ts";
+import { loadRuntimeReplaySpec } from "./runtime-testing/replay.ts";
+import {
+  runtimeExpectationLabels,
+  runtimeTurns,
+} from "./runtime-testing/scenario.ts";
 import { loadFixtureWorkspaceSpec } from "./runtime-testing/workspace-fixture.ts";
 
 type TestStatus = BehavioralStatus;
 type RuntimeTestMode = "scenario-structure" | "runtime-judge";
+type RuntimeEngine = "codex" | "ollama";
 
 type RuntimeTest = RuntimeScenario;
 
@@ -35,6 +44,7 @@ interface TestResult {
   status: TestStatus;
   details: string[];
   fixtureBacked?: boolean;
+  turnCount?: number;
   evaluation?: HarnessEvaluation;
 }
 
@@ -46,8 +56,10 @@ interface CliOptions {
   codexCommand: string;
   confirmLlmCost: boolean;
   dry: boolean;
+  engine: RuntimeEngine;
   ids: string[];
   judgeModel?: string;
+  localProvider?: CodexLocalProvider;
   maxTests?: number;
   model?: string;
   runAll: boolean;
@@ -76,6 +88,8 @@ interface RuntimeTestRun {
   assurance: string;
   executesStudioOs: boolean;
   fixtureBackedScenarios?: number;
+  replayScenarios?: number;
+  runtimeTurns?: number;
   usesLlmJudge: boolean;
   validatesWorkspaceMutations?: boolean;
 }
@@ -98,9 +112,9 @@ const RUN_MODES: Record<RuntimeTestMode, RuntimeTestRun> = {
   },
   "runtime-judge": {
     mode: "runtime-judge",
-    label: "One-turn Runtime contract evaluation",
+    label: "Runtime contract evaluation",
     assurance:
-      "Executes Universal Bootstrap in one-turn scenarios and uses an LLM judge. Declared fixtures also receive deterministic workspace assertions; synthetic scenarios do not validate file mutations.",
+      "Executes Universal Bootstrap for every declared turn and uses one LLM judge per scenario. Declared fixtures also receive deterministic workspace checkpoints; synthetic scenarios do not validate file mutations.",
     executesStudioOs: true,
     usesLlmJudge: true,
   },
@@ -110,8 +124,10 @@ function parseArgs(argv: string[]): CliOptions {
   let codexCommand = process.env.STUDIO_OS_CODEX_COMMAND ?? "codex";
   let confirmLlmCost = false;
   let dry = false;
+  let engine: RuntimeEngine = "codex";
   const ids: string[] = [];
   let judgeModel: string | undefined;
+  let localProvider: CodexLocalProvider | undefined;
   let maxTests: number | undefined;
   let model: string | undefined;
   let runAll = false;
@@ -129,6 +145,16 @@ function parseArgs(argv: string[]): CliOptions {
 
     if (arg === "--confirm-llm-cost") {
       confirmLlmCost = true;
+      continue;
+    }
+
+    if (arg === "--engine") {
+      const selectedEngine = requiredOptionValue(argv, index, arg);
+      if (selectedEngine !== "codex" && selectedEngine !== "ollama") {
+        throw new Error("--engine must be either codex or ollama");
+      }
+      engine = selectedEngine;
+      index += 1;
       continue;
     }
 
@@ -173,6 +199,18 @@ function parseArgs(argv: string[]): CliOptions {
       continue;
     }
 
+    if (arg === "--local-provider") {
+      const provider = requiredOptionValue(argv, index, arg);
+      if (provider !== "ollama" && provider !== "lmstudio") {
+        throw new Error(
+          "--local-provider must be either ollama or lmstudio",
+        );
+      }
+      localProvider = provider;
+      index += 1;
+      continue;
+    }
+
     if (arg === "--timeout-ms") {
       timeoutMs = positiveInteger(requiredOptionValue(argv, index, arg), arg);
       index += 1;
@@ -192,8 +230,10 @@ function parseArgs(argv: string[]): CliOptions {
     codexCommand,
     confirmLlmCost,
     dry,
+    engine,
     ids,
     judgeModel,
+    localProvider,
     maxTests,
     model,
     runAll,
@@ -226,12 +266,21 @@ function positiveInteger(value: string, option: string): number {
 function assertBehavioralRunAuthorized(options: CliOptions): void {
   if (!options.dry && !options.confirmLlmCost) {
     throw new Error(
-      "Runtime evaluation makes two LLM calls per scenario. Re-run with --confirm-llm-cost and use --id, --tag, --max-tests, or an explicit --all.",
+      "Runtime evaluation makes one executor call per turn plus one judge call per scenario. Re-run with --confirm-llm-cost and use --id, --tag, --max-tests, or an explicit --all.",
     );
   }
 
   if (options.dry) {
     return;
+  }
+
+  if (options.engine === "ollama" && !options.model) {
+    throw new Error("Ollama engine requires an explicit --model.");
+  }
+  if (options.engine === "ollama" && options.localProvider) {
+    throw new Error(
+      "--local-provider configures Codex CLI and cannot be combined with --engine ollama.",
+    );
   }
 
   const hasBound =
@@ -375,7 +424,9 @@ function validateRuntimeTest(
   const workspaceAssertions = optionalString(
     frontmatter.workspace_assertions,
   );
+  const replayPath = optionalString(frontmatter.replay);
   let workspace: FixtureWorkspaceSpec | undefined;
+  let replay: RuntimeReplaySpec | undefined;
 
   if (typeof frontmatter.id !== "string" || !frontmatter.id.trim()) {
     errors.push("Field id must be a non-empty string");
@@ -417,6 +468,14 @@ function validateRuntimeTest(
     errors.push("Field workspace_assertions must be a non-empty string");
   }
 
+  if (
+    "replay" in frontmatter &&
+    (typeof frontmatter.replay !== "string" ||
+      !frontmatter.replay.trim())
+  ) {
+    errors.push("Field replay must be a non-empty string");
+  }
+
   if (fixture && !workspaceAssertions) {
     errors.push(
       "Field workspace_assertions is required when fixture is declared",
@@ -439,6 +498,18 @@ function validateRuntimeTest(
     }
   }
 
+  if (replayPath) {
+    try {
+      replay = loadRuntimeReplaySpec(
+        repositoryRoot,
+        replayPath,
+        Boolean(fixture),
+      );
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+
   if (errors.length > 0) {
     throw new Error(errors.join("; "));
   }
@@ -453,6 +524,7 @@ function validateRuntimeTest(
     tags,
     body,
     workspace,
+    replay,
   };
 }
 
@@ -477,7 +549,10 @@ function normalizeStringList(value: unknown): string[] {
   return [];
 }
 
-function loadRuntimeTests(testsDir: string): TestResult[] {
+function loadRuntimeTests(
+  testsDir: string,
+  repositoryRoot = process.cwd(),
+): TestResult[] {
   const files = findMarkdownFiles(testsDir);
 
   if (files.length === 0) {
@@ -495,7 +570,12 @@ function loadRuntimeTests(testsDir: string): TestResult[] {
 
   return files.map((filePath) => {
     try {
-      const test = validateRuntimeTest(filePath, readFileSync(filePath, "utf8"));
+      const test = validateRuntimeTest(
+        filePath,
+        readFileSync(filePath, "utf8"),
+        repositoryRoot,
+      );
+      const turns = runtimeTurns(test);
       return {
         filePath,
         id: test.id,
@@ -503,8 +583,9 @@ function loadRuntimeTests(testsDir: string): TestResult[] {
         stage: test.stage,
         status: "PASS",
         fixtureBacked: Boolean(test.workspace),
+        turnCount: turns.length,
         details: [
-          `${test.expect.length} expectation(s), stage: ${test.stage}${test.workspace ? ", fixture-backed workspace" : ""}`,
+          `${runtimeExpectationLabels(test).length} expectation(s), ${turns.length} turn(s), stage: ${test.stage}${test.workspace ? ", fixture-backed workspace" : ""}`,
         ],
       };
     } catch (error) {
@@ -564,8 +645,9 @@ class HarnessRuntimeJudge implements RuntimeJudge {
       stage: test.stage,
       status: evaluation.status,
       fixtureBacked: Boolean(test.workspace),
+      turnCount: runtimeTurns(test).length,
       details: [
-        `${test.expect.length} expectation(s), stage: ${test.stage}`,
+        `${runtimeExpectationLabels(test).length} expectation(s), ${runtimeTurns(test).length} turn(s), stage: ${test.stage}`,
         ...evaluation.details,
       ],
       evaluation,
@@ -669,6 +751,7 @@ function buildResultsJson(
       status: result.status,
       filePath: result.filePath,
       fixtureBacked: Boolean(result.fixtureBacked),
+      turnCount: result.turnCount,
       details: result.details,
       evaluation: result.evaluation,
     })),
@@ -687,6 +770,8 @@ function buildSummaryMarkdown(
     `- Mode: ${run.label}`,
     `- Assurance: ${run.assurance}`,
     `- Fixture-backed scenarios: ${run.fixtureBackedScenarios}`,
+    `- Replay scenarios: ${run.replayScenarios}`,
+    `- Runtime turns: ${run.runtimeTurns}`,
     `- Workspace mutations evaluated: ${run.validatesWorkspaceMutations ? "Yes" : "No"}`,
     `- Total tests: ${results.length}`,
     `- Pass: ${counts.PASS}`,
@@ -712,10 +797,19 @@ function buildRunMetadata(
   const fixtureBackedScenarios = results.filter(
     (result) => result.fixtureBacked,
   ).length;
+  const replayScenarios = results.filter(
+    (result) => (result.turnCount ?? 0) > 1,
+  ).length;
+  const declaredRuntimeTurns = results.reduce(
+    (total, result) => total + (result.turnCount ?? 0),
+    0,
+  );
 
   return {
     ...RUN_MODES[mode],
     fixtureBackedScenarios,
+    replayScenarios,
+    runtimeTurns: declaredRuntimeTurns,
     validatesWorkspaceMutations:
       mode === "runtime-judge" && fixtureBackedScenarios > 0,
   };
@@ -744,13 +838,13 @@ function writeResultArtifacts(
       path.join(evaluationsDir, evaluationFileName(result.id)),
       `${JSON.stringify(
         {
+          ...result.evaluation,
           id: result.id,
           title: result.title,
           stage: result.stage,
           status: result.status,
           filePath: result.filePath,
           details: result.details,
-          ...result.evaluation,
         },
         null,
         2,
@@ -776,6 +870,8 @@ function printResults(results: TestResult[], mode: RuntimeTestMode): void {
   console.log(`Mode: ${run.label}`);
   console.log(`Assurance: ${run.assurance}`);
   console.log(`Fixture-backed scenarios: ${run.fixtureBackedScenarios}`);
+  console.log(`Replay scenarios: ${run.replayScenarios}`);
+  console.log(`Runtime turns: ${run.runtimeTurns}`);
   console.log(
     `Workspace mutations evaluated: ${run.validatesWorkspaceMutations ? "Yes" : "No"}`,
   );
@@ -802,18 +898,46 @@ async function main(): Promise<void> {
     } else {
       assertBehavioralRunAuthorized(options);
 
+      const executorOptions = {
+        adapterName:
+          options.engine === "ollama"
+            ? `ollama:${options.model}`
+            : undefined,
+        executable: options.codexCommand,
+        localProvider: options.localProvider,
+        model: options.model,
+        studioOsRoot: process.cwd(),
+        timeoutMs: options.timeoutMs,
+      };
+      const judgeOptions = {
+        adapterName:
+          options.engine === "ollama"
+            ? `ollama:${options.judgeModel ?? options.model}`
+            : undefined,
+        executable: options.codexCommand,
+        localProvider: options.localProvider,
+        model: options.judgeModel ?? options.model,
+        timeoutMs: options.timeoutMs,
+      };
+      const executorRunner =
+        options.engine === "ollama"
+          ? new OllamaPromptRunner({
+              model: options.model as string,
+              studioOsRoot: process.cwd(),
+              timeoutMs: options.timeoutMs,
+            })
+          : undefined;
+      const judgeRunner =
+        options.engine === "ollama"
+          ? new OllamaPromptRunner({
+              model: (options.judgeModel ?? options.model) as string,
+              studioOsRoot: process.cwd(),
+              timeoutMs: options.timeoutMs,
+            })
+          : undefined;
       const harness = new RuntimeHarness(
-        new CodexCliRuntimeExecutor({
-          executable: options.codexCommand,
-          model: options.model,
-          studioOsRoot: process.cwd(),
-          timeoutMs: options.timeoutMs,
-        }),
-        new CodexCliResponseJudge({
-          executable: options.codexCommand,
-          model: options.judgeModel ?? options.model,
-          timeoutMs: options.timeoutMs,
-        }),
+        new CodexCliRuntimeExecutor(executorOptions, executorRunner),
+        new CodexCliResponseJudge(judgeOptions, judgeRunner),
       );
       results = await runLlmJudgedTests(
         options.testsDir,
@@ -825,7 +949,9 @@ async function main(): Promise<void> {
         },
         {
           onScenarioStart(test, index, total) {
-            console.log(`RUN ${index + 1}/${total} ${test.id}`);
+            console.log(
+              `RUN ${index + 1}/${total} ${test.id} (${runtimeTurns(test).length} turn(s))`,
+            );
           },
         },
       );

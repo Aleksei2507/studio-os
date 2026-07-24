@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "modified": [
+    ".studio/project-state.md"
+  ],
+  "unchanged": [
+    ".studio/active-context.md",
+    ".studio/design-system-profile.md",
+    ".studio/standards-profile.md",
+    ".studio/telemetry/development-report.md",
+    ".studio/telemetry/validation-report.md",
+    "README.md",
+    "docs/project-brief.md",
+    "docs/roadmap.md",
+    "package.json",
+    "src/status.ts"
+  ],
+  "absent": [
+    "work-items"
+  ],
+  "allowedChanges": [
+    ".studio/project-state.md"
+  ],
+  "contains": {
+    ".studio/project-state.md": [
+      "Mode: Brownfield",
+      "Workflow: brownfield",
+      "Work Type: Not Selected",
+      "Active Work Item: None",
+      "Parent Workflow: None",
+      "Return Stage: None",
+      "Project Language: English",
+      "Target Milestone: Stable support queue MVP",
+      "Product Readiness: Not Ready",
+      "Current Increment: Increment 2 - Queue reliability",
+      "Increment Status: In QA",
+      "Increment Progress: 1/2",
+      "Previous Stage: Validation",
+      "Current Stage: QA",
+      "Status: Waiting Confirmation",
+      "Next Recommended Stage: QA"
+    ]
+  },
+  "notContains": {
+    ".studio/project-state.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://",
+      "Product Readiness: Ready for Release",
+      "Product Readiness: Released"
+    ]
+  }
+}

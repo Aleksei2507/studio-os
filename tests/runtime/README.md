@@ -16,9 +16,10 @@ npm run test:runtime -- \
   --id <scenario-id>
 ```
 
-Most scenarios use synthetic one-turn context. Scenarios with `fixture` and
+Most scenarios use synthetic single-turn context. Scenarios with `fixture` and
 `workspace_assertions` run against disposable physical workspaces and add
-deterministic file assertions.
+deterministic file assertions. A `replay` file adds bounded follow-up turns;
+fixture-backed replay evaluates a new workspace checkpoint after every turn.
 
 See `docs/runtime-testing.md` for the schema, assurance levels, fixture
-contract, and report format.
+contract, replay contract, and report format.

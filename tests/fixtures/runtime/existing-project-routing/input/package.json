@@ -1,0 +1,8 @@
+{
+  "name": "support-queue-fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "unchanged": [
+    ".studio/project-state.md"
+  ],
+  "absent": [
+    "work-items"
+  ],
+  "allowedChanges": [],
+  "contains": {
+    ".studio/project-state.md": [
+      "Mode: Brownfield",
+      "Project Language: English",
+      "Product Readiness: Not Ready",
+      "Current Increment: Increment 2 - Queue reliability",
+      "Increment Status: In QA",
+      "Increment Progress: 1/2",
+      "Current Stage: QA"
+    ]
+  },
+  "notContains": {
+    ".studio/project-state.md": [
+      "Workflow:",
+      "Work Type:",
+      "Active Work Item:",
+      "Parent Workflow:",
+      "Return Stage:"
+    ]
+  }
+}

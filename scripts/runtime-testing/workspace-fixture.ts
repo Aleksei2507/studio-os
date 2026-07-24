@@ -17,6 +17,7 @@ import path from "node:path";
 import type {
   FixtureWorkspaceSpec,
   WorkspaceAssertionAssessment,
+  WorkspaceAssertionSpec,
   WorkspaceAssertions,
   WorkspaceDiff,
   WorkspaceEvaluation,
@@ -34,6 +35,11 @@ interface WorkspaceSnapshot {
 export interface FixtureWorkspaceRun<T> {
   value: T;
   evaluation: WorkspaceEvaluation;
+}
+
+export interface FixtureWorkspaceSession {
+  workspace: string;
+  checkpoint(assertions: WorkspaceAssertions): WorkspaceEvaluation;
 }
 
 const ASSERTION_KEYS = new Set([
@@ -59,11 +65,7 @@ export function loadFixtureWorkspaceSpec(
     fixturePath,
     "Fixture",
   );
-  const assertionsFile = resolveRepositoryPath(
-    root,
-    assertionsPath,
-    "Workspace assertions",
-  );
+  const assertionSpec = loadWorkspaceAssertionSpec(root, assertionsPath);
 
   if (!statSync(fixtureDirectory).isDirectory()) {
     throw new Error(`Fixture path is not a directory: ${fixturePath}`);
@@ -73,13 +75,30 @@ export function loadFixtureWorkspaceSpec(
     throw new Error("Fixture must be a repository-relative subdirectory.");
   }
 
+  assertNoSymlinks(fixtureDirectory);
+
+  return {
+    fixtureDirectory,
+    ...assertionSpec,
+  };
+}
+
+export function loadWorkspaceAssertionSpec(
+  repositoryRoot: string,
+  assertionsPath: string,
+): WorkspaceAssertionSpec {
+  const root = realpathSync(repositoryRoot);
+  const assertionsFile = resolveRepositoryPath(
+    root,
+    assertionsPath,
+    "Workspace assertions",
+  );
+
   if (!statSync(assertionsFile).isFile()) {
     throw new Error(
       `Workspace assertions path is not a file: ${assertionsPath}`,
     );
   }
-
-  assertNoSymlinks(fixtureDirectory);
 
   let source: unknown;
   try {
@@ -91,16 +110,15 @@ export function loadFixtureWorkspaceSpec(
   }
 
   return {
-    fixtureDirectory,
     assertionsFile,
     assertions: parseWorkspaceAssertions(source),
   };
 }
 
-export async function runFixtureWorkspace<T>(
-  spec: FixtureWorkspaceSpec,
-  execute: (workspace: string) => Promise<T>,
-): Promise<FixtureWorkspaceRun<T>> {
+export async function withFixtureWorkspace<T>(
+  fixtureDirectory: string,
+  execute: (session: FixtureWorkspaceSession) => Promise<T>,
+): Promise<T> {
   const sessionRoot = mkdtempSync(
     path.join(tmpdir(), "studio-os-runtime-fixture-"),
   );
@@ -108,23 +126,43 @@ export async function runFixtureWorkspace<T>(
   mkdirSync(workspace);
 
   try {
-    copyFixtureContents(spec.fixtureDirectory, workspace);
-    const before = snapshotWorkspace(workspace);
-    const value = await execute(workspace);
-    const after = snapshotWorkspace(workspace);
+    copyFixtureContents(fixtureDirectory, workspace);
+    let baseline = snapshotWorkspace(workspace);
 
-    return {
-      value,
-      evaluation: evaluateWorkspace(
-        workspace,
-        before,
-        after,
-        spec.assertions,
-      ),
-    };
+    return await execute({
+      workspace,
+      checkpoint(assertions) {
+        const after = snapshotWorkspace(workspace);
+        const evaluation = evaluateWorkspace(
+          workspace,
+          baseline,
+          after,
+          assertions,
+        );
+        baseline = after;
+        return evaluation;
+      },
+    });
   } finally {
     rmSync(sessionRoot, { recursive: true, force: true });
   }
+}
+
+export async function runFixtureWorkspace<T>(
+  spec: FixtureWorkspaceSpec,
+  execute: (workspace: string) => Promise<T>,
+): Promise<FixtureWorkspaceRun<T>> {
+  return withFixtureWorkspace(
+    spec.fixtureDirectory,
+    async ({ workspace, checkpoint }) => {
+      const value = await execute(workspace);
+
+      return {
+        value,
+        evaluation: checkpoint(spec.assertions),
+      };
+    },
+  );
 }
 
 export function parseWorkspaceAssertions(
@@ -178,7 +216,7 @@ export function parseWorkspaceAssertions(
   return assertions;
 }
 
-function resolveRepositoryPath(
+export function resolveRepositoryPath(
   repositoryRoot: string,
   repositoryPath: string,
   label: string,

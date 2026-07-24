@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "turns": [
+    {
+      "id": "confirm-routing-migration",
+      "prompt": "Yes. Apply exactly those routing fields to Project Memory. Stop after confirming the migration; do not start QA work.",
+      "expect": [
+        "The response should confirm that the missing routing fields were added to Project Memory.",
+        "The response should state that the existing Brownfield workflow, QA stage, and Not Ready product readiness were preserved.",
+        "The response should name the updated artifact using the project-relative path `.studio/project-state.md`.",
+        "Should not: Claim that QA work, Brownfield Onboarding, a Work Item, or release preparation has started."
+      ],
+      "workspace_assertions": "tests/fixtures/runtime/existing-project-routing/after-confirmation.json"
+    }
+  ]
+}

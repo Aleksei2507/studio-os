@@ -12,10 +12,13 @@ export interface WorkspaceAssertions {
   notContains?: Record<string, string[]>;
 }
 
-export interface FixtureWorkspaceSpec {
-  fixtureDirectory: string;
+export interface WorkspaceAssertionSpec {
   assertionsFile: string;
   assertions: WorkspaceAssertions;
+}
+
+export interface FixtureWorkspaceSpec extends WorkspaceAssertionSpec {
+  fixtureDirectory: string;
 }
 
 export interface WorkspaceDiff {
@@ -36,6 +39,18 @@ export interface WorkspaceEvaluation {
   assertions: WorkspaceAssertionAssessment[];
 }
 
+export interface RuntimeFollowUpTurn {
+  id: string;
+  prompt: string;
+  expect: string[];
+  workspace?: WorkspaceAssertionSpec;
+}
+
+export interface RuntimeReplaySpec {
+  replayFile: string;
+  turns: RuntimeFollowUpTurn[];
+}
+
 export interface RuntimeScenario {
   filePath: string;
   id: string;
@@ -46,6 +61,15 @@ export interface RuntimeScenario {
   tags: string[];
   body: string;
   workspace?: FixtureWorkspaceSpec;
+  replay?: RuntimeReplaySpec;
+}
+
+export interface RuntimeTurnExecution {
+  id: string;
+  prompt: string;
+  response: string;
+  durationMs: number;
+  workspace?: WorkspaceEvaluation;
 }
 
 export interface RuntimeExecution {
@@ -53,6 +77,7 @@ export interface RuntimeExecution {
   response: string;
   durationMs: number;
   workspace?: WorkspaceEvaluation;
+  turns?: RuntimeTurnExecution[];
 }
 
 export interface ExpectationAssessment {

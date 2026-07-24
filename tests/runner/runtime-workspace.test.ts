@@ -18,6 +18,7 @@ import {
   loadFixtureWorkspaceSpec,
   parseWorkspaceAssertions,
   runFixtureWorkspace,
+  withFixtureWorkspace,
 } from "../../scripts/runtime-testing/workspace-fixture.ts";
 
 function createFixtureRoot(): {
@@ -176,5 +177,41 @@ describe("fixture-backed runtime workspace", () => {
         .join("\n"),
       /src\/app\.ts/,
     );
+  });
+
+  it("keeps one disposable workspace and advances the baseline per checkpoint", async () => {
+    const { fixtureDirectory } = createFixtureRoot();
+    let disposableWorkspace = "";
+
+    const result = await withFixtureWorkspace(
+      fixtureDirectory,
+      async ({ workspace, checkpoint }) => {
+        disposableWorkspace = workspace;
+        const first = checkpoint({
+          version: 1,
+          unchanged: ["src/app.ts"],
+          allowedChanges: [],
+        });
+
+        writeFileSync(
+          path.join(workspace, "src", "app.ts"),
+          'export const status = "migrated";\n',
+        );
+        const second = checkpoint({
+          version: 1,
+          modified: ["src/app.ts"],
+          allowedChanges: ["src/app.ts"],
+        });
+
+        return { first, second, workspace };
+      },
+    );
+
+    assert.equal(result.first.status, "PASS");
+    assert.deepEqual(result.first.diff.modified, []);
+    assert.equal(result.second.status, "PASS");
+    assert.deepEqual(result.second.diff.modified, ["src/app.ts"]);
+    assert.equal(result.workspace, disposableWorkspace);
+    assert.equal(existsSync(disposableWorkspace), false);
   });
 });

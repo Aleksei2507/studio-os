@@ -2,10 +2,17 @@
 
 ## Unreleased
 
-- Added a cost-gated one-turn Runtime Harness with isolated Codex CLI execution, separate structured response judgment, scenario filters, sequential runs, and per-scenario diagnostic artifacts.
+- Added a cost-gated Runtime Harness with isolated Codex CLI execution, separate structured response judgment, scenario filters, sequential runs, and per-scenario diagnostic artifacts.
 - Added fixture-backed Runtime execution with disposable writable workspaces,
   before/after file snapshots, exact mutation allowlists, content assertions,
   and a real Brownfield Project Memory regression scenario.
+- Added bounded multi-turn replay with persistent fixture workspaces, per-turn
+  checkpoints, observable transcript carryover, turn-scoped judgment, and an
+  existing-project routing migration regression.
+- Added a direct local Ollama behavioral engine with structured response
+  judgment, bounded filesystem actions, workspace inventory, recoverable tool
+  errors, and read/write containment that keeps test expectations unavailable
+  to the Runtime executor.
 
 ## 0.5.0-alpha.3
 
