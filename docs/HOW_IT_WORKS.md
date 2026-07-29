@@ -34,6 +34,13 @@ Selected Workflow And Active Runtime
 
 Codex and Claude Code use host-specific manifests with the shared packaged skill under `skills/studio-os/`. An agent with filesystem access but no plugin system can read the Universal Bootstrap directly. Every route must reach Loader before product planning, technology selection, implementation skills, or file changes.
 
+An installed host adapter derives Studio OS Root from the exact skill file
+loaded by the host. It preserves every marketplace and cache path component,
+verifies the Universal Bootstrap, Loader, and workflow registry at that root,
+and stops with an adapter or bootstrap failure if the root cannot be confirmed.
+Runtime, standards, and template paths are then resolved only from the
+confirmed Studio OS Root.
+
 The Universal Bootstrap and Loader use observable intent rather than fixed language-specific commands. A request only to explain Studio OS remains a meta request; a request to use Studio OS for a supplied product or project enters the workflow.
 
 ---

@@ -75,6 +75,11 @@ Keep references one level below `SKILL.md`. Do not create reference chains.
 
 ## Loading Contract
 
+All paths beginning with `skill/`, `templates/`, or `adapters/` resolve from
+the confirmed Studio OS Root. Only paths beginning with `references/` resolve
+from the active Runtime directory. Never resolve a root-relative Runtime
+contract against the Target Workspace or current working directory.
+
 Before running a Runtime, load only:
 
 1. `skill/core/INVARIANTS.md`.

@@ -171,6 +171,25 @@ Expected in both cases:
 - Studio OS Root is not treated as the product Target Workspace;
 - README and unrelated Runtime files are not loaded at startup.
 
+### Installed Adapter Root Resolution
+
+Repeat adapter activation from an installed package whose host path contains
+nested marketplace, plugin, version, and cache segments. Repeated path segments
+are valid and must remain intact.
+
+Expected:
+
+- the adapter derives Studio OS Root from the exact absolute path of the skill
+  file loaded by the host;
+- `adapters/universal/BOOTSTRAP.md`, `skill/core/LOADER.md`, and
+  `skill/workflows/registry.json` are verified at that root before Loader runs;
+- Runtime, standards, and template references resolve from the confirmed
+  Studio OS Root;
+- existing files are not described as stale or replaced with files from
+  another checkout;
+- a missing root marker is reported as an adapter or bootstrap failure and
+  execution stops instead of searching for another installation.
+
 ## Brownfield Design System Detection
 
 Use a disposable existing UI project without `.studio/`. Include an actively used component library or local component layer, theme or token definitions, and at least one real interface usage path. If possible, include one unused UI dependency or a legacy interface area as counter-evidence.

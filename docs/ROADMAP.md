@@ -33,7 +33,7 @@ Delivered:
 - Project-Local Reference Contract;
 - Project Standards and Design System Profiles;
 - scoped Product Outcome and release-readiness gates;
-- deterministic structure tests and 151 Runtime scenario definitions;
+- deterministic structure tests and 152 Runtime scenario definitions;
 - cost-gated single-turn and multi-turn Runtime execution with LLM judgment;
 - a fixture-backed Brownfield workspace with deterministic Project Memory,
   source-integrity, artifact-boundary, and portability assertions;

@@ -20,6 +20,21 @@ Determine project mode, work type, workflow, current stage, current increment, P
 
 Loader routes work. It does not perform Interview, Discovery, Planning, Architecture, Interface Design, Development, or other stage work.
 
+## Path Resolution
+
+Bootstrap supplies a confirmed Studio OS Root. Resolve every registry entry and
+every path beginning with `skill/`, `templates/`, or `adapters/` relative to
+the confirmed Studio OS Root.
+
+These paths are not relative to the Target Workspace, current working
+directory, active Runtime directory, or referring Markdown file. Only
+Runtime-local `references/...` paths resolve from the active Runtime directory.
+
+If a registry target or required root-relative file is absent at its resolved
+path, report a package integrity failure and stop the affected Runtime. Do not
+search by basename, reconstruct a marketplace or cache path, substitute another
+checkout, or call the reference outdated.
+
 ## Progressive Startup Loading
 
 Always read:
@@ -165,6 +180,11 @@ For an active Runtime, load a reference only when its `SKILL.md` gives a conditi
 Resolve declared capability IDs through `skill/capabilities/registry.json`. Load only their contracts. If a required capability is unavailable, follow the capability and Runtime blocked behavior.
 
 Resolve declared standard IDs through `skill/standards/registry.json`. When a Project or active Work Item Standards Profile exists, load only selected standards whose `appliesTo` includes the active Runtime. Architecture may load an additional domain standard while forming or revising the profile.
+
+Resolve the registry files and every path stored inside them relative to the
+confirmed Studio OS Root. A path such as
+`skill/standards/core/testing.md` never resolves from the active Runtime
+directory or Target Workspace.
 
 Resolve project or stack standard references only from an accepted profile and only for their recorded Runtime stages. If a recorded path or adapter is unavailable, report the limitation instead of substituting an unrelated guide.
 

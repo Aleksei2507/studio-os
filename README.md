@@ -31,6 +31,11 @@ I want to build...
 
 The Codex and Claude Code packages are declared by their host manifests and expose the same `skills/studio-os/SKILL.md`. Every entry path uses the same Universal Bootstrap; adapters do not contain workflow logic.
 
+An installed adapter derives Studio OS Root from the exact skill file loaded by
+the host and verifies the Bootstrap, Loader, and workflow registry there before
+continuing. It preserves the host's complete marketplace and cache path instead
+of reconstructing it from package names or the current working directory.
+
 ---
 
 # Installation

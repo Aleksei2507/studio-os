@@ -16,12 +16,31 @@ Infer activation from intent and available project context. Do not depend on a f
 
 Keep these locations separate:
 
-- **Studio OS Root:** the directory containing `skill/`, `adapters/`, and this Bootstrap;
+- **Studio OS Root:** the verified directory containing `skill/`, `adapters/`, and this Bootstrap;
 - **Target Workspace:** the product project directory supplied by the user, or the current workspace when no other target is supplied.
 
 Never use Studio OS Root as the Target Workspace merely because the adapter was loaded from there. The two roots may be the same only when the user is explicitly developing Studio OS itself.
 
-All Studio OS paths below are relative to Studio OS Root. Product artifacts and `.studio/` state belong to the Target Workspace.
+When a host adapter activated this file, keep the Studio OS Root it already
+derived and verified from the exact loaded host skill path. When the user or
+host supplies this Bootstrap directly, use the exact absolute path of this
+loaded `BOOTSTRAP.md` as the sole anchor and derive Studio OS Root as two parent
+directories above its containing directory.
+
+Before startup, verify these root markers:
+
+- `adapters/universal/BOOTSTRAP.md`;
+- `skill/core/LOADER.md`;
+- `skill/workflows/registry.json`.
+
+All `skill/`, `templates/`, and `adapters/` paths are relative to the confirmed
+Studio OS Root. They are not relative to the current working directory, Target
+Workspace, active Runtime directory, or the file that mentions them. Product
+artifacts and `.studio/` state belong to the Target Workspace.
+
+Do not reconstruct a plugin or cache path from package metadata, omit repeated
+directory components, or search for another checkout when the confirmed root
+fails verification.
 
 Persist local file references in product artifacts as project-relative paths that resolve inside the Target Workspace. Never persist a machine-specific home, download, temporary, attachment-cache, or sibling-workspace path. A separately supplied local source may be inspected when authorized, but it must be imported into the project or recorded without its host path before becoming persistent evidence.
 
@@ -68,6 +87,9 @@ Use Project Language for conversation and product artifacts. Keep activation beh
 
 ## Failure Behavior
 
-If Studio OS Root or a required core file is unavailable, report an adapter/bootstrap failure and stop. Do not silently fall back to the host agent's default implementation workflow.
+If Studio OS Root, a root marker, or a required core file is unavailable,
+report an adapter/bootstrap failure and stop. Do not silently fall back to the
+host agent's default implementation workflow, search for a substitute Studio
+OS checkout, or describe unresolved package paths as outdated references.
 
 If the Target Workspace cannot be determined reliably, ask one focused path question. Do not ask the user to select a Studio OS mode or Runtime.

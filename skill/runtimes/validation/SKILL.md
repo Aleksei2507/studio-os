@@ -47,7 +47,12 @@ Load `skill/capabilities/technical-validation.md`.
 - `testing`;
 - `security-privacy`.
 
-Load the direct contracts above and only additional standards selected in the canonical and active Work Item Standards Profiles that apply to Validation.
+Resolve these IDs through
+`skill/standards/registry.json` relative to the confirmed Studio OS Root. Load
+the resulting direct contracts and only additional standards selected in the
+canonical and active Work Item Standards Profiles that apply to Validation.
+Do not resolve a standard path from this Runtime directory or the Target
+Workspace.
 
 ## Entry Gate
 
@@ -147,7 +152,9 @@ Create Validation Report under `.studio/telemetry/` or the Active Work Item dire
 - QA Handoff on pass;
 - Residual Technical Risks.
 
-Use `templates/validation-report.md` as the output structure.
+Use `templates/validation-report.md` as the output structure. Resolve the
+template relative to the confirmed Studio OS Root, not this Runtime directory
+or the Target Workspace.
 
 ## Project Memory Update
 

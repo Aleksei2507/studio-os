@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Fixed installed adapter root resolution by anchoring every package path to
+  the exact loaded skill file, preserving nested cache path components,
+  verifying root markers, and failing closed when the package root is invalid.
 - Added a cost-gated Runtime Harness with isolated Codex CLI execution, separate structured response judgment, scenario filters, sequential runs, and per-scenario diagnostic artifacts.
 - Added fixture-backed Runtime execution with disposable writable workspaces,
   before/after file snapshots, exact mutation allowlists, content assertions,

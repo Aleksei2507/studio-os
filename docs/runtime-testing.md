@@ -162,8 +162,8 @@ npm run test:runtime:dry
 ```
 
 This command does not start Studio OS, produce a Runtime response, or judge
-behavior. A result such as `151/151 PASS` means that 151 scenario definitions
-have valid frontmatter, expectations, and bodies. It is not evidence that 151
+behavior. A result such as `152/152 PASS` means that 152 scenario definitions
+have valid frontmatter, expectations, and bodies. It is not evidence that 152
 conversations were executed successfully.
 
 Runtime contract evaluation executes Universal Bootstrap in a disposable
@@ -199,7 +199,7 @@ npm run test:runtime -- \
   --tag severity:critical \
   --max-tests 10
 
-# A full 151-scenario run requires a second explicit signal.
+# A full 152-scenario run requires a second explicit signal.
 npm run test:runtime -- \
   --confirm-llm-cost \
   --all
