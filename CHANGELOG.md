@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0-alpha.4
+
 - Fixed installed adapter root resolution by anchoring every package path to
   the exact loaded skill file, preserving nested cache path components,
   verifying root markers, and failing closed when the package root is invalid.
