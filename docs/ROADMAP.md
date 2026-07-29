@@ -33,7 +33,7 @@ Delivered:
 - Project-Local Reference Contract;
 - Project Standards and Design System Profiles;
 - scoped Product Outcome and release-readiness gates;
-- deterministic structure tests and 152 Runtime scenario definitions;
+- deterministic structure tests and 153 Runtime scenario definitions;
 - cost-gated single-turn and multi-turn Runtime execution with LLM judgment;
 - a fixture-backed Brownfield workspace with deterministic Project Memory,
   source-integrity, artifact-boundary, and portability assertions;
@@ -43,6 +43,8 @@ Delivered:
   shell capability;
 - a Greenfield Interview replay that verifies confirmation-gated Project
   Memory creation and the Discovery stop boundary;
+- a fixture-backed Product Outcome gate that keeps accepted increment evidence
+  separate from incomplete milestone readiness;
 - a versioned behavioral assurance policy with explicit model identity,
   immutable trial output, zero automatic retries, three-trial classification,
   privacy rules, and evaluation-budget gates.

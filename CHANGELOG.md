@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added a fixture-backed Product Outcome regression that keeps an accepted
+  increment distinct from an incomplete milestone, preserves Not Ready product
+  state, and prevents product-source or accepted-artifact mutation.
+
 ## 0.5.0-alpha.4
 
 - Fixed installed adapter root resolution by anchoring every package path to

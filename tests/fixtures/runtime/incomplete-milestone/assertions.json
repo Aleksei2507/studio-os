@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "created": [
+    ".studio/telemetry/product-outcome-report.md"
+  ],
+  "modified": [
+    ".studio/project-state.md",
+    ".studio/active-context.md"
+  ],
+  "unchanged": [
+    ".studio/telemetry/development-report.md",
+    ".studio/telemetry/validation-report.md",
+    "docs/project-brief.md",
+    "docs/roadmap.md",
+    "docs/architecture.md",
+    "docs/qa-report.md",
+    "package.json",
+    "src/library.ts"
+  ],
+  "absent": [
+    "work-items"
+  ],
+  "allowedChanges": [
+    ".studio/project-state.md",
+    ".studio/active-context.md",
+    ".studio/telemetry/product-outcome-report.md"
+  ],
+  "contains": {
+    ".studio/project-state.md": [
+      "Target Milestone: Personal reading list MVP",
+      "Product Readiness: Not Ready",
+      "Current Increment: Increment 2 - Reading progress",
+      "Increment Status: Planned",
+      "Increment Progress: 1/2",
+      "Previous Stage: Product Outcome",
+      "Current Stage: Development",
+      "Status: Waiting Confirmation",
+      "Next Recommended Stage: Development",
+      ".studio/telemetry/product-outcome-report.md"
+    ],
+    ".studio/active-context.md": [
+      "Increment 2 - Reading progress",
+      ".studio/telemetry/product-outcome-report.md"
+    ],
+    ".studio/telemetry/product-outcome-report.md": [
+      "Personal reading list MVP",
+      "Increment 1 - Capture books",
+      "Increment 2 - Reading progress",
+      "VERIFIED",
+      "PLANNED",
+      "Decision: CONTINUE",
+      "Product Readiness: Not Ready",
+      "Development",
+      ".studio/telemetry/validation-report.md",
+      "docs/qa-report.md",
+      "docs/architecture.md"
+    ]
+  },
+  "notContains": {
+    ".studio/project-state.md": [
+      "Product Readiness: Ready for Release",
+      "Product Readiness: Released",
+      "Current Stage: Release",
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ],
+    ".studio/telemetry/product-outcome-report.md": [
+      "Decision: PASS",
+      "Decision: BLOCKED",
+      "Decision: RE-SCOPE",
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ]
+  }
+}

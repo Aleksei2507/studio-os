@@ -11,7 +11,7 @@ description: Independently compare an accepted product milestone or Work Item ou
 
 Stage: Product Outcome
 
-Version: 1.0
+Version: 1.1
 
 Optional: No for Greenfield, Brownfield, and Feature milestone delivery
 
@@ -118,6 +118,13 @@ Product Outcome must not rewrite the target. Record the conflict, route to Brief
 8. Update Project Memory without starting the next Runtime.
 9. Communicate the completed unit, current increment, target readiness, remaining work, and recommended next stage separately.
 
+For `CONTINUE`, record in the Product Outcome Report the accepted Validation
+and QA evidence that supports the completed increment. When routing directly
+to Development, record the accepted product, architecture, interface, and
+standards evidence that makes earlier decision Runtimes unnecessary. Use
+project-relative artifact paths. If that evidence is absent or incomplete,
+route to the Runtime that owns the missing decision instead.
+
 ## Scoped Completion
 
 Every response from this Runtime must distinguish:
@@ -127,6 +134,11 @@ Every response from this Runtime must distinguish:
 - Target Milestone Or Work Item Outcome;
 - Product Readiness;
 - next stage and remaining delivery units.
+
+For `CONTINUE`, the response must name the accepted increment, explicit Product
+Readiness, remaining increments, recommended next Runtime, and confirmation
+boundary. Keep the complete evidence rationale in the Product Outcome Report;
+the response may summarize it instead of repeating every artifact path.
 
 Do not use an unqualified completion statement. An accepted increment is not a completed milestone, and a completed Work Item is not automatically a completed product.
 
@@ -144,7 +156,12 @@ The report must contain:
 - Decision And Rationale Criteria;
 - Remaining Increments Or Blockers;
 - Recommended Next Runtime;
-- Project Memory Update.
+- for `CONTINUE`, project-relative Validation and QA evidence paths for the
+  completed increment and accepted decision-artifact paths that justify the
+  recommended next Runtime;
+- Project Memory Update, including the explicit Product Readiness value,
+  completed increment, selected next increment, progress, current stage, and
+  waiting or blocked status.
 
 ## Project Memory Update
 
