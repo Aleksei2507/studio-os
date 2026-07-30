@@ -14,6 +14,7 @@ describe("Studio OS public site", () => {
       "website/styles.css",
       "website/script.js",
       "website/assets/studio-workbench.jpg",
+      "website/assets/spoke-deployed.jpg",
     ]) {
       assert.equal(existsSync(path.join(root, filePath)), true, filePath);
     }
@@ -29,6 +30,9 @@ describe("Studio OS public site", () => {
     assert.match(html, /\/plugin install studio-os@studio-os/);
     assert.match(html, /\/reload-plugins/);
     assert.match(html, /\/studio-os:studio-os/);
+    assert.match(html, /From a rough idea to a deployed product\./);
+    assert.match(html, /src="\.\/assets\/spoke-deployed\.jpg"/);
+    assert.match(html, /How is Studio OS different from BMAD\?/);
     assert.match(html, /href="\.\/styles\.css"/);
     assert.match(html, /src="\.\/script\.js"/);
     assert.doesNotMatch(html, /<script[^>]+src="https?:\/\//);
@@ -53,12 +57,26 @@ describe("Studio OS public site", () => {
   });
 
   it("uses the project visual asset without shipping an oversized source", () => {
-    const asset = statSync(
+    const heroAsset = statSync(
       path.join(root, "website/assets/studio-workbench.jpg"),
     );
+    const productAsset = statSync(
+      path.join(root, "website/assets/spoke-deployed.jpg"),
+    );
 
-    assert.ok(asset.size > 100_000, "hero image should contain real visual detail");
-    assert.ok(asset.size < 1_500_000, "hero image should remain web-friendly");
+    assert.ok(
+      heroAsset.size > 100_000,
+      "hero image should contain real visual detail",
+    );
+    assert.ok(heroAsset.size < 1_500_000, "hero image should remain web-friendly");
+    assert.ok(
+      productAsset.size > 100_000,
+      "deployed product image should contain real interface detail",
+    );
+    assert.ok(
+      productAsset.size < 1_500_000,
+      "deployed product image should remain web-friendly",
+    );
   });
 
   it("publishes the static directory through GitHub Pages", () => {

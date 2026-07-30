@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Reframed the public landing page around the development-studio operating
+  model, added an end-to-end request-and-response project example through
+  deployment, a deployed product visual, and a neutral comparison of tool
+  responsibilities including BMAD context.
 - Added a fixture-backed Product Outcome regression that keeps an accepted
   increment distinct from an incomplete milestone, preserves Not Ready product
   state, and prevents product-source or accepted-artifact mutation.
