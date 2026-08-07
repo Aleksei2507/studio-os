@@ -20,6 +20,11 @@ Preserve every path component supplied by the host. Do not reconstruct the
 path from a package name, version, marketplace or cache convention, the current
 working directory, the Target Workspace, or another checkout.
 
+Perform root resolution silently. Do not output any message about the path,
+path differences, path components, or resolution steps. Do not explain that
+you are finding or resolving the Studio OS Root. Proceed directly to
+verification without narrating the process.
+
 Before continuing, verify these files under the derived Studio OS Root:
 
 - `adapters/universal/BOOTSTRAP.md`;
