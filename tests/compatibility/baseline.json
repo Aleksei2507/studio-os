@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "baselineId": "v0.5-compatibility",
+  "suiteId": "v0.5-critical-lifecycle",
+  "requiredTrials": 3,
+  "combinations": [
+    {
+      "id": "remote-o4-mini",
+      "description": "Remote baseline: OpenAI o4-mini via Codex CLI",
+      "engine": "codex",
+      "executorModel": "o4-mini",
+      "judgeModel": "o4-mini",
+      "adapter": "codex-cli:o4-mini"
+    },
+    {
+      "id": "local-llama3.2",
+      "description": "Local baseline: llama3.2 via Ollama",
+      "engine": "ollama",
+      "executorModel": "llama3.2",
+      "judgeModel": "llama3.2",
+      "adapter": "ollama:llama3.2"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "version": 1,
+  "baselineId": "v0.5-compatibility",
+  "suiteId": "v0.5-critical-lifecycle",
+  "generatedAt": "pending",
+  "combinations": [
+    {
+      "combinationId": "remote-o4-mini",
+      "engine": "codex",
+      "executorModel": "o4-mini",
+      "judgeModel": "o4-mini",
+      "overallClassification": "Unknown",
+      "scenarios": [
+        {
+          "scenarioId": "bootstrap-001-explicit-greenfield-activation",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "bootstrap-002-nested-plugin-root-resolution",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-001-brownfield-project-memory",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-002-existing-project-routing-replay",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-003-greenfield-interview-replay",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-004-incomplete-milestone-after-qa",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "interaction-006-language-agnostic",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "regression-010-project-local-file-references",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "release-003-explicit-authorization",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "release-005-milestone-requires-product-outcome",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        }
+      ]
+    },
+    {
+      "combinationId": "local-llama3.2",
+      "engine": "ollama",
+      "executorModel": "llama3.2",
+      "judgeModel": "llama3.2",
+      "overallClassification": "Unknown",
+      "scenarios": [
+        {
+          "scenarioId": "bootstrap-001-explicit-greenfield-activation",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "bootstrap-002-nested-plugin-root-resolution",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-001-brownfield-project-memory",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-002-existing-project-routing-replay",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-003-greenfield-interview-replay",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "fixture-004-incomplete-milestone-after-qa",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "interaction-006-language-agnostic",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "regression-010-project-local-file-references",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "release-003-explicit-authorization",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        },
+        {
+          "scenarioId": "release-005-milestone-requires-product-outcome",
+          "classification": "Unknown",
+          "validTrials": 0,
+          "passedTrials": 0,
+          "failedTrials": 0,
+          "invalidTrials": 0,
+          "workspaceMutationViolation": false
+        }
+      ]
+    }
+  ]
+}

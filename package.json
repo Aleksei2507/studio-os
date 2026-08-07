@@ -1,13 +1,19 @@
 {
   "name": "studio-os",
-  "version": "0.5.0-alpha.4",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "test:adapters:dry": "node --import tsx scripts/check-installed-adapters.ts --dry",
+    "test:adapters:check": "node --import tsx scripts/check-installed-adapters.ts",
+    "test:compatibility:dry": "node --import tsx scripts/check-compatibility-baseline.ts --dry",
+    "test:compatibility:check": "node --import tsx scripts/check-compatibility-baseline.ts",
     "test:runtime": "node --import tsx scripts/run-runtime-tests.ts",
     "test:runtime:dry": "node --import tsx scripts/run-runtime-tests.ts --dry",
     "test:runner": "node --import tsx --test tests/runner/*.test.ts tests/structure/*.test.ts",
     "test:structure": "node --import tsx --test tests/structure/*.test.ts",
+    "test:rc:dry": "node --import tsx scripts/check-release-candidate.ts --dry",
+    "test:rc:check": "node --import tsx scripts/check-release-candidate.ts",
     "release:check": "node --import tsx scripts/build-release.ts --check",
     "release:build": "node --import tsx scripts/build-release.ts --build"
   },

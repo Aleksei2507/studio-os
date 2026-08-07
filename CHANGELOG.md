@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.5.0
+
+- Added a Release Candidate gate aggregator with eight deterministic evidence
+  gates (release metadata, release manifest, installed adapter matrix,
+  compatibility baseline, compatibility summary, critical suite, issue triage,
+  and documentation) that consolidate all five milestone evidence streams into
+  a single pass/fail RC readiness check.
+- Added an issue triage contract and canonical triage document for
+  milestone-relevant GitHub issues with closed, deferred, and not-applicable
+  resolution statuses.
+- Added a versioned compatibility baseline for remote (Codex CLI / o4-mini) and
+  local (Ollama / llama3.2) model classes with trial record schema, zero-retry
+  classification policy, workspace mutation violation detection, and
+  Unknown/Compatible/Flaky/Incompatible aggregation across three required
+  independent valid trials per critical scenario.
+- Added an installed adapter parity matrix for Codex, Claude Code, and
+  Universal adapter paths in Greenfield and Brownfield modes with portable
+  evidence format and acceptance gate.
 - Reframed the public landing page around the development-studio operating
   model, added an end-to-end request-and-response project example through
   deployment, a deployed product visual, and a neutral comparison of tool

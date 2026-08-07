@@ -35,6 +35,15 @@ import {
   runtimeExpectationLabels,
   runtimeTurns,
 } from "./runtime-testing/scenario.ts";
+import {
+  loadRuntimeSuite,
+  runtimeSuiteIdentity,
+  selectRuntimeSuiteMembers,
+} from "./runtime-testing/suite.ts";
+import type {
+  RuntimeSuite,
+  RuntimeSuiteIdentity,
+} from "./runtime-testing/suite.ts";
 import { loadFixtureWorkspaceSpec } from "./runtime-testing/workspace-fixture.ts";
 
 type TestStatus = BehavioralStatus;
@@ -73,6 +82,7 @@ interface CliOptions {
   outputDir: string;
   outputDirExplicit: boolean;
   runAll: boolean;
+  suite?: string;
   tags: string[];
   testsDir: string;
   timeoutMs: number;
@@ -82,6 +92,7 @@ interface CliOptions {
 interface RuntimeTestSelection {
   ids?: string[];
   maxTests?: number;
+  suite?: RuntimeSuite;
   tags?: string[];
 }
 
@@ -105,6 +116,7 @@ interface RuntimeTestRun {
   validBehavioralTrials?: number;
   invalidBehavioralTrials?: number;
   identity?: BehavioralRunIdentity;
+  suite?: RuntimeSuiteIdentity;
   usesLlmJudge: boolean;
   validatesWorkspaceMutations?: boolean;
 }
@@ -162,6 +174,7 @@ function parseArgs(argv: string[]): CliOptions {
   let outputDir = "test-results/latest";
   let outputDirExplicit = false;
   let runAll = false;
+  let suite: string | undefined;
   const tags: string[] = [];
   let testsDir = "tests/runtime";
   let timeoutMs = 180_000;
@@ -192,6 +205,15 @@ function parseArgs(argv: string[]): CliOptions {
 
     if (arg === "--all") {
       runAll = true;
+      continue;
+    }
+
+    if (arg === "--suite") {
+      if (suite) {
+        throw new Error("--suite may be supplied only once");
+      }
+      suite = requiredOptionValue(argv, index, arg);
+      index += 1;
       continue;
     }
 
@@ -271,6 +293,20 @@ function parseArgs(argv: string[]): CliOptions {
     throw new Error(`Unknown argument: ${arg}`);
   }
 
+  if (
+    suite &&
+    (ids.length > 0 || tags.length > 0 || maxTests !== undefined || runAll)
+  ) {
+    throw new Error(
+      "--suite cannot be combined with --id, --tag, --max-tests, or --all.",
+    );
+  }
+  if (suite && testsDir !== "tests/runtime") {
+    throw new Error(
+      "--suite uses canonical tests/runtime scenarios and cannot be combined with --tests-dir.",
+    );
+  }
+
   return {
     codexCommand,
     confirmLlmCost,
@@ -284,6 +320,7 @@ function parseArgs(argv: string[]): CliOptions {
     outputDir,
     outputDirExplicit,
     runAll,
+    suite,
     tags,
     testsDir,
     timeoutMs,
@@ -314,10 +351,11 @@ function positiveInteger(value: string, option: string): number {
 function assertBehavioralRunAuthorized(
   options: CliOptions,
   policy = loadBehavioralAssurancePolicy(process.cwd()),
+  suite?: RuntimeSuite,
 ): void {
   if (!options.dry && !options.confirmLlmCost) {
     throw new Error(
-      "Runtime evaluation makes one executor call per turn plus one judge call per scenario. Re-run with --confirm-llm-cost and use --id, --tag, --max-tests, or an explicit --all.",
+      "Runtime evaluation makes one executor call per turn plus one judge call per scenario. Re-run with --confirm-llm-cost and use --id, --tag, --max-tests, --suite, or an explicit --all.",
     );
   }
 
@@ -331,6 +369,17 @@ function assertBehavioralRunAuthorized(
   if (options.engine === "ollama" && options.localProvider) {
     throw new Error(
       "--local-provider configures Codex CLI and cannot be combined with --engine ollama.",
+    );
+  }
+  if (options.suite && !suite) {
+    throw new Error("Runtime suite must be loaded before behavioral execution.");
+  }
+  if (
+    suite &&
+    suite.scenarios.length > policy.exploratoryScenarioLimit
+  ) {
+    throw new Error(
+      `Exploratory behavioral suites may select at most ${policy.exploratoryScenarioLimit} scenarios.`,
     );
   }
   if (
@@ -379,12 +428,13 @@ function assertBehavioralRunAuthorized(
   }
 
   const hasBound =
+    Boolean(options.suite) ||
     options.ids.length > 0 ||
     options.tags.length > 0 ||
     options.maxTests !== undefined;
   if (!options.runAll && !hasBound) {
     throw new Error(
-      "Behavioral runs require --id, --tag, --max-tests, or an explicit --all.",
+      "Behavioral runs require --id, --tag, --max-tests, --suite, or an explicit --all.",
     );
   }
 
@@ -823,6 +873,19 @@ function selectRuntimeTests(
   tests: RuntimeTest[],
   selection: RuntimeTestSelection = {},
 ): RuntimeTest[] {
+  if (selection.suite) {
+    if (
+      (selection.ids?.length ?? 0) > 0 ||
+      (selection.tags?.length ?? 0) > 0 ||
+      selection.maxTests !== undefined
+    ) {
+      throw new Error(
+        "Runtime suite selection cannot be combined with scenario filters or --max-tests.",
+      );
+    }
+    return selectRuntimeSuiteMembers(tests, selection.suite);
+  }
+
   const ids = selection.ids ?? [];
   const tags = selection.tags ?? [];
   const selected = tests.filter((test) => {
@@ -859,9 +922,10 @@ function buildResultsJson(
   results: TestResult[],
   mode: RuntimeTestMode = "scenario-structure",
   identity?: BehavioralRunIdentity,
+  suite?: RuntimeSuiteIdentity,
 ): object {
   const counts = countStatuses(results);
-  const run = buildRunMetadata(results, mode, identity);
+  const run = buildRunMetadata(results, mode, identity, suite);
 
   return {
     generatedAt: new Date().toISOString(),
@@ -892,9 +956,10 @@ function buildSummaryMarkdown(
   results: TestResult[],
   mode: RuntimeTestMode = "scenario-structure",
   identity?: BehavioralRunIdentity,
+  suite?: RuntimeSuiteIdentity,
 ): string {
   const counts = countStatuses(results);
-  const run = buildRunMetadata(results, mode, identity);
+  const run = buildRunMetadata(results, mode, identity, suite);
   const identityLines = run.identity
     ? [
         `- Assurance policy: v${run.identity.policyVersion}`,
@@ -906,6 +971,13 @@ function buildSummaryMarkdown(
         `- Trial: ${run.identity.trial ?? "Exploratory"}`,
         `- Baseline eligible: ${run.identity.baselineEligible ? "Yes" : "No"}`,
         `- Planned model calls: ${run.plannedModelCalls}`,
+      ]
+    : [];
+  const suiteLines = run.suite
+    ? [
+        `- Suite: ${run.suite.suiteId} (contract v${run.suite.version})`,
+        `- Suite source: ${run.suite.sourcePath}`,
+        `- Suite scenarios: ${run.suite.scenarioCount}`,
       ]
     : [];
   const lines = [
@@ -923,6 +995,7 @@ function buildSummaryMarkdown(
           `- Invalid behavioral trials: ${run.invalidBehavioralTrials}`,
         ]
       : []),
+    ...suiteLines,
     ...identityLines,
     `- Total tests: ${results.length}`,
     `- Pass: ${counts.PASS}`,
@@ -945,6 +1018,7 @@ function buildRunMetadata(
   results: TestResult[],
   mode: RuntimeTestMode,
   identity?: BehavioralRunIdentity,
+  suite?: RuntimeSuiteIdentity,
 ): RuntimeTestRun {
   const fixtureBackedScenarios = results.filter(
     (result) => result.fixtureBacked,
@@ -979,6 +1053,7 @@ function buildRunMetadata(
     validBehavioralTrials,
     invalidBehavioralTrials,
     identity,
+    suite,
     validatesWorkspaceMutations:
       mode === "runtime-judge" && fixtureBackedScenarios > 0,
   };
@@ -993,6 +1068,7 @@ function writeResultArtifacts(
   outputDir = "test-results/latest",
   mode: RuntimeTestMode = "scenario-structure",
   identity?: BehavioralRunIdentity,
+  suite?: RuntimeSuiteIdentity,
 ): void {
   mkdirSync(outputDir, { recursive: true });
   const evaluationsDir = path.join(outputDir, "evaluations");
@@ -1024,11 +1100,11 @@ function writeResultArtifacts(
 
   writeFileSync(
     path.join(outputDir, "summary.md"),
-    buildSummaryMarkdown(results, mode, identity),
+    buildSummaryMarkdown(results, mode, identity, suite),
   );
   writeFileSync(
     path.join(outputDir, "results.json"),
-    `${JSON.stringify(buildResultsJson(results, mode, identity), null, 2)}\n`,
+    `${JSON.stringify(buildResultsJson(results, mode, identity, suite), null, 2)}\n`,
   );
 }
 
@@ -1040,15 +1116,21 @@ function printResults(
   results: TestResult[],
   mode: RuntimeTestMode,
   identity?: BehavioralRunIdentity,
+  suite?: RuntimeSuiteIdentity,
 ): void {
   const summary = summarize(results);
-  const run = buildRunMetadata(results, mode, identity);
+  const run = buildRunMetadata(results, mode, identity, suite);
 
   console.log(`Mode: ${run.label}`);
   console.log(`Assurance: ${run.assurance}`);
   console.log(`Fixture-backed scenarios: ${run.fixtureBackedScenarios}`);
   console.log(`Replay scenarios: ${run.replayScenarios}`);
   console.log(`Runtime turns: ${run.runtimeTurns}`);
+  if (run.suite) {
+    console.log(
+      `Suite: ${run.suite.suiteId} v${run.suite.version} (${run.suite.scenarioCount} scenarios, ${run.suite.sourcePath})`,
+    );
+  }
   if (run.identity) {
     console.log(
       `Behavioral identity: ${run.identity.engine}/${run.identity.executorModel}, trial ${run.identity.trial ?? "exploratory"}, baseline ${run.identity.baselineEligible ? "eligible" : "ineligible"}`,
@@ -1151,11 +1233,18 @@ async function main(): Promise<void> {
     );
     let results: TestResult[];
     let identity: BehavioralRunIdentity | undefined;
+    const suite = options.suite
+      ? loadRuntimeSuite(repositoryRoot, options.suite)
+      : undefined;
+    const suiteIdentity = suite ? runtimeSuiteIdentity(suite) : undefined;
 
     if (options.dry) {
-      results = loadRuntimeTests(options.testsDir);
+      const loadedResults = loadRuntimeTests(options.testsDir);
+      results = suite
+        ? selectRuntimeSuiteMembers(loadedResults, suite)
+        : loadedResults;
     } else {
-      assertBehavioralRunAuthorized(options, policy);
+      assertBehavioralRunAuthorized(options, policy, suite);
       if (options.trial !== undefined && existsSync(outputDir)) {
         throw new Error(
           `Baseline result directory already exists: ${options.outputDir}`,
@@ -1214,6 +1303,7 @@ async function main(): Promise<void> {
         {
           ids: options.ids,
           maxTests: options.maxTests,
+          suite,
           tags: options.tags,
         },
         {
@@ -1228,8 +1318,8 @@ async function main(): Promise<void> {
 
     const mode: RuntimeTestMode = options.dry ? "scenario-structure" : "runtime-judge";
 
-    printResults(results, mode, identity);
-    writeResultArtifacts(results, outputDir, mode, identity);
+    printResults(results, mode, identity, suiteIdentity);
+    writeResultArtifacts(results, outputDir, mode, identity, suiteIdentity);
 
     const summary = summarize(results);
     process.exitCode =

@@ -137,6 +137,52 @@ Important rules:
 - critical prohibited mutations and safety or scope violations cannot be
   averaged away.
 
+## Critical Lifecycle Suite
+
+The accepted `v0.5` critical lifecycle contract is
+`tests/runtime/critical-suite.json`. It contains exactly ten scenario IDs in
+execution order and one maintainer-facing product-risk responsibility for each
+scenario. The runner validates the contract version, rejects duplicate or
+missing IDs, and records its project-relative identity in JSON and Markdown
+results.
+
+Risk responsibilities are not sent to the Runtime executor. They explain why a
+scenario belongs to the suite; the executor still receives only the ordinary
+Runtime input assembled by the existing harness. Scenario expectations and
+workspace assertion manifests retain their existing hidden-evidence
+boundaries.
+
+Before any critical behavioral trial, run the deterministic gates in this
+order:
+
+```bash
+npm run test:runner
+npm run test:runtime:dry
+npm run test:runtime:dry -- --suite tests/runtime/critical-suite.json
+```
+
+The first two commands remain the repository-wide gates. The scoped dry run
+then proves that the exact versioned suite resolves to ten valid scenarios in
+declared order and creates suite-identified evidence without making model
+calls.
+
+Only after all three commands pass may an explicitly authorized behavioral run
+start:
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --suite tests/runtime/critical-suite.json \
+  --timeout-ms 300000
+```
+
+`--suite` is one bounded selector and cannot be combined with `--id`, `--tag`,
+`--max-tests`, `--all`, or a custom `--tests-dir`. It always resolves scenario
+definitions from canonical `tests/runtime`. The accepted suite must remain
+within the policy limit of ten scenarios. Adding, removing, or replacing a
+critical scenario requires an explicit product-scope decision and a contract
+version review; tag selection must not silently expand the suite.
+
 ## Commands
 
 Runner and Studio OS structure tests:

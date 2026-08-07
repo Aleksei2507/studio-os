@@ -102,6 +102,291 @@ observable transcript into fresh executor sessions. It does not verify hidden
 host-session state or installed host-adapter activation, so it supplements
 rather than replaces the manual scenarios below.
 
+## Installed Adapter Matrix
+
+The canonical matrix is `tests/installed-adapters/matrix.json`. Validate its
+shape before opening any host session:
+
+```bash
+npm run test:adapters:dry
+```
+
+This command is deterministic. It does not install plugins, invoke a model, or
+claim that an installed adapter works. The matrix contains exactly these cases:
+
+| Case | Distribution under test | Project mode |
+| --- | --- | --- |
+| `codex-greenfield` | Codex GitHub marketplace installation | Greenfield |
+| `codex-brownfield` | Codex GitHub marketplace installation | Brownfield |
+| `claude-code-greenfield` | Claude Code GitHub marketplace installation | Greenfield |
+| `claude-code-brownfield` | Claude Code GitHub marketplace installation | Brownfield |
+| `universal-greenfield` | Universal release ZIP | Greenfield |
+| `universal-brownfield` | Universal release ZIP | Brownfield |
+
+### Independent Session Protocol
+
+Installed-adapter sessions execute the real host and may invoke a local or
+remote model. Run them only with explicit authorization for model execution,
+cost, and any data the host may transmit. Repository commands do not grant that
+authorization implicitly.
+
+Use a fresh host session and a disposable Target Workspace for every case. The
+Codex and Claude Code cases must use the installed marketplace package, not the
+current checkout. The Universal cases must use an extracted, checksum-verified
+release ZIP. Record the exact Studio OS revision, package version, adapter
+version, host name and version, distribution source, and case ID.
+
+For each Greenfield case, use the request and observable expectations from
+`bootstrap-001-explicit-greenfield-activation`. The installed adapter must
+resolve its exact Studio OS Root, preserve Project Language, route to Interview,
+and stop before implementation or product-file creation.
+
+For each Brownfield case, copy `tests/fixtures/runtime/brownfield-web/input` to
+a new disposable workspace and use the request and observable expectations from
+`fixture-001-brownfield-project-memory`. Brownfield Onboarding may create only
+the bounded Project Memory artifacts, must preserve source files, and must stop
+before Briefing begins.
+
+Evaluate every required check declared by the matrix. A host startup or
+environment problem is `BLOCKED`, not PASS. A failed adapter remains FAIL even
+when the other two adapters pass. After remediation, create a new run instead
+of overwriting or omitting the failed record.
+
+### Evidence Contract
+
+Store one JSON record set per run below
+`test-results/installed-adapters/<run-id>.json`. It must contain all six cases.
+Each case records its matrix identity, adapter and host versions, outcome,
+failure owner, bounded observations for every required check, and one or more
+sanitized evidence identifiers. Valid failure owners are `none`, `adapter`,
+`runtime`, `host`, and `infrastructure`.
+
+Do not store raw transcripts, prompts containing private data, secrets,
+machine-specific absolute paths, temporary workspace locations, or files from
+outside the repository in the evidence JSON or generated summary. Keep raw
+host evidence local and refer to it only with portable identifiers such as
+`sessions/codex-greenfield`.
+
+Validate a completed run and write a new immutable summary directory:
+
+```bash
+npm run test:adapters:check -- \
+  --evidence test-results/installed-adapters/<run-id>.json \
+  --output-dir test-results/installed-adapters/reports/<run-id>
+```
+
+The checker rejects missing, duplicate, contradictory, unsafe, or misordered
+check evidence. Case records are rendered in canonical matrix order. It exits
+non-zero for both FAIL and BLOCKED and writes `summary.md` and `results.json`
+only when the requested output directory does not exist.
+
+## Compatibility Baseline
+
+The canonical baseline is `tests/compatibility/baseline.json`. It defines two
+combinations: `remote-o4-mini` (OpenAI o4-mini via Codex CLI) and
+`local-llama3.2` (llama3.2 via Ollama). Each combination requires three
+independent valid trials for every critical scenario before a classification
+is issued.
+
+Validate the baseline contract without invoking any model:
+
+```bash
+npm run test:compatibility:dry
+```
+
+### Prerequisites
+
+All deterministic gates must pass before any trial:
+
+```bash
+npm run test:runner
+npm run test:runtime:dry
+```
+
+Do not run or classify model compatibility while either gate is failing.
+
+### Trial Authorization
+
+Behavioral trials execute a model for every declared scenario turn plus one
+separate judge call. Run them only with explicit authorization for model
+execution, cost, and any data transmitted. Repository commands do not grant
+that authorization.
+
+The planned model-call count per trial is: declared turns + 1 judge call.
+The ten-scenario critical suite has a total planned call count across all
+three trials of approximately 132 model calls per combination.
+
+### Running A Single Trial
+
+For a remote trial (Codex CLI with `o4-mini`):
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --suite tests/runtime/critical-suite.json \
+  --model o4-mini \
+  --judge-model o4-mini \
+  --trial 1 \
+  --output-dir test-results/compatibility/run-<date>-remote-t1
+```
+
+Repeat with `--trial 2` and `--trial 3` as separate independent runs. Do not
+retry a failed trial automatically. A failure is a valid compatibility result.
+
+For a local trial (Ollama with `llama3.2`):
+
+```bash
+npm run test:runtime -- \
+  --confirm-llm-cost \
+  --suite tests/runtime/critical-suite.json \
+  --engine ollama \
+  --model llama3.2 \
+  --judge-model llama3.2 \
+  --trial 1 \
+  --output-dir test-results/compatibility/run-<date>-local-t1
+```
+
+### Trial Identity Requirements
+
+Every trial must be baseline-eligible:
+
+- working tree clean at execution time;
+- exact `executorModelExact` and `judgeModelExact` recorded (not implicit host default);
+- `providerVersion` included when the provider exposes it;
+- `validTrial: false` with `invalidReason` recorded for any executor startup
+  failure, timeout, unavailable provider, truncated response, or malformed
+  judge output.
+
+### Evidence Contract
+
+Store one JSON trial record per trial below
+`test-results/compatibility/<run-id>/trial-<combo-id>-<scenario-id>-t<n>.json`.
+
+Required fields: `version` (1), `baselineId`, `combinationId`, `scenarioId`,
+`trialNumber`, `studioOsVersion`, `studioOsRevision` (40-char hex),
+`workingTreeDirty`, `engine`, `executorModelExact`, `judgeModelExact`,
+`executedAt` (ISO 8601 UTC), `validTrial`, `status` (when valid),
+`invalidReason` (when invalid), `workspaceMutationViolation`.
+
+Set `workspaceMutationViolation: true` when a prohibited workspace mutation is
+detected during a fixture-backed scenario. A workspace mutation violation is
+immediately Incompatible for that scenario regardless of the judge verdict.
+
+Do not store raw transcripts, complete model prompts, private project data,
+secrets, or machine-specific absolute paths in trial records or generated
+summaries.
+
+Invalid trial records must be retained separately and must not be overwritten.
+After correcting the infrastructure cause, create a new trial.
+
+### Aggregating Results
+
+After collecting trial records, aggregate and update the checked-in summary:
+
+```bash
+npm run test:compatibility:check -- \
+  --trials test-results/compatibility \
+  --output tests/compatibility/summary.json
+```
+
+The checker reads all `*.json` files inside run subdirectories under the trials
+directory, computes per-scenario classifications (Compatible / Flaky /
+Incompatible / Unknown), and overwrites `tests/compatibility/summary.json`.
+
+Classifications:
+
+- **Compatible**: 3 of 3 valid trials PASS
+- **Flaky**: 1 or 2 of 3 valid trials PASS
+- **Incompatible**: 0 of 3 valid trials PASS, or any `workspaceMutationViolation`
+- **Unknown**: fewer than 3 valid trials exist
+
+The command exits non-zero when any scenario is Unknown, Incompatible, or Flaky.
+
+### Promotion Gate
+
+A compatibility baseline may only be published when:
+
+- all deterministic gates pass;
+- every critical scenario has three valid trials per combination;
+- `executorModelExact`, `judgeModelExact`, and `studioOsRevision` are
+  reproducibly identifiable;
+- failed and invalid trial records remain visible and unmodified;
+- a maintainer reviews the classification before committing the summary.
+
+## Release Candidate
+
+Before making a release readiness decision, run the full RC evidence check:
+
+```bash
+npm run test:rc:dry
+```
+
+Expected (dry mode):
+
+- all eight structural gates print `PASS`;
+- issue triage at `tests/release-candidate/issue-triage.json` is valid;
+- installed adapter matrix, compatibility baseline, compatibility summary, and
+  critical suite all load successfully;
+- release metadata and manifest are internally consistent;
+- `docs/INSTALLATION.md`, `docs/MANUAL_TESTING.md`, and `docs/RELEASING.md`
+  contain all required sections;
+- no summary file is written.
+
+To run all gates and write the consolidated RC summary:
+
+```bash
+npm run test:rc:check
+```
+
+This writes `tests/release-candidate/summary.json` with the result of all
+eight gates. The output is a checked-in RC evidence record and must not contain
+machine-specific paths or secrets.
+
+### RC Gates
+
+The RC checker evaluates these gates in order:
+
+| Gate | What it checks |
+| --- | --- |
+| `release-metadata` | `package.json`, `package-lock.json`, plugin manifests, and marketplace refs all agree on the same version and tag |
+| `release-manifest` | `scripts/release-manifest.json` is internally consistent and has no forbidden paths in the allowlist |
+| `installed-adapter-matrix` | `tests/installed-adapters/matrix.json` has exactly 6 cases for `codex`, `claude-code`, and `universal` adapters |
+| `compatibility-baseline` | `tests/compatibility/baseline.json` is valid with `remote-o4-mini` and `local-llama3.2` combinations |
+| `compatibility-summary` | `tests/compatibility/summary.json` matches the baseline and covers all critical scenarios |
+| `critical-suite` | `tests/runtime/critical-suite.json` has the accepted `v0.5-critical-lifecycle` suite with 10 scenarios |
+| `issue-triage` | `tests/release-candidate/issue-triage.json` is valid and every listed issue has a resolution |
+| `documentation` | `INSTALLATION.md`, `MANUAL_TESTING.md`, and `RELEASING.md` contain required sections for all adapter paths |
+
+All eight gates must be `PASS` before a release readiness decision can be made.
+A failing gate must be resolved or explicitly acknowledged in the issue triage
+before proceeding. Do not tag or publish a release without separate explicit
+authorization.
+
+### Issue Triage
+
+`tests/release-candidate/issue-triage.json` records milestone-relevant GitHub
+issues and their resolution. Valid resolutions are:
+
+- `closed` — issue is closed in GitHub;
+- `deferred` — issue is deferred to a future milestone; add a `deferredTo`
+  field with the target milestone name;
+- `not-applicable` — issue does not apply to this milestone; add a `notes`
+  field explaining why.
+
+An empty `issues` array means no milestone-relevant issues were identified. To
+add a tracked issue:
+
+```json
+{
+  "id": "42",
+  "title": "Short issue title",
+  "resolution": "closed"
+}
+```
+
+Any issue without one of the three valid resolutions causes the `issue-triage`
+gate to fail.
+
 ## Distribution Baseline
 
 Before creating a release tag, run:

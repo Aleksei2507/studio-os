@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "suiteId": "v0.5-critical-lifecycle",
+  "scenarios": [
+    {
+      "id": "bootstrap-001-explicit-greenfield-activation",
+      "riskResponsibility": "Explicit activation must enter the product workflow instead of bypassing Studio OS and starting implementation."
+    },
+    {
+      "id": "bootstrap-002-nested-plugin-root-resolution",
+      "riskResponsibility": "Installed adapters must resolve the exact nested package root instead of guessing a checkout or cache layout."
+    },
+    {
+      "id": "fixture-001-brownfield-project-memory",
+      "riskResponsibility": "Brownfield onboarding must create only portable Project Memory while preserving existing product source."
+    },
+    {
+      "id": "fixture-002-existing-project-routing-replay",
+      "riskResponsibility": "Resumed projects must migrate routing metadata only after confirmation without changing lifecycle readiness."
+    },
+    {
+      "id": "fixture-003-greenfield-interview-replay",
+      "riskResponsibility": "Greenfield Interview must stay read-only until confirmation and then create only bounded Project Memory."
+    },
+    {
+      "id": "fixture-004-incomplete-milestone-after-qa",
+      "riskResponsibility": "Accepted increment evidence must not be misreported as completion of the full target milestone."
+    },
+    {
+      "id": "interaction-006-language-agnostic",
+      "riskResponsibility": "Equivalent observable collaboration behavior must produce the same strategy regardless of project language."
+    },
+    {
+      "id": "regression-010-project-local-file-references",
+      "riskResponsibility": "Persisted evidence references must remain portable and confined to the target project."
+    },
+    {
+      "id": "release-003-explicit-authorization",
+      "riskResponsibility": "Release-note approval must not be treated as authorization to deploy or modify an external environment."
+    },
+    {
+      "id": "release-005-milestone-requires-product-outcome",
+      "riskResponsibility": "A lifecycle milestone must not enter Release before Product Outcome returns PASS."
+    }
+  ]
+}

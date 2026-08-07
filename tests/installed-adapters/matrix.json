@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "matrixId": "v0.5-installed-adapter-parity",
+  "cases": [
+    {
+      "id": "codex-greenfield",
+      "adapter": "codex",
+      "projectMode": "greenfield",
+      "distributionSource": "github-marketplace",
+      "scenarioId": "bootstrap-001-explicit-greenfield-activation",
+      "requiredChecks": [
+        "exact-studio-os-root",
+        "canonical-runtime-boundary",
+        "project-language",
+        "portable-evidence",
+        "target-workspace-isolation",
+        "interview-handoff",
+        "no-premature-implementation"
+      ]
+    },
+    {
+      "id": "codex-brownfield",
+      "adapter": "codex",
+      "projectMode": "brownfield",
+      "distributionSource": "github-marketplace",
+      "scenarioId": "fixture-001-brownfield-project-memory",
+      "requiredChecks": [
+        "exact-studio-os-root",
+        "canonical-runtime-boundary",
+        "project-language",
+        "portable-evidence",
+        "target-workspace-isolation",
+        "briefing-handoff",
+        "bounded-onboarding-artifacts",
+        "source-preservation"
+      ]
+    },
+    {
+      "id": "claude-code-greenfield",
+      "adapter": "claude-code",
+      "projectMode": "greenfield",
+      "distributionSource": "github-marketplace",
+      "scenarioId": "bootstrap-001-explicit-greenfield-activation",
+      "requiredChecks": [
+        "exact-studio-os-root",
+        "canonical-runtime-boundary",
+        "project-language",
+        "portable-evidence",
+        "target-workspace-isolation",
+        "interview-handoff",
+        "no-premature-implementation"
+      ]
+    },
+    {
+      "id": "claude-code-brownfield",
+      "adapter": "claude-code",
+      "projectMode": "brownfield",
+      "distributionSource": "github-marketplace",
+      "scenarioId": "fixture-001-brownfield-project-memory",
+      "requiredChecks": [
+        "exact-studio-os-root",
+        "canonical-runtime-boundary",
+        "project-language",
+        "portable-evidence",
+        "target-workspace-isolation",
+        "briefing-handoff",
+        "bounded-onboarding-artifacts",
+        "source-preservation"
+      ]
+    },
+    {
+      "id": "universal-greenfield",
+      "adapter": "universal",
+      "projectMode": "greenfield",
+      "distributionSource": "release-zip",
+      "scenarioId": "bootstrap-001-explicit-greenfield-activation",
+      "requiredChecks": [
+        "exact-studio-os-root",
+        "canonical-runtime-boundary",
+        "project-language",
+        "portable-evidence",
+        "target-workspace-isolation",
+        "interview-handoff",
+        "no-premature-implementation"
+      ]
+    },
+    {
+      "id": "universal-brownfield",
+      "adapter": "universal",
+      "projectMode": "brownfield",
+      "distributionSource": "release-zip",
+      "scenarioId": "fixture-001-brownfield-project-memory",
+      "requiredChecks": [
+        "exact-studio-os-root",
+        "canonical-runtime-boundary",
+        "project-language",
+        "portable-evidence",
+        "target-workspace-isolation",
+        "briefing-handoff",
+        "bounded-onboarding-artifacts",
+        "source-preservation"
+      ]
+    }
+  ]
+}

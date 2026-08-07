@@ -57,6 +57,12 @@
     ]
   },
   "notContains": {
+    ".studio/active-context.md": [
+      "/Users/",
+      "/private/",
+      "Downloads/",
+      "file://"
+    ],
     ".studio/project-state.md": [
       "Product Readiness: Ready for Release",
       "Product Readiness: Released",

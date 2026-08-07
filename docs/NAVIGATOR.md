@@ -1,20 +1,14 @@
 # Studio Navigator
 
-Studio Navigator is the user-facing entry point to Studio OS.
+Studio Navigator describes user-facing activation and routing behavior. Actual activation starts through a supported host adapter or the Universal Bootstrap; Navigator is not a separate installed command.
 
 The user should not need to know internal stages or Runtime files.
 
 ---
 
-# Main Commands
+# Activation
 
-## Start or continue a project
-
-```text
-/studio:start
-```
-
-or natural language:
+## Codex
 
 ```text
 Use Studio OS.
@@ -22,7 +16,30 @@ Use Studio OS.
 I want to build...
 ```
 
-## Run Evolution
+The installed Codex plugin activates `skills/studio-os/SKILL.md`, which resolves the canonical Universal Bootstrap.
+
+## Claude Code
+
+```text
+/studio-os:studio-os
+
+I want to build...
+```
+
+Natural-language activation is also supported after the Claude Code plugin is installed.
+
+## Other Filesystem Agents
+
+```text
+Read and follow <studio-os-root>/adapters/universal/BOOTSTRAP.md.
+
+Use Studio OS.
+I want to build...
+```
+
+## Evolution
+
+Evolution is an explicit Studio OS request, not the default project lifecycle. It may be requested naturally or with the canonical request form:
 
 ```text
 /studio:evolve

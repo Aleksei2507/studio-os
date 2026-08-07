@@ -6,3 +6,11 @@ tests export-ignore
 package.json export-ignore
 package-lock.json export-ignore
 test-results export-ignore
+.studio export-ignore
+docs/adr export-ignore
+docs/architecture.md export-ignore
+docs/delivery-estimate.md export-ignore
+docs/development-roadmap.md export-ignore
+docs/discovery-summary.md export-ignore
+docs/project-brief.md export-ignore
+docs/qa-report.md export-ignore

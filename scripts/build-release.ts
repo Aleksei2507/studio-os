@@ -44,6 +44,19 @@ interface Marketplace {
   }>;
 }
 
+export interface ReleaseManifest {
+  version: number;
+  includeTrees: string[];
+  includeFiles: string[];
+  requiredFiles: string[];
+  forbiddenPrefixes: string[];
+}
+
+interface ReleaseTree {
+  files: string[];
+  pathspecs: string[];
+}
+
 export interface ReleaseMetadata {
   packageName: string;
   packageVersion: string;
@@ -73,18 +86,13 @@ export interface ReleaseArtifacts {
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-export const REQUIRED_RELEASE_FILES = [
-  ".agents/plugins/marketplace.json",
-  ".claude-plugin/marketplace.json",
-  ".claude-plugin/plugin.json",
-  ".codex-plugin/plugin.json",
+export const RELEASE_MANIFEST_PATH = "scripts/release-manifest.json";
+
+const REQUIRED_RELEASE_SOURCE_FILES = [
   ".gitattributes",
-  "LICENSE",
-  "README.md",
-  "adapters/universal/BOOTSTRAP.md",
   "package.json",
-  "skill/SKILL.md",
-  "skills/studio-os/SKILL.md",
+  "package-lock.json",
+  RELEASE_MANIFEST_PATH,
 ] as const;
 
 export function expectedReleaseTag(version: string): string {
@@ -194,6 +202,167 @@ function readJson<T>(relativePath: string): T {
   return JSON.parse(readFileSync(path.join(root, relativePath), "utf8")) as T;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function readStringArray(
+  record: Record<string, unknown>,
+  key: keyof ReleaseManifest,
+): string[] {
+  const value = record[key];
+  assert.ok(Array.isArray(value), `Release manifest ${key} must be an array`);
+  assert.ok(
+    value.every((entry) => typeof entry === "string"),
+    `Release manifest ${key} must contain only strings`,
+  );
+  return value as string[];
+}
+
+function isWithinPath(candidate: string, prefix: string): boolean {
+  return candidate === prefix || candidate.startsWith(`${prefix}/`);
+}
+
+function assertSafeManifestPath(value: string, label: string): void {
+  assert.ok(value.length > 0, `${label} must not be empty`);
+  assert.equal(
+    value,
+    value.trim(),
+    `${label} must not contain outer whitespace`,
+  );
+  assert.equal(value.includes("\\"), false, `${label} must use POSIX separators`);
+  assert.equal(value.includes("\0"), false, `${label} must not contain NUL`);
+  assert.equal(path.posix.isAbsolute(value), false, `${label} must be relative`);
+  assert.equal(/^[A-Za-z]:\//.test(value), false, `${label} must be relative`);
+  assert.equal(
+    value.split("/").includes(".."),
+    false,
+    `${label} must not contain traversal`,
+  );
+  assert.equal(path.posix.normalize(value), value, `${label} must be normalized`);
+  assert.notEqual(value, ".", `${label} must identify a project path`);
+  assert.equal(value.endsWith("/"), false, `${label} must not end with a slash`);
+  assert.equal(
+    /[*?[\]]/.test(value),
+    false,
+    `${label} must not contain pathspec patterns`,
+  );
+}
+
+function assertUnique(values: string[], label: string): void {
+  assert.equal(
+    new Set(values).size,
+    values.length,
+    `Release manifest ${label} must not contain duplicates`,
+  );
+}
+
+export function validateReleaseManifest(manifest: ReleaseManifest): string[] {
+  assert.equal(manifest.version, 1, "Unsupported release manifest version");
+
+  for (const [label, values] of [
+    ["includeTrees", manifest.includeTrees],
+    ["includeFiles", manifest.includeFiles],
+    ["requiredFiles", manifest.requiredFiles],
+    ["forbiddenPrefixes", manifest.forbiddenPrefixes],
+  ] as const) {
+    assert.ok(values.length > 0, `Release manifest ${label} must not be empty`);
+    assertUnique(values, label);
+    for (const value of values) {
+      assertSafeManifestPath(value, `Release manifest ${label} entry`);
+    }
+  }
+
+  for (let index = 0; index < manifest.includeTrees.length; index += 1) {
+    for (
+      let other = index + 1;
+      other < manifest.includeTrees.length;
+      other += 1
+    ) {
+      const left = manifest.includeTrees[index];
+      const right = manifest.includeTrees[other];
+      assert.equal(
+        isWithinPath(left, right) || isWithinPath(right, left),
+        false,
+        `Release manifest includeTrees overlap: ${left} and ${right}`,
+      );
+    }
+  }
+
+  for (const file of manifest.includeFiles) {
+    assert.equal(
+      manifest.includeTrees.some((tree) => isWithinPath(file, tree)),
+      false,
+      `Release manifest includeFiles entry is already covered by a tree: ${file}`,
+    );
+  }
+
+  const included = (file: string): boolean =>
+    manifest.includeFiles.includes(file) ||
+    manifest.includeTrees.some((tree) => isWithinPath(file, tree));
+  const forbidden = (file: string): boolean =>
+    manifest.forbiddenPrefixes.some((prefix) => isWithinPath(file, prefix));
+
+  for (const pathspec of [...manifest.includeTrees, ...manifest.includeFiles]) {
+    assert.equal(
+      forbidden(pathspec),
+      false,
+      `Release manifest includes forbidden path: ${pathspec}`,
+    );
+  }
+
+  for (const requiredFile of manifest.requiredFiles) {
+    assert.ok(
+      included(requiredFile),
+      `Required release file is not included by the manifest: ${requiredFile}`,
+    );
+    assert.equal(
+      forbidden(requiredFile),
+      false,
+      `Required release file is forbidden by the manifest: ${requiredFile}`,
+    );
+  }
+
+  return [...manifest.includeTrees, ...manifest.includeFiles].sort();
+}
+
+export function parseReleaseManifest(source: string): ReleaseManifest {
+  const value: unknown = JSON.parse(source);
+  assert.ok(isRecord(value), "Release manifest must be an object");
+  assert.deepEqual(
+    Object.keys(value).sort(),
+    [
+      "forbiddenPrefixes",
+      "includeFiles",
+      "includeTrees",
+      "requiredFiles",
+      "version",
+    ],
+    "Release manifest contains unknown or missing fields",
+  );
+  assert.equal(
+    typeof value.version,
+    "number",
+    "Release manifest version must be a number",
+  );
+
+  const manifest: ReleaseManifest = {
+    version: value.version,
+    includeTrees: readStringArray(value, "includeTrees"),
+    includeFiles: readStringArray(value, "includeFiles"),
+    requiredFiles: readStringArray(value, "requiredFiles"),
+    forbiddenPrefixes: readStringArray(value, "forbiddenPrefixes"),
+  };
+  validateReleaseManifest(manifest);
+  return manifest;
+}
+
+export function readReleaseManifest(repoRoot = root): ReleaseManifest {
+  return parseReleaseManifest(
+    readFileSync(path.join(repoRoot, RELEASE_MANIFEST_PATH), "utf8"),
+  );
+}
+
 export function readReleaseMetadata(): ReleaseMetadata {
   const packageManifest = readJson<PackageManifest>("package.json");
   const packageLock = readJson<PackageLock>("package-lock.json");
@@ -272,19 +441,100 @@ function assertReleaseCheckout(repoRoot: string, tag: string): void {
   }
 }
 
-function assertReleaseTree(repoRoot: string, tag: string): void {
-  const files = new Set(
-    runGit(repoRoot, ["ls-tree", "-r", "--name-only", tag])
-      .split("\n")
-      .filter(Boolean),
-  );
+function resolveReleaseTree(repoRoot: string, tag: string): ReleaseTree {
+  const taggedFiles = runGit(repoRoot, ["ls-tree", "-r", "--name-only", tag])
+    .split("\n")
+    .filter(Boolean);
+  const taggedFileSet = new Set(taggedFiles);
 
-  for (const requiredFile of REQUIRED_RELEASE_FILES) {
+  for (const requiredFile of REQUIRED_RELEASE_SOURCE_FILES) {
     assert.ok(
-      files.has(requiredFile),
+      taggedFileSet.has(requiredFile),
+      `Required release source file is missing: ${requiredFile}`,
+    );
+  }
+
+  const manifest = parseReleaseManifest(
+    runGit(repoRoot, ["show", `${tag}:${RELEASE_MANIFEST_PATH}`]),
+  );
+  const pathspecs = validateReleaseManifest(manifest);
+  const included = (file: string): boolean =>
+    manifest.includeFiles.includes(file) ||
+    manifest.includeTrees.some((tree) => isWithinPath(file, tree));
+  const forbidden = (file: string): boolean =>
+    manifest.forbiddenPrefixes.some((prefix) => isWithinPath(file, prefix));
+
+  for (const tree of manifest.includeTrees) {
+    assert.ok(
+      taggedFiles.some((file) => isWithinPath(file, tree)),
+      `Included release tree is missing: ${tree}`,
+    );
+  }
+  for (const requiredFile of manifest.requiredFiles) {
+    assert.ok(
+      taggedFileSet.has(requiredFile),
       `Required release file is missing: ${requiredFile}`,
     );
   }
+  for (const file of manifest.includeFiles) {
+    assert.ok(
+      taggedFileSet.has(file),
+      `Included release file is missing: ${file}`,
+    );
+  }
+
+  const files = taggedFiles.filter(included).sort();
+  assert.ok(files.length > 0, "Release manifest resolves to no files");
+  for (const file of files) {
+    assert.equal(
+      forbidden(file),
+      false,
+      `Forbidden release file resolved: ${file}`,
+    );
+  }
+
+  return { files, pathspecs };
+}
+
+export function listZipEntries(archivePath: string): string[] {
+  const archive = readFileSync(archivePath);
+  const minimumOffset = Math.max(0, archive.length - 65_557);
+  let endOfDirectoryOffset = -1;
+
+  for (let offset = archive.length - 22; offset >= minimumOffset; offset -= 1) {
+    if (archive.readUInt32LE(offset) === 0x06054b50) {
+      endOfDirectoryOffset = offset;
+      break;
+    }
+  }
+
+  assert.notEqual(
+    endOfDirectoryOffset,
+    -1,
+    "ZIP end-of-directory record is missing",
+  );
+
+  const entryCount = archive.readUInt16LE(endOfDirectoryOffset + 10);
+  let offset = archive.readUInt32LE(endOfDirectoryOffset + 16);
+  const entries: string[] = [];
+
+  for (let index = 0; index < entryCount; index += 1) {
+    assert.equal(
+      archive.readUInt32LE(offset),
+      0x02014b50,
+      "Invalid ZIP directory entry",
+    );
+
+    const nameLength = archive.readUInt16LE(offset + 28);
+    const extraLength = archive.readUInt16LE(offset + 30);
+    const commentLength = archive.readUInt16LE(offset + 32);
+    entries.push(
+      archive.toString("utf8", offset + 46, offset + 46 + nameLength),
+    );
+    offset += 46 + nameLength + extraLength + commentLength;
+  }
+
+  return entries;
 }
 
 export function buildReleaseArchive(
@@ -292,7 +542,7 @@ export function buildReleaseArchive(
   tag: string,
 ): ReleaseArtifacts {
   assertReleaseCheckout(repoRoot, tag);
-  assertReleaseTree(repoRoot, tag);
+  const releaseTree = resolveReleaseTree(repoRoot, tag);
 
   const distPath = path.join(repoRoot, "dist");
   const archiveName = `studio-os-${tag}.zip`;
@@ -310,6 +560,8 @@ export function buildReleaseArchive(
       `--prefix=studio-os-${tag}/`,
       `--output=${archivePath}`,
       tag,
+      "--",
+      ...releaseTree.pathspecs,
     ],
     { cwd: repoRoot, encoding: "utf8" },
   );
@@ -317,6 +569,20 @@ export function buildReleaseArchive(
   if (archive.status !== 0) {
     throw new Error(archive.stderr.trim() || "git archive failed");
   }
+
+  const prefix = `studio-os-${tag}/`;
+  const archiveFiles = listZipEntries(archivePath)
+    .filter((entry) => !entry.endsWith("/"))
+    .map((entry) => {
+      assert.ok(entry.startsWith(prefix), `Unexpected archive entry: ${entry}`);
+      return entry.slice(prefix.length);
+    })
+    .sort();
+  assert.deepEqual(
+    archiveFiles,
+    releaseTree.files,
+    "Release archive contents do not match the manifest",
+  );
 
   const digest = createHash("sha256")
     .update(readFileSync(archivePath))
@@ -333,10 +599,11 @@ export function buildReleaseArchive(
 function main(): void {
   const metadata = readReleaseMetadata();
   const tag = validateReleaseMetadata(metadata);
+  readReleaseManifest();
   const command = process.argv[2] ?? "--check";
 
   if (command === "--check") {
-    console.log(`Release metadata is consistent for ${tag}`);
+    console.log(`Release metadata and manifest are consistent for ${tag}`);
     return;
   }
 

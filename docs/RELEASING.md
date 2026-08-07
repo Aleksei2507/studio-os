@@ -29,6 +29,8 @@ There is no separate root `VERSION` file. Adding another version source would du
 
 `studio-os-v<version>.zip` is the installable runtime distribution. It is not a source checkout and cannot run repository tests.
 
+`scripts/release-manifest.json` is the versioned source of truth for archive contents. It declares included runtime trees, exact public files, required entry points, and forbidden internal prefixes. The release builder reads this manifest from the exact Git tag, resolves its allowlist against the tagged tree, passes only those paths to `git archive`, and then compares the actual ZIP entries with the resolved file set. A missing, extra, or silently ignored file fails the build.
+
 The ZIP must include:
 
 - `.codex-plugin/plugin.json`;
@@ -38,9 +40,12 @@ The ZIP must include:
 - `adapters/universal/BOOTSTRAP.md`;
 - `skill/SKILL.md` and the runtime core;
 - `skills/studio-os/SKILL.md`;
-- public documentation and the license.
+- `templates/`;
+- the changelog, license, and explicitly allowlisted public documentation.
 
-The ZIP intentionally excludes `.github/`, `.gitattributes`, `.gitignore`, `package.json`, `package-lock.json`, `scripts/`, `tests/`, and generated test results. Use a Git clone for development and repository validation. Release contract tests build and inspect a real tagged ZIP so hidden runtime files cannot be dropped silently.
+The ZIP intentionally excludes `.studio/`, self-hosting lifecycle artifacts, `.github/`, `.gitattributes`, `.gitignore`, `package.json`, `package-lock.json`, `scripts/`, `tests/`, generated test results, the website, and source-only example or module placeholders. Use a Git clone for development and repository validation.
+
+`.gitattributes` remains a secondary defense for source archives, not the package definition. It must not remove an allowlisted runtime file; the post-build ZIP comparison catches that drift.
 
 ## Prepare A Release
 
@@ -72,7 +77,7 @@ git push origin main
 git push origin v0.5.0-alpha.4
 ```
 
-Pushing the tag starts `.github/workflows/release.yml`. The workflow reruns all required tests, rejects inconsistent release metadata, a mismatched checkout, or a tagged tree missing a runtime entry point, builds a versioned ZIP from the tag, writes a SHA-256 checksum, and creates the GitHub release.
+Pushing the tag starts `.github/workflows/release.yml`. The workflow reruns all required tests, rejects inconsistent release metadata or manifest contents, a mismatched checkout, a tagged tree missing a runtime entry point, or an archive that differs from its allowlist. It then writes a SHA-256 checksum and creates the GitHub release.
 
 Tagging and pushing are publication actions. Perform them only after explicit release approval.
 
@@ -82,7 +87,7 @@ After GitHub finishes the release workflow:
 
 1. Confirm that both `studio-os-v<version>.zip` and its `.sha256` file are attached.
 2. Confirm that an unauthenticated browser can open the repository when the release is intended for public use.
-3. Verify the checksum and inspect the extracted archive for `.codex-plugin/`, `.claude-plugin/`, `skills/`, `skill/`, and `adapters/universal/BOOTSTRAP.md`.
+3. Verify the checksum and inspect the extracted archive for `.codex-plugin/`, `.claude-plugin/`, `skills/`, `skill/`, `templates/`, and `adapters/universal/BOOTSTRAP.md`. Confirm that `.studio/`, `scripts/`, `tests/`, `website/`, package metadata, and self-hosting lifecycle artifacts are absent.
 4. Install through the Codex GitHub marketplace from outside this repository.
 5. Install through the Claude Code GitHub marketplace from outside this repository.
 6. Start fresh Codex and Claude Code sessions and run the Tetris activation scenario from `docs/MANUAL_TESTING.md`.

@@ -29,6 +29,37 @@ Run the layers in order:
 Do not run or classify model compatibility while either deterministic layer is
 failing.
 
+Installed-adapter parity has a separate six-case contract in
+`tests/installed-adapters/matrix.json`: Codex, Claude Code, and Universal ZIP,
+each in Greenfield and Brownfield mode. `npm run test:adapters:dry` validates
+the contract without invoking a host or model. Real-session evidence is checked
+with `npm run test:adapters:check`; one adapter failure cannot be averaged away
+by passes from the others. The authorization, execution, and privacy protocol
+is defined in `docs/MANUAL_TESTING.md`.
+
+For the accepted critical lifecycle set, run the repository-wide runner and
+full dry validation before the scoped suite dry command documented in
+`docs/runtime-testing.md`. A scoped suite PASS does not compensate for a
+failure in either repository-wide deterministic gate.
+
+## Critical Suite Contract
+
+`tests/runtime/critical-suite.json` is the versioned source of the accepted
+critical scenario set. It contains exactly ten ordered scenario IDs and one
+product-risk responsibility per scenario. The contract is maintainer evidence:
+risk responsibilities are not included in Runtime executor input.
+
+The runner must fail closed when the suite is malformed, outside
+`tests/runtime`, contains duplicate IDs, references a missing or ambiguous
+scenario, or exceeds the exploratory scenario limit. Suite identity and count
+must appear in result metadata so trials can be compared against the same
+scenario set.
+
+`--suite` is mutually exclusive with `--id`, `--tag`, `--max-tests`, `--all`,
+and a custom `--tests-dir`. Changing the accepted membership requires explicit
+scope and contract review; tags must not silently redefine the evaluation
+budget.
+
 ## Behavioral Trial
 
 One behavioral trial consists of:
@@ -130,8 +161,9 @@ test behavior outside that contract.
 - Behavioral execution always requires `--confirm-llm-cost`, including local
   inference.
 - Exploratory runs are limited to 10 selected scenarios.
-- Use `--id`, `--tag`, or `--max-tests` before considering `--all`.
-- A full suite requires the explicit `--all` signal.
+- Use `--id`, `--tag`, `--max-tests`, or the accepted `--suite` contract before
+  considering `--all`.
+- A full repository run requires the explicit `--all` signal.
 - Estimate calls from declared turns before approving a remote run.
 - Executor and judge runs are sequential unless a future policy revision
   defines a concurrency budget.
