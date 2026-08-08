@@ -2,7 +2,20 @@
 
 ## Current Focus
 
-Product Outcome принял `Epic 4 - Remote And Local Compatibility Baseline`. Deterministic tooling принято: `tests/compatibility/baseline.json` с двумя combinations (`remote-o4-mini` via Codex CLI, `local-llama3.2` via Ollama), aggregator, CLI checker, structure и runner тесты, документация в `MANUAL_TESTING.md`. Epics 1–4 `VERIFIED` (deterministic tooling); behavioral trials (132+ model calls) требуют отдельной explicit authorization. Прогресс `4/5`. Следующий increment: `Epic 5 - v0.5 Release Candidate`; ожидает подтверждения пользователя перед Development.
+`v0.5 Distribution And Delivery Assurance` released (`Product Readiness: Ready For Release`, `Release (v0.5.0)` completed). Active work moved to a new post-release Feature Work Item: `work-items/2026-08-07-admin-panel-task-tracing/` — (1) a local read + comment-write admin panel over `.studio/`, `docs/`, `work-items/` artifacts with zero model calls, and (2) a new `task-decomposition` Runtime plus a Traceability ID threaded through Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence. `Current Stage: Briefing` for this Work Item. Parent Workflow `brownfield` has `Return Stage: None` — nothing pending on the released milestone.
+
+Historical v0.5 delivery context below is preserved for reference; it is not the active focus.
+
+## Work Item: admin-panel-task-tracing
+
+- Briefing outcome: Go, High confidence. Brief at `work-items/2026-08-07-admin-panel-task-tracing/brief.md`.
+- Confirmed MVP scope: (1) local read + comment-write admin panel, zero model calls, zero new runtime dependencies by default; (2) new `task-decomposition` Runtime producing ≤8h tasks with IDs, wired between Architecture and Development in `greenfield`/`brownfield`/`work-item-feature`; shared Traceability ID across Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence; single Loader-level `.studio/feedback/` check instead of per-Runtime duplication.
+- Non Goals: no DB/auth/real-time sync, no model calls from the panel, no ticket-tracker export, no retrofitting IDs onto released v0.5 artifacts.
+- Product Decisions: 8h default task ceiling; Task Decomposition `conditional` in `work-item-feature`, `required` in full `greenfield`/`brownfield` lifecycle; feedback check centralized in `skill/core/LOADER.md`.
+- Planning skipped (recorded in Completed Stages) — scope has no multi-iteration sequencing beyond what Brief already enumerates.
+- Feature complete: `task-decomposition` Runtime built and dogfooded on itself (`tasks.md`, T1-T9, AC1-AC5 covered); admin panel built (`scripts/admin-panel/`) and smoke-tested live against this repository's real `.studio/`/`docs/`/`work-items/`; Traceability ID scheme threaded through Briefing/Planning/Development/Validation; `.studio/feedback/` + Loader check added.
+- Validation PASS (67/67 structure, 153/153 runtime dry, live HTTP smoke test). QA PASS, no blockers. Product Outcome PASS, all 5 AC VERIFIED.
+- Current Stage: Release — waiting on explicit user authorization to commit; changes are uncommitted in the working tree.
 
 ## Confirmed Facts
 
@@ -57,6 +70,7 @@ Product Outcome принял `Epic 4 - Remote And Local Compatibility Baseline`.
 - `docs/architecture.md`
 - `.studio/standards-profile.md`
 - `docs/BEHAVIORAL_ASSURANCE.md`
+- `work-items/2026-08-07-admin-panel-task-tracing/request.md`
 - `docs/runtime-testing.md`
 - `tests/runtime/critical-suite.json`
 - `tests/installed-adapters/matrix.json`

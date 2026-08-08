@@ -21,6 +21,7 @@ Interview
 -> Planning
 -> Architecture
 -> Interface Design (conditional)
+-> Task Decomposition
 -> Development
 -> Validation
 -> QA
@@ -30,6 +31,8 @@ Interview
 ```
 
 Use Research when external evidence may materially change product decisions.
+
+Task Decomposition turns the accepted roadmap increment into bounded, estimable tasks traced to Acceptance Criteria before Development starts.
 
 Use Design Strategy when visual direction, trust, or interaction design materially affects the product.
 

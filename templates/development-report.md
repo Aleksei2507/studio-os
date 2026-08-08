@@ -9,6 +9,8 @@ Increment Progress:
 
 ## Scope Implemented
 
+## Tasks Completed
+
 ## Acceptance Criteria Addressed
 
 ## Files Changed

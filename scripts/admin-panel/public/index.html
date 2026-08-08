@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Studio OS — Admin</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+<header class="app-header">
+  <h1>Studio OS</h1>
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="artifacts">Artifacts</button>
+    <button class="tab" data-tab="work-items">Work Items</button>
+  </nav>
+</header>
+
+<main id="app">
+  <section id="view-dashboard" class="view active">
+    <div class="panel" id="state-panel"><p class="muted">Loading project state…</p></div>
+    <div class="panel" id="timeline-panel"></div>
+  </section>
+
+  <section id="view-artifacts" class="view">
+    <div class="artifacts-layout">
+      <aside class="artifact-tree" id="artifact-tree"><p class="muted">Loading artifacts…</p></aside>
+      <div class="artifact-detail" id="artifact-detail">
+        <p class="muted">Select an artifact on the left.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-work-items" class="view">
+    <div class="panel" id="work-items-board"><p class="muted">Loading work items…</p></div>
+  </section>
+</main>
+
+<script src="/script.js"></script>
+</body>
+</html>

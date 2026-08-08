@@ -47,6 +47,7 @@ Then read only what the current request requires:
 
 1. `skill/core/PROJECT_MEMORY.md` when Project Memory exists or must be created.
 2. `.studio/project-state.md` and `.studio/active-context.md` when available.
+2a. `.studio/feedback/*.md` (excluding `.studio/feedback/resolved/`) when `.studio/` exists. See Feedback Check below.
 3. The canonical and active Work Item Standards Profiles only when the active Runtime uses standards.
 4. The canonical and active Work Item Project Design System Profiles only when the active Runtime needs design-system evidence.
 5. The selected workflow Markdown file.
@@ -57,6 +58,16 @@ Then read only what the current request requires:
 10. Optional Runtime references only when the Runtime says they are needed.
 
 Do not load README, user documentation, every workflow, or every Runtime at startup.
+
+## Feedback Check
+
+A local tool (for example the admin panel under `scripts/admin-panel/`) may write a human comment on a Studio OS artifact as a plain Markdown file under `.studio/feedback/<slug>-<timestamp>.md`. This is a single, shared check — Runtimes do not each implement their own feedback reading.
+
+When `.studio/feedback/` contains one or more `*.md` files directly inside it (not inside `.studio/feedback/resolved/`), list them with their referenced artifact and a short excerpt before handing control to the active Runtime. Surfacing is informational: state what is unresolved, then continue into the selected workflow in the same turn. Do not treat an unresolved comment as a blocking gate by itself, and do not silently drop it either.
+
+A comment is resolved by moving its file into `.studio/feedback/resolved/` — no status field to parse, presence in the top-level directory is the only signal. Any Runtime or the user may resolve a comment once it has been addressed; the admin panel may also do this directly since moving a file is not model or workflow logic.
+
+Do not read `.studio/feedback/` when `.studio/` does not exist — there is no Project Memory yet to comment on.
 
 ## Project Mode Detection
 

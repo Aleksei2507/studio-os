@@ -264,6 +264,8 @@ Each iteration should include:
 - Acceptance Criteria
 - Dependencies
 
+Number every iteration `IT1`, `IT2`, ... in delivery order and list which Brief `AC<n>` it advances. Task Decomposition traces its `T<iteration>.<n>` tasks back to these IDs — do not renumber an `IT<n>` once Task Decomposition or Development references it.
+
 ---
 
 # Project Memory Update

@@ -15,7 +15,8 @@
     "test:rc:dry": "node --import tsx scripts/check-release-candidate.ts --dry",
     "test:rc:check": "node --import tsx scripts/check-release-candidate.ts",
     "release:check": "node --import tsx scripts/build-release.ts --check",
-    "release:build": "node --import tsx scripts/build-release.ts --build"
+    "release:build": "node --import tsx scripts/build-release.ts --build",
+    "admin": "node --import tsx scripts/admin-panel/server.ts"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

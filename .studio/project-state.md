@@ -1,8 +1,8 @@
 Mode: Brownfield
-Workflow: brownfield
-Work Type: Not Selected
-Active Work Item: None
-Parent Workflow: None
+Workflow: work-item-feature
+Work Type: Feature
+Active Work Item: work-items/2026-08-07-admin-panel-task-tracing
+Parent Workflow: brownfield
 Return Stage: None
 Project Language: Russian
 Target Milestone: v0.5 Distribution And Delivery Assurance
@@ -13,10 +13,10 @@ Increment Progress: 5/5
 Onboarding Status: Bootstrapped
 Studio Assessment: Go
 Assessment Confidence: High
-Previous Stage: QA
+Previous Stage: Product Outcome
 Current Stage: Release
-Status: Published
-Next Recommended Stage: None
+Status: Waiting Confirmation
+Next Recommended Stage: Release (commit requires explicit user authorization)
 
 Completed Stages:
 - Brownfield Onboarding
@@ -44,6 +44,14 @@ Completed Stages:
 - QA (Epic 5 - v0.5 Release Candidate)
 - Product Outcome (Epic 5 - PASS)
 - Release (v0.5.0)
+- Work Item Intake (admin-panel-task-tracing)
+- Briefing (admin-panel-task-tracing) - Go, Planning skipped: scope already fully enumerated in Brief, no multi-iteration sequencing needed
+- Architecture (admin-panel-task-tracing) - node:http/no new deps, ADR-0002 (task-decomposition Runtime + Traceability ID scheme), Interface Design skipped
+- Task Decomposition (admin-panel-task-tracing) - 9 tasks (T1-T9), all 5 AC covered, dogfooded the new Runtime on itself
+- Development (admin-panel-task-tracing) - all 9 tasks complete
+- Validation (admin-panel-task-tracing) - PASS, 67/67 structure + 153/153 runtime dry, live smoke-test against real repo
+- QA (admin-panel-task-tracing) - PASS, no release blockers
+- Product Outcome (admin-panel-task-tracing) - PASS, 5/5 AC VERIFIED
 
 Latest Artifacts:
 - docs/discovery-summary.md
@@ -77,3 +85,15 @@ Latest Artifacts:
 - tests/release-candidate/issue-triage.json
 - tests/structure/release-candidate.test.ts
 - tests/runner/release-candidate.test.ts
+- work-items/2026-08-07-admin-panel-task-tracing/request.md
+- work-items/2026-08-07-admin-panel-task-tracing/brief.md
+- work-items/2026-08-07-admin-panel-task-tracing/architecture.md
+- work-items/2026-08-07-admin-panel-task-tracing/delivery-estimate.md
+- docs/adr/0002-task-decomposition-and-traceability-id.md
+- work-items/2026-08-07-admin-panel-task-tracing/tasks.md
+- skill/runtimes/task-decomposition/SKILL.md
+- work-items/2026-08-07-admin-panel-task-tracing/development-report.md
+- work-items/2026-08-07-admin-panel-task-tracing/validation-report.md
+- work-items/2026-08-07-admin-panel-task-tracing/qa-report.md
+- work-items/2026-08-07-admin-panel-task-tracing/product-outcome-report.md
+- scripts/admin-panel/server.ts

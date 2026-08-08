@@ -18,6 +18,7 @@ Work Item Intake
 -> Planning (conditional)
 -> Architecture (conditional)
 -> Interface Design (conditional)
+-> Task Decomposition (conditional)
 -> Development
 -> Validation
 -> QA
@@ -36,6 +37,8 @@ Run Architecture when the feature changes an accepted technical decision, bounda
 Run Interface Design when the feature introduces or materially changes user-facing flows, surfaces, states, responsive behavior, platform adaptation, or design-system patterns. Skip it when the accepted design system already resolves the bounded change.
 
 When Interface Design is skipped for that reason, Development and QA still use the applicable Project Design System Profile. A proposed change remains in `work-items/<id>/design-system-profile.md` until successful Release.
+
+Run Task Decomposition when the Feature needs more than one estimable, independently completable unit. Skip it with a recorded reason for a single bounded change; Development then traces directly to the Brief's `AC<n>` Acceptance Criteria without an intermediate `T<n>` task list.
 
 Product Outcome verifies the complete accepted Feature outcome. A multi-increment Feature returns to the next incomplete increment on `CONTINUE`; it reaches Release only on `PASS`.
 

@@ -21,6 +21,7 @@ Brownfield Onboarding
 -> Planning
 -> Architecture
 -> Interface Design (conditional)
+-> Task Decomposition
 -> Development
 -> Validation
 -> QA
@@ -29,7 +30,7 @@ Brownfield Onboarding
 -> Retrospective (conditional)
 ```
 
-Brownfield Briefing documents Current Product Scope. Brownfield Planning creates a Development Roadmap.
+Brownfield Briefing documents Current Product Scope. Brownfield Planning creates a Development Roadmap. Task Decomposition turns the accepted Development Epic into bounded, estimable tasks traced to Acceptance Criteria before Development starts.
 
 Brownfield Onboarding also creates an Observed Project Design System Profile. It records active, absent, unknown, mixed, and legacy interface-system evidence without replacing the current system. Design Strategy preserves its experience constraints; Architecture uses it for technical compatibility; Interface Design confirms or extends it; Development and QA preserve and verify it.
 

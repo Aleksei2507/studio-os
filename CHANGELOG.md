@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Added a `task-decomposition` Runtime between Architecture and Development
+  that turns accepted scope into bounded, estimable tasks, required in
+  Greenfield/Brownfield and conditional in the Feature Work Item workflow.
+- Added a Traceability ID scheme (`AC<n>` Acceptance Criteria, `IT<n>` Roadmap
+  iterations, `T<n>` tasks) threaded through Briefing, Planning, Development,
+  and Validation output.
+- Added a local admin panel (`npm run admin`) that renders `.studio/`, `docs/`,
+  and `work-items/` artifacts and lets a user leave comments that land under
+  `.studio/feedback/` as plain Markdown files — read and comment-write only,
+  no model calls, no new runtime dependencies.
+- Added a shared `.studio/feedback/` check in Loader so any active Runtime
+  surfaces unresolved comments once instead of duplicating the check per
+  Runtime.
+
 ## 0.5.0
 
 - Added a Release Candidate gate aggregator with eight deterministic evidence

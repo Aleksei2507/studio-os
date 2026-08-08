@@ -82,6 +82,7 @@ Read only relevant context:
 - selected workflow;
 - accepted Project Brief and roadmap scope;
 - active Architecture path and applicable ADRs;
+- active `tasks.md` when Task Decomposition ran for this workflow;
 - active Interface Design path when available;
 - canonical `.studio/standards-profile.md` and active `work-items/<id>/standards-profile.md` when available;
 - canonical `.studio/design-system-profile.md` and active `work-items/<id>/design-system-profile.md` when interface code is affected;
@@ -182,7 +183,8 @@ Produce a working increment and Development Report under `.studio/telemetry/` or
 
 - Delivery Context: Target Milestone, Product Readiness, current increment, and progress;
 - Scope Implemented;
-- Acceptance Criteria Addressed;
+- Tasks Completed: the `T<n>` IDs closed by this increment, when `tasks.md` exists;
+- Acceptance Criteria Addressed: reference the Brief's `AC<n>` IDs when they exist, not only prose;
 - Files Changed;
 - Tests Added or Updated;
 - Focused Checks Run;

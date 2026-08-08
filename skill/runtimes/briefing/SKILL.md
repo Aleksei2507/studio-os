@@ -238,6 +238,8 @@ Document structure:
 
 Use `templates/project-brief.md` as the output structure.
 
+Number every Acceptance Criterion `AC1`, `AC2`, ... in reading order. Task Decomposition and later Development and Validation evidence trace back to these IDs — do not renumber or reuse an ID once a Roadmap iteration or task references it.
+
 ---
 
 # Project Memory Update

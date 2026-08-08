@@ -72,7 +72,7 @@ Read:
 
 - `.studio/project-state.md`;
 - `.studio/active-context.md`;
-- active Development Report path from Project Memory when available;
+- active Development Report path from Project Memory when available, including its `Tasks Completed` and `Acceptance Criteria Addressed` IDs when present;
 - canonical `.studio/standards-profile.md` and active `work-items/<id>/standards-profile.md` when available;
 - relevant acceptance criteria;
 - package scripts, build files, CI configuration, and project instructions;
@@ -139,6 +139,7 @@ Read `references/anti-patterns.md` when a command is skipped, bypassed, flaky, o
 Create Validation Report under `.studio/telemetry/` or the Active Work Item directory according to Project Memory, with:
 
 - Delivery Context: Target Milestone, Product Readiness, current increment, and progress;
+- Acceptance Criteria Verified: the Brief's `AC<n>` IDs this evidence covers, and the `T<n>` tasks that produced it, when those IDs exist;
 - Target and Scope;
 - Environment;
 - Changed Revision or Worktree State;

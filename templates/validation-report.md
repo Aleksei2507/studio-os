@@ -7,6 +7,8 @@ Product Readiness:
 Current Increment:
 Increment Progress:
 
+## Acceptance Criteria Verified
+
 ## Target And Scope
 
 ## Environment
