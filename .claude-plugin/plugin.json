@@ -17,5 +17,6 @@
     "development",
     "studio"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "commands": "./commands/"
 }

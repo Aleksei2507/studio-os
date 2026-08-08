@@ -2,6 +2,8 @@
   "version": 1,
   "includeTrees": [
     "adapters/universal",
+    "commands",
+    "scripts/admin-panel",
     "skill",
     "skills/studio-os",
     "templates"
@@ -59,7 +61,16 @@
     "examples",
     "modules",
     "node_modules",
-    "scripts",
+    "scripts/adapter-testing",
+    "scripts/build-release.ts",
+    "scripts/check-compatibility-baseline.ts",
+    "scripts/check-installed-adapters.ts",
+    "scripts/check-release-candidate.ts",
+    "scripts/compatibility-baseline",
+    "scripts/release-candidate",
+    "scripts/release-manifest.json",
+    "scripts/run-runtime-tests.ts",
+    "scripts/runtime-testing",
     "test-results",
     "tests",
     "website"

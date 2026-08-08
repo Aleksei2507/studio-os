@@ -59,6 +59,7 @@ These rules apply to every Studio OS workflow and Runtime.
 ## Completion
 
 - Every completed stage produces its required artifact or memory update.
+- Verify every created or updated `docs/`, `.studio/`, or Work Item artifact matches the stored Project Language at the moment of writing it. Do not rely on having checked Project Language earlier in the conversation.
 - Update Project Memory after a stage transition.
 - Recommend the next stage and wait when confirmation is required.
 - Every completion response must name the exact completed unit and state Target Milestone readiness separately when it is not released.

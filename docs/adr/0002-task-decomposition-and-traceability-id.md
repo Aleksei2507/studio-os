@@ -1,4 +1,4 @@
-# ADR-0002: Task Decomposition Runtime And Traceability ID Scheme
+# ADR-0002: Runtime Task Decomposition И Схема Traceability ID
 
 Status: Accepted
 
@@ -6,42 +6,42 @@ Date: 2026-08-07
 
 ## Context
 
-Between an accepted Roadmap iteration or Architecture decision and Development, Studio OS today has no bounded, estimable artifact. Development reads iteration-level acceptance criteria directly and self-decomposes implementation with no recorded trace back to the requirement it satisfies. This was identified as a concrete gap relative to an internal spec-driven tool (`sp`) already in production use, which produces an hour-bounded, requirement-traced `tasks.md` that plugs into a ticket tracker.
+Между принятой Roadmap-итерацией или решением Architecture и Development в Studio OS сегодня нет ограниченного, оцениваемого артефакта. Development читает acceptance criteria уровня итерации напрямую и сам декомпозирует реализацию без записанной трассировки назад к требованию, которое она удовлетворяет. Это конкретный пробел, обнаруженный при сравнении с внутренним spec-driven инструментом (`sp`), уже используемым в продакшене, который производит ограниченный по часам, трассируемый к требованиям `tasks.md`, встраиваемый в таск-трекер.
 
-`skill/` contains no concept of task decomposition or cross-artifact traceability IDs (verified: no matches for these concepts across `skill/`).
+В `skill/` нет концепции декомпозиции задач или сквозной трассировки по ID (подтверждено: по этим концептам нет совпадений при поиске по всему `skill/`).
+
+Пользователь явно запросил эту работу: "надо сделать, чтобы в любой [LLM] мог написать открой админку и студия это сделала" — а также, отдельно, пункты 1 и 3 из предложенных улучшений против `sp`: Task Decomposition и сквозную трассировку ID.
 
 ## Decision
 
-Add a new Runtime stage, `task-decomposition`, registered `active` in `skill/workflows/registry.json`, positioned between Architecture and Development. It produces `docs/tasks.md` or `work-items/<id>/tasks.md`: a list of tasks bounded to ≤8 hours each, every task carrying an ID and an explicit reference to the Acceptance Criterion it satisfies.
+1. Добавить новую Runtime-стадию `task-decomposition`, зарегистрированную `active` в `skill/workflows/registry.json`, размещённую между Architecture и Development. Она производит `docs/tasks.md` или `work-items/<id>/tasks.md`: список задач, ограниченных ≤8 часами каждая, каждая с ID и явной ссылкой на Acceptance Criterion, который она удовлетворяет.
+2. Ввести общую схему Traceability ID, используемую в четырёх существующих Runtime и новом:
+   - Briefing нумерует каждый Acceptance Criterion `AC1`, `AC2`, ... в `docs/project-brief.md` / `work-items/<id>/brief.md`.
+   - Planning нумерует каждую Roadmap-итерацию `IT1`, `IT2`, ... в `docs/roadmap.md` / `work-items/<id>/roadmap.md`, и записывает, какой `AC<n>` каждая итерация продвигает.
+   - Task Decomposition присваивает `T<iteration>.<n>` на каждую задачу (например `T1.1`, `T1.2`), каждая записывает `Satisfies: AC<n>[, AC<m>]`.
+   - Development Report записывает `Tasks Completed: T<x>.<y>[, ...]`.
+   - Validation evidence записывает `Acceptance Criteria Verified: AC<n>[, ...]` и задачи `T<x>.<y>`, которые произвели эту evidence.
 
-Introduce a shared Traceability ID scheme used across four existing Runtimes and the new one:
+Встраивание в workflow:
 
-- Briefing numbers each Acceptance Criterion `AC1`, `AC2`, ... in `docs/project-brief.md` / `work-items/<id>/brief.md`.
-- Planning numbers each Roadmap iteration `IT1`, `IT2`, ... in `docs/roadmap.md` / `work-items/<id>/roadmap.md`, and records which `AC<n>` each iteration advances.
-- Task Decomposition assigns `T<iteration>.<n>` per task (e.g. `T1.1`, `T1.2`), each recording `Satisfies: AC<n>[, AC<m>]`.
-- Development Report records `Tasks Completed: T<x>.<y>[, ...]`.
-- Validation evidence records `Acceptance Criteria Verified: AC<n>[, ...]` and the `T<x>.<y>` tasks that produced that evidence.
+- `greenfield`, `brownfield`: стадия `task-decomposition` policy `required`, размещена после `architecture` и перед `development`.
+- `work-item-feature`: `task-decomposition` policy `conditional` — выполняется, когда Feature требует несколько оцениваемых единиц; пропускается для одного тривиального изменения с зафиксированной причиной, зеркально тому, как `planning` и `architecture` уже conditional в этом workflow.
+- `work-item-bugfix`, `work-item-research`, `work-item-refactor`: не добавлено — эти workflow уже малы и ограничены по конструкции (Bugfix или единичный Refactor редко требует под-декомпозиции); Task Decomposition может быть добавлен позже, если evidence покажет иное.
 
-Workflow wiring:
-
-- `greenfield`, `brownfield`: `task-decomposition` stage policy `required`, positioned after `architecture` and before `development`.
-- `work-item-feature`: `task-decomposition` stage policy `conditional` — run when the Feature needs multiple estimable units; skip for a single trivial change and record the reason, mirroring how `planning` and `architecture` are already conditional in that workflow.
-- `work-item-bugfix`, `work-item-research`, `work-item-refactor`: not added — these workflows are already small-bounded by construction (a Bugfix or single Refactor rarely needs sub-decomposition); Task Decomposition may be added later if evidence shows otherwise.
-
-The ID scheme does not retrofit onto already-completed artifacts (e.g. the released `v0.5` roadmap/reports keep their existing unqualified references).
+Схема ID не ретроактивно применяется к уже завершённым артефактам (например, выпущенные v0.5 roadmap/reports сохраняют существующие нарративные ссылки).
 
 ## Alternatives
 
-- **Decompose inside Development itself** — rejected: keeps the same problem (no artifact a human can review/estimate/hand out before implementation starts) and mixes "what must be true" with "how it is implemented."
-- **A separate tool outside `skill/` that generates tasks.md from Architecture** — rejected: would create a second source of workflow logic outside the canonical `skill/` tree, which `.studio/standards-profile.md` explicitly designates as the only canonical Runtime implementation location.
-- **Free-form IDs chosen ad hoc per project** — rejected: traceability requires a predictable, greppable format; an explicit scheme is cheap to define once and enforce structurally.
+- **Декомпозировать внутри самого Development** — отклонено: сохраняет ту же проблему (нет артефакта, который человек может просмотреть/оценить/раздать до начала реализации) и смешивает "что должно быть верно" с "как это реализовано".
+- **Отдельный инструмент вне `skill/`, генерирующий tasks.md из Architecture** — отклонено: создал бы второй источник workflow-логики вне канонического дерева `skill/`, которое `.studio/standards-profile.md` явно определяет как единственное каноническое место реализации Runtime.
+- **Произвольные ID, выбираемые ad hoc по каждому проекту** — отклонено: трассируемость требует предсказуемого, grep-able формата; явную схему дёшево определить один раз и обеспечивать структурно.
 
 ## Consequences
 
-- `skill/workflows/registry.json` gains one new Runtime entry and three workflow files gain one stage each — additive, no existing stage removed or renamed.
-- `skill/runtimes/briefing/SKILL.md`, `planning/SKILL.md`, `development/SKILL.md`, `validation/SKILL.md` gain an ID-numbering requirement in their Output sections — a small, backward-compatible addition (existing unqualified artifacts remain valid; the requirement applies going forward).
-- Development and Validation gain a light bookkeeping duty (record which `T<x>.<y>` / `AC<n>` were addressed) in exchange for end-to-end traceability that did not exist before.
+- `skill/workflows/registry.json` получает одну новую запись Runtime, а три workflow-файла получают по одной новой стадии — аддитивно, ни одна существующая стадия не удалена и не переименована.
+- `skill/runtimes/briefing/SKILL.md`, `planning/SKILL.md`, `development/SKILL.md`, `validation/SKILL.md` получают требование нумерации ID в секциях Output — небольшое, обратно совместимое добавление (существующие ненумерованные артефакты остаются валидными; требование применяется вперёд).
+- Development и Validation получают небольшую обязанность учёта (записывать, какие `T<x>.<y>` / `AC<n>` были затронуты) взамен на сквозную трассируемость, которой раньше не существовало.
 
 ## Affected Scope
 
-`skill/workflows/registry.json`, `skill/workflows/greenfield.md`, `skill/workflows/brownfield.md`, `skill/workflows/work-item-feature.md`, new `skill/runtimes/task-decomposition/SKILL.md`, `skill/runtimes/briefing/SKILL.md`, `skill/runtimes/planning/SKILL.md`, `skill/runtimes/development/SKILL.md`, `skill/runtimes/validation/SKILL.md`, `templates/`.
+`skill/workflows/registry.json`, `skill/workflows/greenfield.md`, `skill/workflows/brownfield.md`, `skill/workflows/work-item-feature.md`, новый `skill/runtimes/task-decomposition/SKILL.md`, `skill/runtimes/briefing/SKILL.md`, `skill/runtimes/planning/SKILL.md`, `skill/runtimes/development/SKILL.md`, `skill/runtimes/validation/SKILL.md`, `templates/`.

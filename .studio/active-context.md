@@ -2,20 +2,32 @@
 
 ## Current Focus
 
-`v0.5 Distribution And Delivery Assurance` released (`Product Readiness: Ready For Release`, `Release (v0.5.0)` completed). Active work moved to a new post-release Feature Work Item: `work-items/2026-08-07-admin-panel-task-tracing/` — (1) a local read + comment-write admin panel over `.studio/`, `docs/`, `work-items/` artifacts with zero model calls, and (2) a new `task-decomposition` Runtime plus a Traceability ID threaded through Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence. `Current Stage: Briefing` for this Work Item. Parent Workflow `brownfield` has `Return Stage: None` — nothing pending on the released milestone.
+`v0.5 Distribution And Delivery Assurance` выпущен (`Product Readiness: Ready For Release`, `Release (v0.5.0)` завершён). Активная работа перешла на новый пострелизный Feature Work Item: `work-items/2026-08-07-admin-panel-task-tracing/` — (1) локальная read + comment-write admin-панель над артефактами `.studio/`, `docs/`, `work-items/` без единого вызова модели, и (2) новый Runtime `task-decomposition` плюс Traceability ID, проходящий через Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence. Parent Workflow `brownfield` имеет `Return Stage: None` — на выпущенном milestone ничего не в ожидании.
 
-Historical v0.5 delivery context below is preserved for reference; it is not the active focus.
+Исторический контекст поставки v0.5 ниже сохранён для справки; это не активный фокус.
 
 ## Work Item: admin-panel-task-tracing
 
-- Briefing outcome: Go, High confidence. Brief at `work-items/2026-08-07-admin-panel-task-tracing/brief.md`.
-- Confirmed MVP scope: (1) local read + comment-write admin panel, zero model calls, zero new runtime dependencies by default; (2) new `task-decomposition` Runtime producing ≤8h tasks with IDs, wired between Architecture and Development in `greenfield`/`brownfield`/`work-item-feature`; shared Traceability ID across Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence; single Loader-level `.studio/feedback/` check instead of per-Runtime duplication.
-- Non Goals: no DB/auth/real-time sync, no model calls from the panel, no ticket-tracker export, no retrofitting IDs onto released v0.5 artifacts.
-- Product Decisions: 8h default task ceiling; Task Decomposition `conditional` in `work-item-feature`, `required` in full `greenfield`/`brownfield` lifecycle; feedback check centralized in `skill/core/LOADER.md`.
-- Planning skipped (recorded in Completed Stages) — scope has no multi-iteration sequencing beyond what Brief already enumerates.
-- Feature complete: `task-decomposition` Runtime built and dogfooded on itself (`tasks.md`, T1-T9, AC1-AC5 covered); admin panel built (`scripts/admin-panel/`) and smoke-tested live against this repository's real `.studio/`/`docs/`/`work-items/`; Traceability ID scheme threaded through Briefing/Planning/Development/Validation; `.studio/feedback/` + Loader check added.
-- Validation PASS (67/67 structure, 153/153 runtime dry, live HTTP smoke test). QA PASS, no blockers. Product Outcome PASS, all 5 AC VERIFIED.
-- Current Stage: Release — waiting on explicit user authorization to commit; changes are uncommitted in the working tree.
+- Briefing outcome: Go, High confidence. Brief — `work-items/2026-08-07-admin-panel-task-tracing/brief.md`.
+- Подтверждённый MVP scope: (1) локальная read + comment-write admin-панель, без вызовов модели, без новых runtime-зависимостей по умолчанию; (2) новый Runtime `task-decomposition`, производящий задачи ≤8ч с ID, встроенный между Architecture и Development в `greenfield`/`brownfield`/`work-item-feature`; общий Traceability ID через Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence; единая проверка `.studio/feedback/` на уровне Loader вместо дублирования по каждому Runtime.
+- Non Goals: без БД/аутентификации/real-time синхронизации, без вызовов модели из панели, без экспорта в таск-трекер, без ретроактивной простановки ID на выпущенные артефакты v0.5.
+- Product Decisions: потолок задачи по умолчанию 8ч; Task Decomposition `conditional` в `work-item-feature`, `required` в полном lifecycle `greenfield`/`brownfield`; проверка feedback централизована в `skill/core/LOADER.md`.
+- Planning пропущена (зафиксировано в Completed Stages) — scope не требует multi-iteration секвенирования сверх того, что уже перечислено в Brief.
+- Фича завершена: Runtime `task-decomposition` построен и продогфужен на себе самом (`tasks.md`, T1-T9, AC1-AC5 покрыты); admin-панель построена (`scripts/admin-panel/`) и проверена вживую против реальных `.studio/`/`docs/`/`work-items/` этого репозитория; Traceability ID схема прошита через Briefing/Planning/Development/Validation; добавлены `.studio/feedback/` + проверка в Loader.
+- Validation PASS (67/67 structure, 153/153 runtime dry, живой HTTP smoke-test). QA PASS, без блокеров. Product Outcome PASS, все 5 AC VERIFIED.
+- Первый инкремент закоммичен (`f34474d`), без co-author трейлера — по явной инструкции пользователя для коммитов этой сессии.
+
+### Дополнение: дистрибуция (2026-08-08)
+
+- Пользователь подтвердил, что scope должен распространяться на установленные копии плагина, не только на этот checkout (см. ADR-0003) — выбрал "Тоже и в установленном виде" на прямой вопрос, поскольку `scripts/` был под `forbiddenPrefixes`, а установленная копия не содержит `package.json`/`tsx`.
+- `scripts/admin-panel/server.ts` переписан в `server.js` (чистый Node, без зависимостей); `createAdminServer(workspaceRoot)` теперь отвязан от `STUDIO_OS_ROOT`; `main()` читает `--workspace <path>`.
+- `scripts/admin-panel` + новый `commands/` добавлены в `includeTrees`; единая широкая запись `"scripts"` в `forbiddenPrefixes` заменена на десять точечных путей; `.gitattributes` получил соответствующий `-export-ignore` override.
+- Добавлены `commands/admin.md` (`/studio-os:admin`, объявлен через `"commands"` в `.claude-plugin/plugin.json`) и третий `defaultPrompt` в Codex.
+- Добавлено host-agnostic распознавание "Local Tooling Requests" в `adapters/universal/BOOTSTRAP.md` + `skill/core/CONVERSATION_ROUTER.md`.
+- При ручном end-to-end тестировании найден и исправлен реальный баг (не пойман начальным автоматическим набором тестов): проверка `isMain` молча ломалась на любом symlink-пути входа (macOS `/tmp` -> `/private/tmp`; правдоподобно и для реальных plugin cache) — `main()` не вызывался, exit 0, ноль вывода. Исправлено сравнением через `realpathSync`; добавлен регрессионный тест через настоящий дочерний процесс и настоящий symlink.
+- Validation PASS: 71/71 structure (было 67 до этой сессии, +3 от первого инкремента, +1 symlink-регрессия), 153/153 runtime dry, плюс сквозная симуляция с нуля (скопировал `admin-panel/` за пределы репозитория, запустил голым `node`, нацелил `--workspace` на несвязанную временную папку) — подтвердила, что сценарий установленного плагина реально работает end-to-end.
+- Current Stage: Release — ожидает явной авторизации пользователя на коммит; изменения не закоммичены в рабочем дереве. Та же no-co-author конвенция применяется, если не сказано иное.
+- Дважды в этой сессии писал docs/adr и .studio/active-context.md на английском вместо Project Language — пользователь поймал оба раза. В `skill/core/INVARIANTS.md`, секция `## Completion`, добавлен общий пункт: проверять Project Language в момент записи каждого артефакта под `docs/`/`.studio/`/`work-items/`, не полагаясь на более раннюю проверку в разговоре — тот же паттерн "один общий чек", что и Feedback Check в Loader, вместо дублирования по каждому Runtime.
 
 ## Confirmed Facts
 

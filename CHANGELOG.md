@@ -15,6 +15,20 @@
 - Added a shared `.studio/feedback/` check in Loader so any active Runtime
   surfaces unresolved comments once instead of duplicating the check per
   Runtime.
+- Shipped the admin panel in the distributed package: rewrote it as
+  dependency-free plain Node.js (no TypeScript/`tsx`, since an installed copy
+  has no `package.json`), decoupled it from Studio OS Root via a
+  `--workspace <path>` argument so it renders whichever project it is pointed
+  at, and added it plus a new `commands/` tree to the release manifest
+  allowlist (ADR-0003).
+- Added a host-agnostic "Local Tooling Requests" rule (Bootstrap and
+  Conversation Router) so any host can recognize a request to open the admin
+  panel without routing it through product workflow, plus a Claude Code
+  `/studio-os:admin` command and a matching Codex default prompt.
+- Fixed a symlink-related entry-point detection bug (`isMainModule`) that
+  silently prevented the admin panel from starting at all when reached
+  through a symlinked ancestor directory, such as macOS's `/tmp` or a
+  plugin/marketplace cache path.
 
 ## 0.5.0
 

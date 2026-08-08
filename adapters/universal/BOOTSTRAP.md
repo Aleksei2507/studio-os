@@ -79,6 +79,28 @@ Host tools and skills are capability adapters. Use them only after the active Ru
 
 Do not load README or user documentation at startup. Do not preload every workflow, Runtime, standard, capability, or optional reference.
 
+## Local Tooling Requests
+
+Some requests ask Studio OS to run one of its own bundled local tools rather than do product work — for example, opening the admin panel that renders `.studio/`, `docs/`, and `work-items/` artifacts (`scripts/admin-panel/`).
+
+Infer this from observable intent (open/start/launch combined with admin/panel/dashboard, or an equivalent phrase in Project Language), not a fixed phrase.
+
+When recognized:
+
+1. Do not route through Loader, Project Mode detection, or any Runtime. This is not product work; it must not create or mutate Project Memory. It is not restricted by the Host Boundary rules above, which govern product implementation, not Studio OS's own bundled tooling.
+2. Determine Studio OS Root (already resolved above) and the Target Workspace whose artifacts should be rendered — normally the current Target Workspace from this same request.
+3. If the current host can execute shell commands, run:
+
+   ```text
+   node <studio-os-root>/scripts/admin-panel/server.js --workspace <target-workspace>
+   ```
+
+   with both paths filled in as absolute paths, then report the bound local URL (`http://127.0.0.1:<port>`, default port 4317, override with `--port <n>`) to the user. Inside the Studio OS development checkout only, `npm run admin -- --workspace <target-workspace>` is an equivalent convenience alias; it does not exist in an installed copy, so prefer the direct `node` form when unsure.
+4. If the host cannot execute commands (filesystem-only capability), tell the user the exact command from step 3 to run themselves, with both paths filled in, and stop. Do not claim the panel started.
+5. Never treat this as an execution request for the product itself, and never let it substitute for Loader routing when the user's next message is actually product work.
+
+This rule is host-agnostic: it applies identically through the Claude Code, Codex, or Universal adapter path.
+
 ## Communication
 
 Do not give a Studio OS architecture tour unless the user requested one. Briefly identify the selected mode and active Runtime when useful, then continue with that Runtime's required interaction.

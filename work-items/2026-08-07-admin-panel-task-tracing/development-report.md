@@ -92,3 +92,21 @@ T1, T2, T3, T4, T5, T6, T7, T8, T9 (все задачи из `tasks.md`).
 ## Remaining Risks
 
 Отсутствие реального использования Loader feedback-check в живом Runtime-ходу — риск низкий (реализация проста: наличие файлов = сигнал), но не подтверждён иначе как чтением кода/документации.
+
+## Дополнение: Дистрибуция (2026-08-08)
+
+Пользователь запросил распространение панели на установленные копии Studio OS (не только этот checkout), см. ADR-0003.
+
+Изменения:
+- `scripts/admin-panel/server.ts` переписан как `scripts/admin-panel/server.js` — чистый Node.js без TypeScript/`tsx` (установленная копия не содержит `package.json`/`node_modules`).
+- `createAdminServer` теперь принимает `workspaceRoot` независимо от `STUDIO_OS_ROOT`/`PUBLIC_DIR`; `main()` читает `--workspace <path>` (по умолчанию `process.cwd()`).
+- `scripts/admin-panel` и новый `commands/` добавлены в `includeTrees` `scripts/release-manifest.json`; единственная широкая запись `"scripts"` в `forbiddenPrefixes` заменена на десять точечных путей, которые обязаны остаться исключены.
+- `.gitattributes` получил `scripts/admin-panel -export-ignore` поверх `scripts export-ignore` — для консистентности с GitHub-автогенерируемым source-архивом тега.
+- Добавлены `commands/admin.md` (`/studio-os:admin` для Claude Code, объявлен через `"commands": "./commands/"` в `.claude-plugin/plugin.json`) и третий `defaultPrompt` в `.codex-plugin/plugin.json`.
+- `adapters/universal/BOOTSTRAP.md` получил секцию "Local Tooling Requests" (host-agnostic, работает через любой adapter path); `skill/core/CONVERSATION_ROUTER.md` получил intent type "Local Tooling Request" для распознавания в середине сессии.
+
+**Найден и исправлен реальный баг при ручном end-to-end тестировании**: `isMain`-проверка (сравнение `import.meta.url` с `pathToFileURL(process.argv[1])`) молча ломалась, когда путь к файлу проходил через symlink (macOS `/tmp` -> `/private/tmp` — ровно то, через что проходит любой временный каталог на этой платформе, и структурно похоже на то, как может быть устроен marketplace/plugin cache). `main()` просто не вызывался: процесс завершался с кодом 0, без единой строки лога, порт не открывался. Исправлено сравнением через `realpathSync` на обеих сторонах. Добавлен регрессионный тест (`tests/structure/admin-panel.test.ts`, "starts as a real subprocess when reached through a symlinked ancestor directory") — реальный дочерний процесс через реальный symlink, не только импорт модуля.
+
+Tasks Completed: T6 (расширен), T8 (расширен) — новые задачи не заводились, это исправление в рамках тех же Acceptance Criteria (AC1, AC2).
+
+Focused Checks Run: `npm run test:structure` (71/71), `npm run test:runtime:dry` (153/153 scenario files), ручной end-to-end через реальный дочерний процесс, скопированный вне репозитория, нацеленный на не связанный с ним временный workspace через `--workspace`.

@@ -1,11 +1,17 @@
-import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { createServer } from "node:http";
 import { readFile, writeFile, mkdir, rename, readdir, stat } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, realpathSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
+
+// Plain Node.js, zero dependencies (not even a TypeScript loader): this file
+// must run with bare `node` inside an installed plugin copy, which ships no
+// package.json, no node_modules, and no tsx. Keep it that way.
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-export const REPO_ROOT = path.resolve(HERE, "..", "..");
+
+// Studio OS Root: where this tool's own code (and its static assets) lives.
+export const STUDIO_OS_ROOT = path.resolve(HERE, "..", "..");
 export const PUBLIC_DIR = path.resolve(HERE, "public");
 
 const ALLOWED_ARTIFACT_ROOTS = ["docs", "work-items", ".studio"];
@@ -14,17 +20,17 @@ const FEEDBACK_RESOLVED_DIR = ".studio/feedback/resolved";
 
 /**
  * Resolves a project-relative path requested by a client and guarantees it stays
- * inside one of ALLOWED_ARTIFACT_ROOTS under repoRoot. Throws on traversal or
- * any path that escapes the allowed roots.
+ * inside one of ALLOWED_ARTIFACT_ROOTS under workspaceRoot. Throws on traversal
+ * or any path that escapes the allowed roots.
  */
-export function resolveArtifactPath(repoRoot: string, relPath: string): string {
+export function resolveArtifactPath(workspaceRoot, relPath) {
   if (!relPath || relPath.includes("\0")) {
     throw new Error("invalid path");
   }
   const normalized = relPath.replace(/^\/+/, "");
-  const resolved = path.resolve(repoRoot, normalized);
+  const resolved = path.resolve(workspaceRoot, normalized);
   const isAllowed = ALLOWED_ARTIFACT_ROOTS.some((root) => {
-    const rootAbs = path.resolve(repoRoot, root);
+    const rootAbs = path.resolve(workspaceRoot, root);
     return resolved === rootAbs || resolved.startsWith(rootAbs + path.sep);
   });
   if (!isAllowed) {
@@ -33,20 +39,20 @@ export function resolveArtifactPath(repoRoot: string, relPath: string): string {
   return resolved;
 }
 
-function slugifyArtifactPath(relPath: string): string {
+function slugifyArtifactPath(relPath) {
   return relPath
     .replace(/^\/+/, "")
     .replace(/\.md$/, "")
     .replace(/[\\/]/g, "-");
 }
 
-async function collectMarkdownFiles(repoRoot: string, root: string): Promise<string[]> {
-  const rootAbs = path.resolve(repoRoot, root);
+async function collectMarkdownFiles(workspaceRoot, root) {
+  const rootAbs = path.resolve(workspaceRoot, root);
   if (!existsSync(rootAbs)) {
     return [];
   }
-  const results: string[] = [];
-  async function walk(dir: string): Promise<void> {
+  const results = [];
+  async function walk(dir) {
     const entries = await readdir(dir, { withFileTypes: true });
     for (const entry of entries) {
       if (entry.name.startsWith(".") && root !== ".studio") {
@@ -59,7 +65,7 @@ async function collectMarkdownFiles(repoRoot: string, root: string): Promise<str
         }
         await walk(abs);
       } else if (entry.isFile() && entry.name.endsWith(".md")) {
-        results.push(path.relative(repoRoot, abs));
+        results.push(path.relative(workspaceRoot, abs));
       }
     }
   }
@@ -67,8 +73,8 @@ async function collectMarkdownFiles(repoRoot: string, root: string): Promise<str
   return results;
 }
 
-async function listOpenFeedback(repoRoot: string): Promise<string[]> {
-  const dir = path.resolve(repoRoot, FEEDBACK_DIR);
+async function listOpenFeedback(workspaceRoot) {
+  const dir = path.resolve(workspaceRoot, FEEDBACK_DIR);
   if (!existsSync(dir)) {
     return [];
   }
@@ -79,7 +85,7 @@ async function listOpenFeedback(repoRoot: string): Promise<string[]> {
     .sort();
 }
 
-function sendJson(res: ServerResponse, status: number, body: unknown): void {
+function sendJson(res, status, body) {
   const payload = JSON.stringify(body);
   res.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
@@ -88,21 +94,29 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
   res.end(payload);
 }
 
-async function sendStatic(res: ServerResponse, filePath: string, contentType: string): Promise<void> {
+async function sendStatic(res, filePath, contentType) {
   const content = await readFile(filePath);
   res.writeHead(200, { "content-type": contentType });
   res.end(content);
 }
 
-async function readRequestBody(req: IncomingMessage): Promise<string> {
-  const chunks: Buffer[] = [];
+async function readRequestBody(req) {
+  const chunks = [];
   for await (const chunk of req) {
-    chunks.push(chunk as Buffer);
+    chunks.push(chunk);
   }
   return Buffer.concat(chunks).toString("utf8");
 }
 
-export function createAdminServer(repoRoot: string = REPO_ROOT) {
+/**
+ * workspaceRoot is the project whose .studio/docs/work-items this instance
+ * serves. It is deliberately independent from STUDIO_OS_ROOT/PUBLIC_DIR: when
+ * Studio OS runs as an installed plugin, the tool's own code lives under the
+ * plugin cache while the artifacts it must render live in the Target
+ * Workspace the user is actually working in. Self-hosting (this repository)
+ * is the special case where the two happen to be the same path.
+ */
+export function createAdminServer(workspaceRoot) {
   return createServer(async (req, res) => {
     try {
       const url = new URL(req.url ?? "/", "http://localhost");
@@ -121,19 +135,19 @@ export function createAdminServer(repoRoot: string = REPO_ROOT) {
       }
 
       if (req.method === "GET" && url.pathname === "/api/state") {
-        const stateFile = path.resolve(repoRoot, ".studio/project-state.md");
-        const contextFile = path.resolve(repoRoot, ".studio/active-context.md");
+        const stateFile = path.resolve(workspaceRoot, ".studio/project-state.md");
+        const contextFile = path.resolve(workspaceRoot, ".studio/active-context.md");
         const projectState = existsSync(stateFile) ? await readFile(stateFile, "utf8") : null;
         const activeContext = existsSync(contextFile) ? await readFile(contextFile, "utf8") : null;
-        sendJson(res, 200, { projectState, activeContext });
+        sendJson(res, 200, { workspaceRoot, projectState, activeContext });
         return;
       }
 
       if (req.method === "GET" && url.pathname === "/api/artifacts") {
         const [docs, workItems, studio] = await Promise.all([
-          collectMarkdownFiles(repoRoot, "docs"),
-          collectMarkdownFiles(repoRoot, "work-items"),
-          collectMarkdownFiles(repoRoot, ".studio"),
+          collectMarkdownFiles(workspaceRoot, "docs"),
+          collectMarkdownFiles(workspaceRoot, "work-items"),
+          collectMarkdownFiles(workspaceRoot, ".studio"),
         ]);
         sendJson(res, 200, { docs, workItems, studio });
         return;
@@ -142,7 +156,7 @@ export function createAdminServer(repoRoot: string = REPO_ROOT) {
       if (req.method === "GET" && url.pathname === "/api/artifact") {
         const relPath = url.searchParams.get("path") ?? "";
         try {
-          const resolved = resolveArtifactPath(repoRoot, relPath);
+          const resolved = resolveArtifactPath(workspaceRoot, relPath);
           const content = await readFile(resolved, "utf8");
           sendJson(res, 200, { path: relPath, content });
         } catch {
@@ -152,21 +166,18 @@ export function createAdminServer(repoRoot: string = REPO_ROOT) {
       }
 
       if (req.method === "GET" && url.pathname === "/api/feedback") {
-        const open = await listOpenFeedback(repoRoot);
+        const open = await listOpenFeedback(workspaceRoot);
         sendJson(res, 200, { open });
         return;
       }
 
       if (req.method === "POST" && url.pathname === "/api/feedback") {
-        const body = JSON.parse(await readRequestBody(req)) as {
-          artifactPath?: string;
-          comment?: string;
-        };
+        const body = JSON.parse(await readRequestBody(req));
         if (!body.artifactPath || !body.comment || !body.comment.trim()) {
           sendJson(res, 400, { error: "artifactPath and comment are required" });
           return;
         }
-        const dir = path.resolve(repoRoot, FEEDBACK_DIR);
+        const dir = path.resolve(workspaceRoot, FEEDBACK_DIR);
         await mkdir(dir, { recursive: true });
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
         const fileName = `${slugifyArtifactPath(body.artifactPath)}-${timestamp}.md`;
@@ -178,14 +189,14 @@ export function createAdminServer(repoRoot: string = REPO_ROOT) {
       }
 
       if (req.method === "POST" && url.pathname === "/api/feedback/resolve") {
-        const body = JSON.parse(await readRequestBody(req)) as { file?: string };
+        const body = JSON.parse(await readRequestBody(req));
         const fileName = body.file ?? "";
         if (!fileName || fileName.includes("/") || fileName.includes("\\") || fileName.includes("..")) {
           sendJson(res, 400, { error: "invalid file name" });
           return;
         }
-        const from = path.resolve(repoRoot, FEEDBACK_DIR, fileName);
-        const toDir = path.resolve(repoRoot, FEEDBACK_RESOLVED_DIR);
+        const from = path.resolve(workspaceRoot, FEEDBACK_DIR, fileName);
+        const toDir = path.resolve(workspaceRoot, FEEDBACK_RESOLVED_DIR);
         if (!existsSync(from)) {
           sendJson(res, 404, { error: "feedback file not found" });
           return;
@@ -198,28 +209,62 @@ export function createAdminServer(repoRoot: string = REPO_ROOT) {
 
       sendJson(res, 404, { error: "not found" });
     } catch (error) {
-      sendJson(res, 500, { error: (error as Error).message });
+      sendJson(res, 500, { error: error.message });
     }
   });
 }
 
-async function main(): Promise<void> {
-  const port = Number(process.env.ADMIN_PORT ?? 4317);
-  if (!existsSync(REPO_ROOT)) {
-    throw new Error(`repo root not found: ${REPO_ROOT}`);
+function parseArgs(argv) {
+  let workspace = process.cwd();
+  let port = Number(process.env.ADMIN_PORT ?? 4317);
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === "--workspace") {
+      workspace = argv[index + 1];
+      index += 1;
+      continue;
+    }
+    if (arg === "--port") {
+      port = Number(argv[index + 1]);
+      index += 1;
+      continue;
+    }
   }
-  const stats = await stat(REPO_ROOT);
+  return { workspace: path.resolve(workspace), port };
+}
+
+async function main() {
+  const { workspace, port } = parseArgs(process.argv.slice(2));
+  if (!existsSync(workspace)) {
+    throw new Error(`workspace not found: ${workspace}`);
+  }
+  const stats = await stat(workspace);
   if (!stats.isDirectory()) {
-    throw new Error(`repo root is not a directory: ${REPO_ROOT}`);
+    throw new Error(`workspace is not a directory: ${workspace}`);
   }
-  const server = createAdminServer(REPO_ROOT);
+  const server = createAdminServer(workspace);
   server.listen(port, "127.0.0.1", () => {
     console.log(`Admin panel: http://127.0.0.1:${port}`);
+    console.log(`Workspace:   ${workspace}`);
   });
 }
 
-const isMain = process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
-if (isMain) {
+function isMainModule() {
+  // Compare realpaths, not raw argv/import.meta.url strings: a symlinked
+  // path (e.g. macOS /tmp -> /private/tmp, or a marketplace/plugin cache
+  // symlink) makes a naive string comparison fail silently, and main()
+  // never runs. See docs/adr/0003-ship-admin-panel-and-commands-in-distribution.md.
+  if (process.argv[1] === undefined) {
+    return false;
+  }
+  try {
+    return realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
+  } catch {
+    return false;
+  }
+}
+
+if (isMainModule()) {
   main().catch((error) => {
     console.error(error);
     process.exitCode = 1;

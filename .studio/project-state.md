@@ -13,10 +13,10 @@ Increment Progress: 5/5
 Onboarding Status: Bootstrapped
 Studio Assessment: Go
 Assessment Confidence: High
-Previous Stage: Product Outcome
+Previous Stage: Validation
 Current Stage: Release
 Status: Waiting Confirmation
-Next Recommended Stage: Release (commit requires explicit user authorization)
+Next Recommended Stage: Release (коммит требует явной авторизации пользователя)
 
 Completed Stages:
 - Brownfield Onboarding
@@ -45,13 +45,16 @@ Completed Stages:
 - Product Outcome (Epic 5 - PASS)
 - Release (v0.5.0)
 - Work Item Intake (admin-panel-task-tracing)
-- Briefing (admin-panel-task-tracing) - Go, Planning skipped: scope already fully enumerated in Brief, no multi-iteration sequencing needed
-- Architecture (admin-panel-task-tracing) - node:http/no new deps, ADR-0002 (task-decomposition Runtime + Traceability ID scheme), Interface Design skipped
-- Task Decomposition (admin-panel-task-tracing) - 9 tasks (T1-T9), all 5 AC covered, dogfooded the new Runtime on itself
-- Development (admin-panel-task-tracing) - all 9 tasks complete
-- Validation (admin-panel-task-tracing) - PASS, 67/67 structure + 153/153 runtime dry, live smoke-test against real repo
-- QA (admin-panel-task-tracing) - PASS, no release blockers
-- Product Outcome (admin-panel-task-tracing) - PASS, 5/5 AC VERIFIED
+- Briefing (admin-panel-task-tracing) - Go, Planning пропущена: scope уже полностью перечислен в Brief, multi-iteration секвенирование не требуется
+- Architecture (admin-panel-task-tracing) - node:http/без новых зависимостей, ADR-0002 (Runtime task-decomposition + схема Traceability ID), Interface Design пропущена
+- Task Decomposition (admin-panel-task-tracing) - 9 задач (T1-T9), все 5 AC покрыты, новый Runtime продогфужен на самом себе
+- Development (admin-panel-task-tracing) - все 9 задач завершены
+- Validation (admin-panel-task-tracing) - PASS, 67/67 structure + 153/153 runtime dry, живой smoke-test против реального репозитория
+- QA (admin-panel-task-tracing) - PASS, без release-блокеров
+- Product Outcome (admin-panel-task-tracing) - PASS, все 5 AC VERIFIED
+- Development (admin-panel-task-tracing) - Дополнение: дистрибуция (ADR-0003), server.ts -> server.js, отвязка через --workspace, carve-out в release-manifest, распознавание в Bootstrap/Router, /studio-os:admin, найден и исправлен symlink-баг в isMain
+- Validation (admin-panel-task-tracing) - PASS, 71/71 structure + 153/153 runtime dry, тест через настоящий дочерний процесс и настоящий symlink
+- Development (admin-panel-task-tracing) - добавлен пункт Project Language в Completion секцию INVARIANTS.md (общий чек, по образцу Feedback Check)
 
 Latest Artifacts:
 - docs/discovery-summary.md
@@ -96,4 +99,6 @@ Latest Artifacts:
 - work-items/2026-08-07-admin-panel-task-tracing/validation-report.md
 - work-items/2026-08-07-admin-panel-task-tracing/qa-report.md
 - work-items/2026-08-07-admin-panel-task-tracing/product-outcome-report.md
-- scripts/admin-panel/server.ts
+- scripts/admin-panel/server.js
+- docs/adr/0003-ship-admin-panel-and-commands-in-distribution.md
+- commands/admin.md

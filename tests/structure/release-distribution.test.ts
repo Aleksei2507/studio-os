@@ -262,6 +262,7 @@ describe("Studio OS GitHub distribution", () => {
 
     assert.match(attributes, /^\.github export-ignore$/m);
     assert.match(attributes, /^scripts export-ignore$/m);
+    assert.match(attributes, /^scripts\/admin-panel -export-ignore$/m);
     assert.match(attributes, /^tests export-ignore$/m);
     assert.match(attributes, /^\.studio export-ignore$/m);
     assert.match(attributes, /^docs\/qa-report\.md export-ignore$/m);
@@ -270,6 +271,8 @@ describe("Studio OS GitHub distribution", () => {
     assert.doesNotMatch(attributes, /^skills export-ignore$/m);
     assert.deepEqual(manifest.includeTrees, [
       "adapters/universal",
+      "commands",
+      "scripts/admin-panel",
       "skill",
       "skills/studio-os",
       "templates",
@@ -283,6 +286,8 @@ describe("Studio OS GitHub distribution", () => {
     assert.ok(manifest.forbiddenPrefixes.includes("docs/adr"));
     assert.ok(manifest.forbiddenPrefixes.includes("docs/qa-report.md"));
     assert.ok(manifest.forbiddenPrefixes.includes("website"));
+    assert.ok(!manifest.forbiddenPrefixes.includes("scripts"));
+    assert.ok(manifest.forbiddenPrefixes.includes("scripts/runtime-testing"));
   });
 
   it("ships current installation guidance and complete declared license terms", () => {

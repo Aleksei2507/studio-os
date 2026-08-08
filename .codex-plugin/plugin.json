@@ -20,7 +20,8 @@
     "capabilities": ["Interactive", "Write"],
     "defaultPrompt": [
       "Use Studio OS to develop my product idea.",
-      "Use Studio OS to continue this product project."
+      "Use Studio OS to continue this product project.",
+      "Open the Studio OS admin panel for this project."
     ]
   }
 }

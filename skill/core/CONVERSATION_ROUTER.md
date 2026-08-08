@@ -116,6 +116,16 @@ Project Mode, Work Type, and interaction strategy are independent. Do not restar
 
 ---
 
+## Local Tooling Request
+
+The user asks to open, start, or launch a Studio OS bundled local tool — for example the admin panel (`scripts/admin-panel/`) — rather than asking for product work.
+
+Action:
+
+Follow the Local Tooling Requests procedure in `adapters/universal/BOOTSTRAP.md` (resolve Studio OS Root and Target Workspace the same way, run the tool if the host can execute commands, otherwise give the exact command). Do not route through Loader, do not change Current Stage, do not create or mutate Project Memory, and remain in the current Runtime and stage afterward.
+
+---
+
 ## Answer Current Stage
 
 The user is answering the current stage question or confirming the proposed artifact.
