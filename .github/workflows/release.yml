@@ -53,4 +53,9 @@ jobs:
           else
             flags+=(--latest)
           fi
-          gh release create "${GITHUB_REF_NAME}" dist/* "${flags[@]}"
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            echo "Release ${GITHUB_REF_NAME} already exists; re-uploading assets instead of failing."
+            gh release upload "${GITHUB_REF_NAME}" dist/* --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" dist/* "${flags[@]}"
+          fi

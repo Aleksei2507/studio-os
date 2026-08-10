@@ -34,6 +34,10 @@
   `development-report.md`, and `validation-report.md` resolves to an ID
   actually defined in its `brief.md` or `tasks.md`, catching a typoed or
   invented Traceability ID instead of only relying on prose review.
+- Fixed the release workflow's "Publish GitHub release" step to be
+  idempotent: a re-run against a tag that already has a release now
+  re-uploads assets (`gh release upload --clobber`) instead of failing with
+  "a release with the same tag name already exists".
 
 ## 0.5.0
 
