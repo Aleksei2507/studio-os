@@ -55,6 +55,7 @@ Completed Stages:
 - Development (admin-panel-task-tracing) - Дополнение: дистрибуция (ADR-0003), server.ts -> server.js, отвязка через --workspace, carve-out в release-manifest, распознавание в Bootstrap/Router, /studio-os:admin, найден и исправлен symlink-баг в isMain
 - Validation (admin-panel-task-tracing) - PASS, 71/71 structure + 153/153 runtime dry, тест через настоящий дочерний процесс и настоящий symlink
 - Development (admin-panel-task-tracing) - добавлен пункт Project Language в Completion секцию INVARIANTS.md (общий чек, по образцу Feedback Check)
+- Development (admin-panel-task-tracing) - Дополнение: структурный тест `traceability-consistency.test.ts` — проверяет, что каждый `T<n>`/`AC<n>` в `tasks.md`/`development-report.md`/`validation-report.md` реально существует в `brief.md`/`tasks.md` (не только прозой)
 
 Latest Artifacts:
 - docs/discovery-summary.md
@@ -102,3 +103,4 @@ Latest Artifacts:
 - scripts/admin-panel/server.js
 - docs/adr/0003-ship-admin-panel-and-commands-in-distribution.md
 - commands/admin.md
+- tests/structure/traceability-consistency.test.ts

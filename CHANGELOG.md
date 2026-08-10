@@ -29,6 +29,11 @@
   silently prevented the admin panel from starting at all when reached
   through a symlinked ancestor directory, such as macOS's `/tmp` or a
   plugin/marketplace cache path.
+- Added a structural test (`traceability-consistency.test.ts`) that verifies
+  every `T<n>`/`AC<n>` reference in a Work Item's `tasks.md`,
+  `development-report.md`, and `validation-report.md` resolves to an ID
+  actually defined in its `brief.md` or `tasks.md`, catching a typoed or
+  invented Traceability ID instead of only relying on prose review.
 
 ## 0.5.0
 

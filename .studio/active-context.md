@@ -28,6 +28,15 @@
 - Validation PASS: 71/71 structure (было 67 до этой сессии, +3 от первого инкремента, +1 symlink-регрессия), 153/153 runtime dry, плюс сквозная симуляция с нуля (скопировал `admin-panel/` за пределы репозитория, запустил голым `node`, нацелил `--workspace` на несвязанную временную папку) — подтвердила, что сценарий установленного плагина реально работает end-to-end.
 - Current Stage: Release — ожидает явной авторизации пользователя на коммит; изменения не закоммичены в рабочем дереве. Та же no-co-author конвенция применяется, если не сказано иное.
 - Дважды в этой сессии писал docs/adr и .studio/active-context.md на английском вместо Project Language — пользователь поймал оба раза. В `skill/core/INVARIANTS.md`, секция `## Completion`, добавлен общий пункт: проверять Project Language в момент записи каждого артефакта под `docs/`/`.studio/`/`work-items/`, не полагаясь на более раннюю проверку в разговоре — тот же паттерн "один общий чек", что и Feedback Check в Loader, вместо дублирования по каждому Runtime.
+- Этот инкремент закоммичен и запушен (`a78096d`, без co-author трейлера); `feature/init-studio-os` смержена в `main`, обе ветки синхронизированы с origin.
+
+### Дополнение: traceability-consistency test (2026-08-10)
+
+- По запросу пользователя ("через студию подумай, чем еще можно улучшить") проведён самоанализ Studio OS по образцу Briefing (Strong/Mixed/Weak evidence). Найден и подтверждён grep'ом реальный пробел: Traceability ID (`AC<n>`/`T<n>`) нигде не проверялись структурно — только прозой, опечатка или выдуманный ID молча не ловились.
+- Добавлен `tests/structure/traceability-consistency.test.ts`: для каждого Work Item с пронумерованными `AC<n>` в `brief.md` проверяет, что (1) каждый `Satisfies:` в `tasks.md` ссылается на существующий `AC<n>`; (2) `Tasks Completed` в `development-report.md` ссылается только на `T<n>`, реально определённые в `tasks.md`; (3) `Acceptance Criteria Addressed`/`Acceptance Criteria Verified` в `development-report.md`/`validation-report.md` ссылаются только на существующие `AC<n>`. Понимает и списки через запятую, и компактные диапазоны (`AC1–AC5`, `T1-T9`).
+- Артефакты без нумерации (например `docs/project-brief.md` дорелизного v0.5) намеренно пропускаются — без ретроактивной простановки ID, как и решено в Brief этого Work Item.
+- Проверено вручную: временная порча `AC5` -> `AC9` в `validation-report.md` детектируется тестом с понятной ошибкой; после отката `npm run test:structure` снова 76/76 PASS.
+- Остальные два пункта из того же анализа (default-policy Task Decomposition в `work-item-feature`, отдельный Traceability-вид в admin-панели) сознательно не начаты — по объёму это отдельный Work Item, ждут приоритизации.
 
 ## Confirmed Facts
 
