@@ -56,6 +56,8 @@ Completed Stages:
 - Validation (admin-panel-task-tracing) - PASS, 71/71 structure + 153/153 runtime dry, тест через настоящий дочерний процесс и настоящий symlink
 - Development (admin-panel-task-tracing) - добавлен пункт Project Language в Completion секцию INVARIANTS.md (общий чек, по образцу Feedback Check)
 - Development (admin-panel-task-tracing) - Дополнение: структурный тест `traceability-consistency.test.ts` — проверяет, что каждый `T<n>`/`AC<n>` в `tasks.md`/`development-report.md`/`validation-report.md` реально существует в `brief.md`/`tasks.md` (не только прозой)
+- Development (admin-panel-task-tracing) - Дополнение: живой end-to-end прогон Feedback Check — реальный комментарий через `npm run admin`, поверхностно показан Loader'ом в следующем ходу Runtime, резолвлен через `/api/feedback/resolve`; Known Limitation закрыт
+- Development (admin-panel-task-tracing) - Дополнение: тест на сохранение AC-трассируемости при conditional-skip Task Decomposition + новый вид Traceability в admin-панели (`/api/traceability`, вкладка Traceability) — покрытие AC->задачи и Validation-статус
 
 Latest Artifacts:
 - docs/discovery-summary.md
@@ -104,3 +106,4 @@ Latest Artifacts:
 - docs/adr/0003-ship-admin-panel-and-commands-in-distribution.md
 - commands/admin.md
 - tests/structure/traceability-consistency.test.ts
+- scripts/admin-panel/public/index.html (Traceability tab)

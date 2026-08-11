@@ -7,7 +7,13 @@ import path from "node:path";
 import { describe, it, after } from "node:test";
 import type { Server } from "node:http";
 
-import { createAdminServer, resolveArtifactPath, STUDIO_OS_ROOT, PUBLIC_DIR } from "../../scripts/admin-panel/server.js";
+import {
+  createAdminServer,
+  resolveArtifactPath,
+  buildTraceability,
+  STUDIO_OS_ROOT,
+  PUBLIC_DIR,
+} from "../../scripts/admin-panel/server.js";
 
 const repositoryRoot = process.cwd();
 const tempDirs: string[] = [];
@@ -17,6 +23,39 @@ async function makeWorkspace(projectStateContents: string): Promise<string> {
   tempDirs.push(dir);
   await mkdir(path.join(dir, ".studio"), { recursive: true });
   await writeFile(path.join(dir, ".studio", "project-state.md"), projectStateContents, "utf8");
+  return dir;
+}
+
+async function makeWorkItemWorkspace(): Promise<string> {
+  const dir = await makeWorkspace(
+    "Mode: Brownfield\nWorkflow: work-item-feature\nActive Work Item: work-items/2026-01-01-fixture\n",
+  );
+  const workItemDir = path.join(dir, "work-items", "2026-01-01-fixture");
+  await mkdir(workItemDir, { recursive: true });
+  await writeFile(
+    path.join(workItemDir, "brief.md"),
+    "## Acceptance Criteria\n\n- AC1: First criterion.\n- AC2: Second criterion, uncovered.\n",
+    "utf8",
+  );
+  await writeFile(
+    path.join(workItemDir, "tasks.md"),
+    [
+      "## Task List",
+      "",
+      "### T1",
+      "",
+      "- Title: Do the first thing",
+      "- Satisfies: AC1",
+      "- Estimate: 1h",
+      "",
+    ].join("\n"),
+    "utf8",
+  );
+  await writeFile(
+    path.join(workItemDir, "validation-report.md"),
+    "## Acceptance Criteria Verified\n\nAC1 — confirmed manually.\n",
+    "utf8",
+  );
   return dir;
 }
 
@@ -118,6 +157,43 @@ describe("Studio OS admin panel", () => {
       assert.equal(existsSync(path.join(workspace, ".studio/feedback", created.file)), false);
     });
     assert.equal(existsSync(path.join(repositoryRoot, ".studio/feedback")), false);
+  });
+
+  it("reports no active work item when project-state.md has none", async () => {
+    const workspace = await makeWorkspace("Mode: Greenfield\n");
+    const result = await buildTraceability(workspace);
+    assert.equal(result.workItemId, null);
+    assert.deepEqual(result.acceptanceCriteria, []);
+  });
+
+  it("builds AC coverage from brief.md, tasks.md, and validation-report.md for the active Work Item", async () => {
+    const workspace = await makeWorkItemWorkspace();
+    const result = await buildTraceability(workspace);
+    assert.equal(result.workItemId, "work-items/2026-01-01-fixture");
+    assert.equal(result.hasTasksFile, true);
+    assert.equal(result.tasks.length, 1);
+    assert.equal(result.tasks[0].id, "T1");
+
+    const ac1 = result.acceptanceCriteria.find((ac: { id: string }) => ac.id === "AC1");
+    assert.ok(ac1);
+    assert.deepEqual(ac1.taskIds, ["T1"]);
+    assert.equal(ac1.verified, true);
+
+    const ac2 = result.acceptanceCriteria.find((ac: { id: string }) => ac.id === "AC2");
+    assert.ok(ac2);
+    assert.deepEqual(ac2.taskIds, []);
+    assert.equal(ac2.verified, false);
+  });
+
+  it("serves /api/traceability over HTTP for the active Work Item", async () => {
+    const workspace = await makeWorkItemWorkspace();
+    await withServer(workspace, async (base) => {
+      const res = await fetch(`${base}/api/traceability`);
+      assert.equal(res.status, 200);
+      const body = (await res.json()) as { workItemId: string; acceptanceCriteria: Array<{ id: string }> };
+      assert.equal(body.workItemId, "work-items/2026-01-01-fixture");
+      assert.equal(body.acceptanceCriteria.length, 2);
+    });
   });
 
   it("starts as a real subprocess when reached through a symlinked ancestor directory", async () => {

@@ -38,6 +38,16 @@
   idempotent: a re-run against a tag that already has a release now
   re-uploads assets (`gh release upload --clobber`) instead of failing with
   "a release with the same tag name already exists".
+- Hardened the Traceability ID scheme's conditional-skip path: when Task
+  Decomposition is skipped in the Feature Work Item workflow (no
+  `tasks.md`), a structural test now requires the Development Report to
+  still name at least one `AC<n>` in "Acceptance Criteria Addressed" instead
+  of letting traceability silently disappear along with the task list.
+- Added a "Traceability" view to the admin panel (`GET /api/traceability`)
+  that renders the active Work Item's Acceptance Criteria against the tasks
+  that satisfy them and their Validation-verified status, with links back
+  into the underlying `brief.md`/`tasks.md` artifacts — read-only, no new
+  write paths.
 
 ## 0.5.0
 

@@ -148,6 +148,22 @@ describe("Traceability ID consistency", () => {
             );
           }
         });
+
+        // Task Decomposition is `conditional` in work-item-feature (see
+        // skill/workflows/work-item-feature.md): a bounded single-unit
+        // change may skip it. When it is skipped, AC<n> traceability must
+        // not silently disappear along with T<n> — Development Report is
+        // still required to name which Acceptance Criteria it addressed.
+        if (!hasTasks) {
+          it(`${devReportPath}: still names Acceptance Criteria Addressed even though ${tasksPath} does not exist (Task Decomposition skipped)`, () => {
+            const section = extractSection(devReportText, "Acceptance Criteria Addressed");
+            const referenced = section === null ? new Set<string>() : extractIds(section, "AC");
+            assert.ok(
+              referenced.size > 0,
+              `${tasksPath} does not exist (Task Decomposition was skipped), so ${devReportPath} must name at least one AC<n> in "Acceptance Criteria Addressed" — traceability cannot fall back to nothing`,
+            );
+          });
+        }
       }
 
       const validationReportPath = path.join(relRoot, "validation-report.md");

@@ -314,6 +314,91 @@ async function loadWorkItems() {
   }
 }
 
+// --- Traceability ---
+
+function gotoArtifact(relPath) {
+  document.querySelector('.tab[data-tab="artifacts"]').click();
+  selectArtifact(relPath);
+}
+
+async function loadTraceability() {
+  const panel = document.getElementById("traceability-panel");
+  try {
+    const data = await fetchJson("/api/traceability");
+    if (!data.workItemId) {
+      panel.innerHTML = '<p class="muted">No active Work Item with a numbered Acceptance Criteria scheme.</p>';
+      return;
+    }
+    if (!data.acceptanceCriteria.length) {
+      panel.innerHTML = `<p class="muted">${data.workItemId} has no numbered AC&lt;n&gt; entries yet.</p>`;
+      return;
+    }
+    const briefPath = `${data.workItemId}/brief.md`;
+    const tasksPath = `${data.workItemId}/tasks.md`;
+
+    const rows = data.acceptanceCriteria
+      .map((ac) => {
+        const taskChips = ac.taskIds.length
+          ? ac.taskIds.map((id) => `<button class="tree-item" data-goto-task="${id}">${id}</button>`).join(" ")
+          : data.hasTasksFile
+            ? '<span class="muted">not covered</span>'
+            : '<span class="muted">Task Decomposition skipped</span>';
+        const status = ac.verified
+          ? '<span class="badge ok">verified</span>'
+          : ac.taskIds.length || !data.hasTasksFile
+            ? '<span class="badge warn">pending</span>'
+            : '<span class="badge warn">uncovered</span>';
+        return `<tr>
+          <td><button class="tree-item" data-goto-artifact="${briefPath}">${ac.id}</button></td>
+          <td>${ac.text}</td>
+          <td>${taskChips}</td>
+          <td>${status}</td>
+        </tr>`;
+      })
+      .join("");
+
+    const taskRows = data.tasks.length
+      ? data.tasks
+          .map(
+            (t) => `<tr>
+              <td><button class="tree-item" data-goto-artifact="${tasksPath}">${t.id}</button></td>
+              <td>${t.title}</td>
+              <td>${t.satisfies.join(", ")}</td>
+              <td>${t.estimate}</td>
+            </tr>`,
+          )
+          .join("")
+      : "";
+
+    panel.innerHTML = `
+      <h2 style="margin-top:0;">${data.workItemId}</h2>
+      <h3 style="font-size:13px;color:var(--text-muted);">Acceptance Criteria coverage</h3>
+      <table class="trace-table">
+        <thead><tr><th>AC</th><th>Text</th><th>Covered by</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${
+        data.hasTasksFile
+          ? `<h3 style="font-size:13px;color:var(--text-muted);">Tasks</h3>
+             <table class="trace-table">
+               <thead><tr><th>ID</th><th>Title</th><th>Satisfies</th><th>Estimate</th></tr></thead>
+               <tbody>${taskRows}</tbody>
+             </table>`
+          : ""
+      }
+    `;
+    panel.querySelectorAll("[data-goto-artifact]").forEach((btn) => {
+      btn.addEventListener("click", () => gotoArtifact(btn.dataset.gotoArtifact));
+    });
+    panel.querySelectorAll("[data-goto-task]").forEach((btn) => {
+      btn.addEventListener("click", () => gotoArtifact(tasksPath));
+    });
+  } catch (err) {
+    panel.innerHTML = `<p class="muted">Failed to load traceability: ${err.message}</p>`;
+  }
+}
+
 initTabs();
 loadDashboard();
 loadArtifactTree().then(loadWorkItems);
+loadTraceability();

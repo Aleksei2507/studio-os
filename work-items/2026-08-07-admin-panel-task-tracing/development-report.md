@@ -110,3 +110,26 @@ T1, T2, T3, T4, T5, T6, T7, T8, T9 (все задачи из `tasks.md`).
 Tasks Completed: T6 (расширен), T8 (расширен) — новые задачи не заводились, это исправление в рамках тех же Acceptance Criteria (AC1, AC2).
 
 Focused Checks Run: `npm run test:structure` (71/71), `npm run test:runtime:dry` (153/153 scenario files), ручной end-to-end через реальный дочерний процесс, скопированный вне репозитория, нацеленный на не связанный с ним временный workspace через `--workspace`.
+
+## Дополнение: Live Feedback Check (2026-08-10)
+
+Known Limitation выше («`.studio/feedback/` пока не используется ни одним реальным комментарием») закрыт живым end-to-end прогоном, а не только чтением кода:
+
+- `npm run admin` поднят против этого репозитория; `POST /api/feedback` создал реальный `.studio/feedback/<slug>-<timestamp>.md` на диске, без сетевых/модельных вызовов.
+- В следующем ходу Runtime (эта же сессия, следующая реплика) комментарий был найден и явно поверхностно показан по контракту `skill/core/LOADER.md` -> "Feedback Check" — артефакт, excerpt, informational/non-blocking — прежде чем продолжить работу, ровно как описано в Loader.
+- Комментарий резолвлен через `POST /api/feedback/resolve` — файл перемещён в `.studio/feedback/resolved/`, что подтверждает: конвенция "resolved = local move, без status-поля" работает через API панели, а не только в теории.
+- Тестовый файл и сама папка `.studio/feedback/` удалены после проверки (не отслеживались git, не являются реальной обратной связью) — тот же паттерн, что и AC2 evidence выше.
+
+Tasks Completed: T4, T6, T9 (расширены проверкой) — новые задачи не заводились, это верификация в рамках уже принятых AC1, AC2.
+
+## Дополнение: Traceability-твёрдость и Traceability-вид (2026-08-10)
+
+По результатам самоанализа Studio OS (запрос пользователя "чем ещё можно улучшить") закрыты ещё два пункта:
+
+**Твёрдость AC-трассируемости при пропуске Task Decomposition** — политика `conditional` в `work-item-feature` признана согласованной с остальными conditional-стадиями Studio OS (тот же паттерн: policy + прописанное условие + причина пропуска в prose), саму политику не меняли. Вместо этого `tests/structure/traceability-consistency.test.ts` получил проверку: если `tasks.md` не существует для Work Item с пронумерованными `AC<n>`, `development-report.md` обязан всё равно назвать хотя бы один `AC<n>` в "Acceptance Criteria Addressed" — трассируемость к Brief не может молча пропасть вместе с `T<n>`-списком. Проверено негативным сценарием (временно опустошённая секция → падение с понятной ошибкой, откат → снова зелёный).
+
+**Вид Traceability в admin-панели** — новый `GET /api/traceability` в `scripts/admin-panel/server.js` (`buildTraceability`, экспортирована) парсит `brief.md`/`tasks.md`/`validation-report.md` активного Work Item и отдаёт покрытие `AC<n>` -> `T<n>` -> verified-статус. Новая вкладка "Traceability" (`index.html`/`script.js`/`styles.css`) рендерит это таблицами с переходом в Artifacts. Read-only, без новых путей записи — не расширяет Non Goals исходного Brief (без трекера, без модели).
+
+Tasks Completed: T3 (расширен — твёрдость ID-схемы), T7 (расширен — новый вид UI) — новые задачи не заводились, аддитивное read-only расширение принятого AC1/AC3/AC4.
+
+Focused Checks Run: `npm run test:structure` (79/79, +3 новых теста в `admin-panel.test.ts`), `npm run test:runtime:dry` (153/153), ручной smoke-test `npm run admin` + `curl /api/traceability` против реального repo state.

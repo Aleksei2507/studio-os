@@ -73,6 +73,105 @@ async function collectMarkdownFiles(workspaceRoot, root) {
   return results;
 }
 
+function extractSection(markdown, heading) {
+  const lines = markdown.split("\n");
+  const startIndex = lines.findIndex((line) => line.trim() === `## ${heading}`);
+  if (startIndex === -1) {
+    return null;
+  }
+  const rest = lines.slice(startIndex + 1);
+  const endOffset = rest.findIndex((line) => /^##\s+/.test(line));
+  return (endOffset === -1 ? rest : rest.slice(0, endOffset)).join("\n");
+}
+
+function parseActiveWorkItem(projectStateText) {
+  const match = projectStateText.match(/^Active Work Item:\s*(.+)$/m);
+  if (!match || match[1].trim().toLowerCase() === "none") {
+    return null;
+  }
+  return match[1].trim();
+}
+
+function parseAcceptanceCriteria(briefText) {
+  const section = extractSection(briefText, "Acceptance Criteria");
+  if (section === null) {
+    return [];
+  }
+  const criteria = [];
+  for (const match of section.matchAll(/^- (AC\d+):\s*(.+)$/gm)) {
+    criteria.push({ id: match[1], text: match[2].trim() });
+  }
+  return criteria;
+}
+
+function parseTasks(tasksText) {
+  const tasks = [];
+  const blocks = tasksText.split(/^### /m).slice(1);
+  for (const block of blocks) {
+    const idMatch = block.match(/^(T\d+(?:\.\d+)?)\s*$/m);
+    if (idMatch === null) {
+      continue;
+    }
+    const titleMatch = block.match(/^- Title:\s*(.+)$/m);
+    const satisfiesMatch = block.match(/^- Satisfies:\s*(.+)$/m);
+    const estimateMatch = block.match(/^- Estimate:\s*(.+)$/m);
+    const satisfies = satisfiesMatch
+      ? [...satisfiesMatch[1].matchAll(/AC\d+/g)].map((m) => m[0])
+      : [];
+    tasks.push({
+      id: idMatch[1],
+      title: titleMatch ? titleMatch[1].trim() : "",
+      satisfies,
+      estimate: estimateMatch ? estimateMatch[1].trim() : "",
+    });
+  }
+  return tasks;
+}
+
+function parseVerifiedAcSet(reportText, heading) {
+  const section = reportText === null ? null : extractSection(reportText, heading);
+  if (section === null) {
+    return new Set();
+  }
+  return new Set([...section.matchAll(/AC\d+/g)].map((m) => m[0]));
+}
+
+export async function buildTraceability(workspaceRoot) {
+  const stateFile = path.resolve(workspaceRoot, ".studio/project-state.md");
+  if (!existsSync(stateFile)) {
+    return { workItemId: null, acceptanceCriteria: [], tasks: [], hasTasksFile: false };
+  }
+  const projectState = await readFile(stateFile, "utf8");
+  const activeWorkItem = parseActiveWorkItem(projectState);
+  if (activeWorkItem === null) {
+    return { workItemId: null, acceptanceCriteria: [], tasks: [], hasTasksFile: false };
+  }
+  const workItemAbs = path.resolve(workspaceRoot, activeWorkItem);
+  const briefFile = path.join(workItemAbs, "brief.md");
+  if (!existsSync(briefFile)) {
+    return { workItemId: activeWorkItem, acceptanceCriteria: [], tasks: [], hasTasksFile: false };
+  }
+  const acceptanceCriteria = parseAcceptanceCriteria(await readFile(briefFile, "utf8"));
+
+  const tasksFile = path.join(workItemAbs, "tasks.md");
+  const hasTasksFile = existsSync(tasksFile);
+  const tasks = hasTasksFile ? parseTasks(await readFile(tasksFile, "utf8")) : [];
+
+  const validationFile = path.join(workItemAbs, "validation-report.md");
+  const verifiedSet = existsSync(validationFile)
+    ? parseVerifiedAcSet(await readFile(validationFile, "utf8"), "Acceptance Criteria Verified")
+    : new Set();
+
+  const coverage = acceptanceCriteria.map((ac) => ({
+    id: ac.id,
+    text: ac.text,
+    taskIds: tasks.filter((t) => t.satisfies.includes(ac.id)).map((t) => t.id),
+    verified: verifiedSet.has(ac.id),
+  }));
+
+  return { workItemId: activeWorkItem, acceptanceCriteria: coverage, tasks, hasTasksFile };
+}
+
 async function listOpenFeedback(workspaceRoot) {
   const dir = path.resolve(workspaceRoot, FEEDBACK_DIR);
   if (!existsSync(dir)) {
@@ -162,6 +261,12 @@ export function createAdminServer(workspaceRoot) {
         } catch {
           sendJson(res, 400, { error: "invalid or disallowed path" });
         }
+        return;
+      }
+
+      if (req.method === "GET" && url.pathname === "/api/traceability") {
+        const traceability = await buildTraceability(workspaceRoot);
+        sendJson(res, 200, traceability);
         return;
       }
 

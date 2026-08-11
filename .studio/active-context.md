@@ -38,6 +38,19 @@
 - Проверено вручную: временная порча `AC5` -> `AC9` в `validation-report.md` детектируется тестом с понятной ошибкой; после отката `npm run test:structure` снова 76/76 PASS.
 - Остальные два пункта из того же анализа (default-policy Task Decomposition в `work-item-feature`, отдельный Traceability-вид в admin-панели) сознательно не начаты — по объёму это отдельный Work Item, ждут приоритизации.
 
+### Дополнение: живая проверка Feedback Check (2026-08-10)
+
+- Известное ограничение из `development-report.md` («`.studio/feedback/` ни разу не прошёл через реальный ход Runtime») закрыто живым прогоном, а не только чтением кода: `npm run admin` поднят, реальный комментарий отправлен через `POST /api/feedback`, в следующем ходу Runtime найден и показан по контракту `skill/core/LOADER.md` -> Feedback Check (артефакт, excerpt, informational/non-blocking), затем резолвлен через `/api/feedback/resolve` (файл переехал в `.studio/feedback/resolved/`).
+- Тестовый файл и сама папка `.studio/feedback/` удалены после проверки (не отслеживались git) — не являются реальной обратной связью, тот же паттерн, что и ранее для AC2.
+- Также закрыт отдельный старый хвост вне scope этого Work Item: неидемпотентная публикация в `.github/workflows/release.yml` (`gh release create` падал на повторном прогоне по тому же тегу) — исправлено на `gh release view` + `gh release upload --clobber` при существующем релизе; закоммичено отдельно (`b96d820`, без co-author).
+
+### Дополнение: пункты #2 и #4 самоанализа (2026-08-10)
+
+- Пункт #2 («Task Decomposition `conditional` в `work-item-feature` — субъективная оценка модели в моменте»): на пересмотре сама условная политика признана согласованной с общим паттерном Studio OS (Research/Design Strategy/Interface Design работают так же — `conditional` + прописанное условие + явная причина пропуска в prose), менять её саму не стали. Вместо этого закрыт реальный риск позади формулировки: `tests/structure/traceability-consistency.test.ts` теперь требует, чтобы Development Report называл хотя бы один `AC<n>` в "Acceptance Criteria Addressed", даже когда `tasks.md` не существует (Task Decomposition пропущена) — трассируемость к Brief не может молча исчезнуть вместе со списком задач. Проверено вручную негативным сценарием (временно опустошённая секция → тест падает с понятной ошибкой; после отката снова 76/76 PASS).
+- Пункт #4 (admin-панель рендерила `tasks.md` тем же generic Markdown, без вида покрытия AC/статуса): добавлен `GET /api/traceability` в `scripts/admin-panel/server.js` (`buildTraceability`, экспортирована для тестов) — парсит `brief.md` (AC<n> + текст), `tasks.md` (задачи, `Satisfies`, оценка), `validation-report.md` (verified-статус по AC) активного Work Item из `.studio/project-state.md`. Новая вкладка "Traceability" в UI (`index.html`/`script.js`/`styles.css`) рендерит таблицу AC -> покрывающие задачи -> verified/pending/uncovered, и таблицу задач, с переходом в Artifacts по клику. Read-only, без новых путей записи — не противоречит Non Goals исходного Brief (никакой интеграции с трекером, никакого вызова модели).
+- Оба пункта покрыты тестами (`tests/structure/traceability-consistency.test.ts` — новый негативный кейс; `tests/structure/admin-panel.test.ts` — 3 новых теста: no active work item, AC coverage build, живой HTTP-запрос `/api/traceability`) и вручную (`npm run admin`, curl против реального repo state). `npm run test:structure` 79/79, `npm run test:runtime:dry` 153/153.
+- Оформлено как продолжение того же Work Item (`admin-panel-task-tracing`) без новой Briefing-итерации — низкий риск, аддитивные read-only изменения к уже принятому MVP scope, тот же паттерн, что и предыдущие "Дополнение"-записи в этой сессии.
+
 ## Confirmed Facts
 
 - Target Milestone: `v0.5 Distribution And Delivery Assurance` из `docs/project-brief.md`.
