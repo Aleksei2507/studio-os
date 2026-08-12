@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.6.0
+
 - Added a `task-decomposition` Runtime between Architecture and Development
   that turns accepted scope into bounded, estimable tasks, required in
   Greenfield/Brownfield and conditional in the Feature Work Item workflow.
@@ -48,8 +50,10 @@
   that satisfy them and their Validation-verified status, with links back
   into the underlying `brief.md`/`tasks.md` artifacts — read-only, no new
   write paths.
+- Fixed the public landing page's workflow stage diagram, which was missing
+  the new Task Decomposition stage between Interface Design and Development.
 
-## 0.5.0
+## 0.6.0
 
 - Added a Release Candidate gate aggregator with eight deterministic evidence
   gates (release metadata, release manifest, installed adapter matrix,
