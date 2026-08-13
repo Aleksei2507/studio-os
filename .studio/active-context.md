@@ -2,7 +2,9 @@
 
 ## Current Focus
 
-`v0.5 Distribution And Delivery Assurance` выпущен (`Product Readiness: Ready For Release`, `Release (v0.5.0)` завершён). Активная работа перешла на новый пострелизный Feature Work Item: `work-items/2026-08-07-admin-panel-task-tracing/` — (1) локальная read + comment-write admin-панель над артефактами `.studio/`, `docs/`, `work-items/` без единого вызова модели, и (2) новый Runtime `task-decomposition` плюс Traceability ID, проходящий через Brief -> Roadmap Iteration -> Task -> Development Report -> Validation evidence. Parent Workflow `brownfield` имеет `Return Stage: None` — на выпущенном milestone ничего не в ожидании.
+`v0.6.0` выпущен и опубликован (2026-08-13): https://github.com/Aleksei2507/studio-os/releases/tag/v0.6.0 — Task Decomposition Runtime, Traceability ID, admin-панель с вкладкой Traceability, Feedback Check. Work Item `work-items/2026-08-07-admin-panel-task-tracing/` завершён (`Status: Completed`). Parent Workflow `brownfield` имеет `Return Stage: None` — ничего в ожидании, следующий шаг определяет пользователь.
+
+При первом прогоне `release.yml` для `v0.6.0` найден реальный баг упаковки: блэклист `scripts export-ignore` + override `scripts/admin-panel -export-ignore` в `.gitattributes` не работал — `git archive` обрезает всё поддерево по атрибуту родительской директории и не пересматривает override вложенного пути (подтверждено `git check-attr` — пусто для файлов внутри `scripts/admin-panel`). Итоговый архив остался бы без admin-панели. Поймано RC-гейтом (`release:build`'s `assert.deepEqual` архива против манифеста), не пользователем — fail-closed сработал по назначению. Исправлено точечным списком `export-ignore` для конкретных dev-only путей под `scripts/` вместо блэклиста+override; тег `v0.6.0` был force-move на исправленный коммит с явного согласия пользователя (старый GitHub Release под этим тегом не публиковался, force-push ничего не сломал наружу).
 
 Исторический контекст поставки v0.5 ниже сохранён для справки; это не активный фокус.
 

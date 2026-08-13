@@ -15,8 +15,8 @@ Studio Assessment: Go
 Assessment Confidence: High
 Previous Stage: Validation
 Current Stage: Release
-Status: Waiting Confirmation
-Next Recommended Stage: Release (коммит требует явной авторизации пользователя)
+Status: Completed
+Next Recommended Stage: Awaiting next Work Item or user direction
 
 Completed Stages:
 - Brownfield Onboarding
@@ -58,6 +58,7 @@ Completed Stages:
 - Development (admin-panel-task-tracing) - Дополнение: структурный тест `traceability-consistency.test.ts` — проверяет, что каждый `T<n>`/`AC<n>` в `tasks.md`/`development-report.md`/`validation-report.md` реально существует в `brief.md`/`tasks.md` (не только прозой)
 - Development (admin-panel-task-tracing) - Дополнение: живой end-to-end прогон Feedback Check — реальный комментарий через `npm run admin`, поверхностно показан Loader'ом в следующем ходу Runtime, резолвлен через `/api/feedback/resolve`; Known Limitation закрыт
 - Development (admin-panel-task-tracing) - Дополнение: тест на сохранение AC-трассируемости при conditional-skip Task Decomposition + новый вид Traceability в admin-панели (`/api/traceability`, вкладка Traceability) — покрытие AC->задачи и Validation-статус
+- Release (v0.6.0) - Task Decomposition Runtime, Traceability ID, admin-панель + вкладка Traceability, Feedback Check, идемпотентный release.yml, фикс диаграммы лендинга. Первый прогон CI упал на `release:build`: `.gitattributes` блэклист `scripts export-ignore` обрезал всё поддерево `scripts/` в `git archive` ещё до того, как проверялся override `scripts/admin-panel -export-ignore` — архив собирался бы без admin-панели. Найдено RC-гейтом (fail-closed сработал по назначению), не пользователем. Исправлено точечным списком `export-ignore` вместо блэклиста+override; тег `v0.6.0` force-move на исправленный коммит (старый GitHub Release не публиковался — force-push согласован с пользователем). Опубликовано: https://github.com/Aleksei2507/studio-os/releases/tag/v0.6.0
 
 Latest Artifacts:
 - docs/discovery-summary.md
