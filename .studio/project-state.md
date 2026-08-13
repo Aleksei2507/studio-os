@@ -13,10 +13,10 @@ Increment Progress: 5/5
 Onboarding Status: Bootstrapped
 Studio Assessment: Go
 Assessment Confidence: High
-Previous Stage: Validation
-Current Stage: Release
+Previous Stage: Release
+Current Stage: Retrospective
 Status: Completed
-Next Recommended Stage: Awaiting next Work Item or user direction
+Next Recommended Stage: Evolution
 
 Completed Stages:
 - Brownfield Onboarding
@@ -59,6 +59,7 @@ Completed Stages:
 - Development (admin-panel-task-tracing) - Дополнение: живой end-to-end прогон Feedback Check — реальный комментарий через `npm run admin`, поверхностно показан Loader'ом в следующем ходу Runtime, резолвлен через `/api/feedback/resolve`; Known Limitation закрыт
 - Development (admin-panel-task-tracing) - Дополнение: тест на сохранение AC-трассируемости при conditional-skip Task Decomposition + новый вид Traceability в admin-панели (`/api/traceability`, вкладка Traceability) — покрытие AC->задачи и Validation-статус
 - Release (v0.6.0) - Task Decomposition Runtime, Traceability ID, admin-панель + вкладка Traceability, Feedback Check, идемпотентный release.yml, фикс диаграммы лендинга. Первый прогон CI упал на `release:build`: `.gitattributes` блэклист `scripts export-ignore` обрезал всё поддерево `scripts/` в `git archive` ещё до того, как проверялся override `scripts/admin-panel -export-ignore` — архив собирался бы без admin-панели. Найдено RC-гейтом (fail-closed сработал по назначению), не пользователем. Исправлено точечным списком `export-ignore` вместо блэклиста+override; тег `v0.6.0` force-move на исправленный коммит (старый GitHub Release не публиковался — force-push согласован с пользователем). Опубликовано: https://github.com/Aleksei2507/studio-os/releases/tag/v0.6.0
+- Retrospective - первый прогон с начала проекта. `.studio/runtime-retrospective.md` создан. Пользователь: самое полезное — рассуждения о том, что стоит/не стоит добавлять; раздражало — плотный технический жаргон, нужно проще; менять отдельно ничего не попросил
 
 Latest Artifacts:
 - docs/discovery-summary.md
@@ -108,3 +109,4 @@ Latest Artifacts:
 - commands/admin.md
 - tests/structure/traceability-consistency.test.ts
 - scripts/admin-panel/public/index.html (Traceability tab)
+- .studio/runtime-retrospective.md
