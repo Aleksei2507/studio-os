@@ -261,8 +261,21 @@ describe("Studio OS GitHub distribution", () => {
     };
 
     assert.match(attributes, /^\.github export-ignore$/m);
-    assert.match(attributes, /^scripts export-ignore$/m);
-    assert.match(attributes, /^scripts\/admin-panel -export-ignore$/m);
+    // Deliberately NOT a blanket "scripts export-ignore": git archive prunes
+    // an export-ignore'd directory's whole subtree and never reconsiders an
+    // override for a nested path (verified empirically — see the v0.6.0
+    // release incident), so scripts/admin-panel must never be reachable only
+    // through an override of a broader "scripts" exclusion. Each dev-only
+    // scripts/ path is export-ignored directly instead.
+    assert.doesNotMatch(attributes, /^scripts export-ignore$/m);
+    assert.doesNotMatch(attributes, /^scripts\/admin-panel -export-ignore$/m);
+    assert.match(attributes, /^scripts\/adapter-testing export-ignore$/m);
+    assert.match(attributes, /^scripts\/build-release\.ts export-ignore$/m);
+    assert.match(attributes, /^scripts\/compatibility-baseline export-ignore$/m);
+    assert.match(attributes, /^scripts\/release-candidate export-ignore$/m);
+    assert.match(attributes, /^scripts\/release-manifest\.json export-ignore$/m);
+    assert.match(attributes, /^scripts\/runtime-testing export-ignore$/m);
+    assert.doesNotMatch(attributes, /^scripts\/admin-panel export-ignore$/m);
     assert.match(attributes, /^tests export-ignore$/m);
     assert.match(attributes, /^\.studio export-ignore$/m);
     assert.match(attributes, /^docs\/qa-report\.md export-ignore$/m);
