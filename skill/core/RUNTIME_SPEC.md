@@ -135,6 +135,8 @@ If Project Memory does not exist, use the language of the initial project reques
 
 Do not mix languages in `docs/` or `.studio/` unless the user explicitly changes Project Language.
 
+Exception: Retrospective (`.studio/runtime-retrospective.md`) and Evolution (`proposals/*.md`) always write in English regardless of Project Language — these artifacts describe the Studio OS framework itself, not the hosted project, and are the ones most likely read by other maintainers or contributors. See `skill/runtimes/retrospective/SKILL.md` and `skill/runtimes/evolution/SKILL.md`.
+
 When using a template, preserve its semantic sections but translate headings and content to Project Language.
 
 ## Artifact Portability Gate

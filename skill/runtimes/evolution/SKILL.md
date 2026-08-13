@@ -180,6 +180,8 @@ If working inside the Studio OS repository, use its local `proposals/` folder.
 
 If working inside a user project, ask where proposals should be written.
 
+Write proposals in English regardless of the project's Project Language — a proposal describes Studio OS itself, not the hosted project, and is the artifact most likely read by another maintainer or contributor. This is the same exception documented in `skill/core/RUNTIME_SPEC.md` (`## Localization`) and `skill/runtimes/retrospective/SKILL.md`.
+
 ---
 
 # Forbidden

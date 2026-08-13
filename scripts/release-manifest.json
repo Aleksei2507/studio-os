@@ -61,6 +61,7 @@
     "examples",
     "modules",
     "node_modules",
+    "proposals",
     "scripts/adapter-testing",
     "scripts/build-release.ts",
     "scripts/check-compatibility-baseline.ts",
@@ -73,6 +74,7 @@
     "scripts/runtime-testing",
     "test-results",
     "tests",
-    "website"
+    "website",
+    "work-items"
   ]
 }

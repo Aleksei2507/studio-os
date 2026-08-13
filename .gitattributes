@@ -16,6 +16,8 @@ package.json export-ignore
 package-lock.json export-ignore
 test-results export-ignore
 .studio export-ignore
+work-items export-ignore
+proposals export-ignore
 docs/adr export-ignore
 docs/architecture.md export-ignore
 docs/delivery-estimate.md export-ignore
