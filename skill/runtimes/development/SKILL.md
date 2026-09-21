@@ -1,6 +1,6 @@
 ---
 name: development
-description: Implement one accepted roadmap increment, Feature, Bugfix, or Refactor within confirmed product scope, architecture, and interface design. Use after Interface Design when selected, or after Architecture or Work Item Intake when code changes are authorized and required capabilities are available.
+description: Implement one accepted roadmap increment, Feature, Bugfix, or Refactor within confirmed product scope, architecture, and interface design. Use after all selected preparation stages, including Task Decomposition, when code changes are authorized and required capabilities are available.
 ---
 
 # Development Runtime
@@ -11,7 +11,7 @@ description: Implement one accepted roadmap increment, Feature, Bugfix, or Refac
 
 Stage: Development
 
-Version: 1.3
+Version: 1.4
 
 Optional: No when the workflow requires code changes
 
@@ -27,7 +27,8 @@ Creates:
 Updates:
 
 - `.studio/project-state.md`;
-- `.studio/active-context.md`.
+- `.studio/active-context.md`;
+- active `orchestration-plan.md` execution state.
 
 Next Stage: Validation
 
@@ -38,12 +39,14 @@ Implement the smallest coherent change that satisfies accepted scope, architectu
 ## Required Capabilities
 
 - `codebase-analysis`;
-- `implementation`.
+- `implementation`;
+- `model-orchestration`.
 
 Load:
 
 - `skill/capabilities/codebase-analysis.md`;
-- `skill/capabilities/implementation.md`.
+- `skill/capabilities/implementation.md`;
+- `skill/capabilities/model-orchestration.md`.
 
 Resolve stack-specific technical skills through the current environment. Do not hard-code Codex, Claude, framework, or language skill names in Studio OS core.
 
@@ -66,12 +69,15 @@ Require:
 - accepted product scope and acceptance evidence;
 - accepted Architecture when the change requires it;
 - accepted Interface Design when the workflow selected it, or a recorded reason it was skipped;
+- accepted active `tasks.md` when Task Decomposition is required or selected by the workflow;
 - an Accepted, Observed, or confirmed Provisional Project Standards Profile;
 - an applicable Observed, Provisional, or Accepted Project or Work Item Design System Profile when interface code is affected, or a recorded reason it is Not Applicable;
 - repository access and implementation capability;
 - no unresolved decision that would materially change the implementation.
 
 If an input is missing or conflicting, stop and route to the responsible Runtime.
+
+Do not interpret a missing task list as permission to skip selected Task Decomposition. A missing orchestration plan alone does not restart a legacy or bounded workflow: create the capability's compact `single-model` plan from accepted scope at `docs/orchestration-plan.md` or `work-items/<id>/orchestration-plan.md`, then reference it in Project Memory. Route material strategy changes or unresolved work boundaries to Architecture.
 
 ## Inputs
 
@@ -82,7 +88,8 @@ Read only relevant context:
 - selected workflow;
 - accepted Project Brief and roadmap scope;
 - active Architecture path and applicable ADRs;
-- active `tasks.md` when Task Decomposition ran for this workflow;
+- accepted active `tasks.md` when Task Decomposition is required or selected;
+- active `orchestration-plan.md`, including its execution ledger and limits;
 - active Interface Design path when available;
 - canonical `.studio/standards-profile.md` and active `work-items/<id>/standards-profile.md` when available;
 - canonical `.studio/design-system-profile.md` and active `work-items/<id>/design-system-profile.md` when interface code is affected;
@@ -98,11 +105,24 @@ Read only relevant context:
 3. Identify the smallest coherent change and focused verification plan.
 4. Resolve direct and profile-selected standards plus required stack-specific skills or tools.
 5. Trace applicable Interface Design, Design System Profile, and standards to implementation and Validation evidence.
-6. Implement within accepted boundaries.
+6. Recheck host capabilities and existing jobs, then implement within accepted boundaries using the active orchestration plan and Native Subagent Execution procedure.
 7. Add or update tests in proportion to behavior and risk.
 8. Run focused checks while developing.
 9. Review the diff for scope, accidental changes, secrets, standards violations, and architecture drift.
 10. Create Development Report and hand off to Validation.
+
+## Native Subagent Execution
+
+Follow `skill/capabilities/model-orchestration.md` for discovery evidence, permissions, concurrency, total attempts, delegation depth, budgets, and recovery. The coordinator remains responsible for integration and keeps the main conversation model unchanged.
+
+1. Before dispatch and on resume, recheck the available native subagent API, permitted model choices, plan limits, and existing running jobs. Reconcile persisted job IDs with host state before respawning. If an earlier job's status is unknown, resolve it or stop that assignment rather than risk duplicate writes or spend.
+2. Use `single-model` when delegation is unavailable or its overhead is not justified. When host subagents support only `default/inherited`, use `same-model-delegation` and record unknown identity honestly. `multi-model` requires evidence for actual permitted subagent model selection. Never install a CLI, call a new provider API, create unrequested sidebar tasks, or switch the main model to simulate delegation.
+3. Dispatch only ready, independent assignments through the actually available native subagent tool. Supply the bounded task/context packet and explicit ownership, tell the worker to preserve other contributors' changes, and enforce the plan's limits. Do not dispatch extra workers under an unenforceable hard token or monetary budget.
+4. Persist task IDs, host job IDs, attempt counts, planned and observed model identity or `Unknown`, and status in the active plan as execution changes. Attempts remain cumulative across model changes, retries, escalation, and coordinator recovery. Check existing work before retrying; do not overwrite or revert another contributor's changes.
+5. Inspect each result's changed files, scope, evidence, and relevant checks before accepting it. A worker's success claim is insufficient. Integrate in dependency order, resolve ownership conflicts, and verify the combined result. Failed or incomplete evidence follows the bounded recovery policy; changing executor does not reset its limits.
+6. Record actual assignments, outcomes, integration checks, and limitations in the Development Report. Use only tool-provided token or cost measurements; otherwise record `Unknown`. Distinguish plan from execution and estimates from measured usage. Do not claim savings or superior quality without comparative evidence.
+
+Subagents receive only their assigned work. They cannot change accepted scope, self-approve integration, skip selected stages, or launch an unrestricted chain of agents. Delegation does not replace independent Validation, QA, or Product Outcome.
 
 ## Work Type Rules
 
@@ -188,6 +208,7 @@ Produce a working increment and Development Report under `.studio/telemetry/` or
 - Files Changed;
 - Tests Added or Updated;
 - Focused Checks Run;
+- Orchestration Results: active plan, execution mode, planned versus actual subagent assignments and models, attempts and outcomes, integration evidence, tool-provided usage or `Unknown`, and limitations;
 - Architecture and ADR Compliance;
 - Interface Design Compliance when applicable;
 - Design System Profile Compliance when applicable;
@@ -201,7 +222,7 @@ Use `templates/development-report.md` as the report structure.
 
 ## Project Memory Update
 
-Reference Development Report and record current increment, relevant decisions, known limitations, applicable Design System Profile, and Validation handoff.
+Reference Development Report and the active orchestration plan, and record current increment, relevant decisions, known limitations, applicable Design System Profile, and Validation handoff. Keep job details and statuses in the plan and report, not copied into Active Context.
 
 Set Validation as current stage after implementation is ready. Preserve Mode, Workflow, Work Type, Active Work Item, and Project Language.
 
@@ -233,6 +254,7 @@ Development must not:
 - relevant tests updated;
 - focused checks executed;
 - diff reviewed;
+- required task list honored and orchestration results reconciled with the active plan and host job evidence;
 - architecture preserved or approved deviation recorded;
 - accepted Interface Design preserved or responsible-stage revision recorded;
 - applicable Design System Profile preserved or responsible-stage revision recorded;

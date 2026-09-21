@@ -11,7 +11,7 @@ description: Translate an accepted Project Brief, roadmap, and existing codebase
 
 Stage: Architecture
 
-Version: 1.2
+Version: 1.3
 
 Optional: No after full Planning, conditional for bounded Work Items
 
@@ -21,6 +21,7 @@ Creates:
 
 - `docs/architecture.md` and `docs/delivery-estimate.md` for project lifecycle;
 - `work-items/<id>/architecture.md` and `work-items/<id>/delivery-estimate.md` for an active Work Item;
+- `docs/orchestration-plan.md` or `work-items/<id>/orchestration-plan.md` for the active delivery unit;
 - `.studio/standards-profile.md` for project-wide accepted quality and technology constraints;
 - `work-items/<id>/standards-profile.md` when a Work Item accepts a standards or technology change;
 - `docs/adr/*.md` for material decisions.
@@ -30,7 +31,7 @@ Updates:
 - `.studio/project-state.md`;
 - `.studio/active-context.md`.
 
-Next Stage: Interface Design when selected, otherwise Development
+Next Stage: Next selected stage in workflow order: Interface Design, Task Decomposition, or Development
 
 ## Goal
 
@@ -41,12 +42,14 @@ Architecture must make important decisions explicit and provide a delivery estim
 ## Required Capabilities
 
 - `codebase-analysis`;
-- `architecture-design`.
+- `architecture-design`;
+- `model-orchestration`.
 
 Load:
 
 - `skill/capabilities/codebase-analysis.md`;
-- `skill/capabilities/architecture-design.md`.
+- `skill/capabilities/architecture-design.md`;
+- `skill/capabilities/model-orchestration.md`.
 
 ## Required Standards
 
@@ -129,8 +132,17 @@ Avoid speculative infrastructure for deferred scope.
 10. Verify that the selected stack preserves or deliberately supports the observed Project Design System Profile when an interface exists.
 11. Define migration, rollback, or compatibility strategy when current behavior changes.
 12. Create a delivery estimate from the accepted design and quality gates.
-13. Determine whether implementation-ready Interface Design is required by the selected workflow.
-14. Show a concise decision summary and request confirmation.
+13. Create the scoped orchestration plan from actual host/model evidence and accepted scope.
+14. Determine the next selected stage in workflow order, including Interface Design and Task Decomposition when required.
+15. Show a concise decision summary and request confirmation when the decision is not already authorized.
+
+## Subagent Orchestration
+
+Follow `model-orchestration` to create the active `orchestration-plan.md` using `templates/orchestration-plan.md`. Keep the leading model as coordinator; choose models for native subagents only when the host supports and permits that selection.
+
+Explain which work benefits from delegation, required model/tool capabilities, context and integration overhead, ownership boundaries, verification, budget limits, and fallback. Record unknown identities and prices honestly. Include a compact `single-model` decision when subagents are unavailable or unnecessary; absence of model selection does not block architecture.
+
+Architecture plans work groups; Task Decomposition binds them to concrete tasks. Do not launch development subagents or promise measured savings during Architecture. Preserve accepted product scope and the active Brief regardless of how capable the coordinator appears.
 
 ## Technology Selection
 
@@ -243,6 +255,7 @@ Create Architecture under `docs/` or the Active Work Item directory according to
 - Migration and Compatibility;
 - Design System Compatibility when applicable;
 - Testing Strategy;
+- Model Orchestration Plan reference and execution-mode rationale;
 - Applied Standards and Quality Gates;
 - Architecture Decisions and ADR references;
 - Risks and Unknowns;
@@ -261,21 +274,22 @@ Each ADR records status, context, decision, alternatives, consequences, and affe
 
 ## Project Memory Update
 
-Reference Architecture, Delivery Estimate, the active Project or Work Item Standards Profile, the applicable Design System Profile, and new ADRs. Record only constraints and decisions required by the next delivery stages.
+Reference Architecture, Delivery Estimate, the active Orchestration Plan, the active Project or Work Item Standards Profile, the applicable Design System Profile, and new ADRs. Record only constraints and decisions required by the next delivery stages.
 
 Do not overwrite canonical Architecture during an intermediate Work Item stage unless an accepted ADR and product decision explicitly change system truth.
 
-When Interface Design is selected by the active workflow, set it as the next stage with `Waiting Confirmation`. Otherwise set Development as the next stage. Preserve Mode, Workflow, Work Type, Active Work Item, and Project Language.
+Select the next incomplete stage in workflow order: Interface Design when selected, then Task Decomposition when required by the workflow, otherwise Development. Do not let a Runtime-local handoff skip a selected stage. Use `Waiting Confirmation` when a new decision requires it. Preserve Mode, Workflow, Work Type, Active Work Item, and Project Language.
 
 ## Handoff
 
-Pass to Interface Design when selected, and otherwise directly to Development:
+Pass to the next selected Runtime in workflow order:
 
 - selected roadmap iteration or Work Item;
 - selected stack and Project Standards Profile;
 - Project Design System Profile and technical compatibility constraints when applicable;
 - delivery surfaces and applicable platform or stack adapters;
 - component boundaries;
+- scoped orchestration plan, confirmed host/model constraints, planned subagent responsibilities, and verification/fallback limits;
 - accepted ADRs;
 - data and interface contracts;
 - migration constraints;
@@ -313,9 +327,10 @@ Architecture must not:
 - Project Design System Profile is technically preserved or an evidence-backed migration is explicit when applicable;
 - security, reliability, deployment, and testing addressed when relevant;
 - delivery estimate includes ranges and assumptions;
+- scoped subagent plan or justified single-model fallback recorded without unsupported model/cost claims;
 - Project Memory updated;
 - next-stage handoff complete.
 
 ## Stop Condition
 
-Stop after Architecture and Delivery Estimate are accepted, Project Memory is updated, and Interface Design or Development is recommended according to the active workflow. Wait for confirmation.
+Stop after Architecture, Delivery Estimate, and Orchestration Plan are accepted, Project Memory is updated, and the next selected Runtime is recommended according to workflow order. Wait when confirmation is required.

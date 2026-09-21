@@ -13,7 +13,7 @@ description: Turn accepted Architecture, Roadmap, and Acceptance Criteria into a
 
 Stage: Task Decomposition
 
-Version: 1.0
+Version: 1.1
 
 Optional: Yes for a bounded single-unit Work Item, No otherwise
 
@@ -28,6 +28,7 @@ Updates:
 
 - `.studio/project-state.md`
 - `.studio/active-context.md`
+- active `orchestration-plan.md` task assignments
 
 Next Stage:
 
@@ -51,6 +52,14 @@ Task Decomposition answers:
 
 ---
 
+# Required Capabilities
+
+- `model-orchestration`.
+
+Load `skill/capabilities/model-orchestration.md` for host evidence, assignment limits, and context boundaries. Task Decomposition prepares assignments; it does not launch subagents or switch the main conversation model.
+
+---
+
 # Inputs
 
 Read:
@@ -60,9 +69,12 @@ Read:
 - active Roadmap (`docs/roadmap.md` or `work-items/<id>/roadmap.md`) for numbered iterations (`IT<n>`) when Planning ran for this workflow;
 - `.studio/project-state.md`;
 - `.studio/active-context.md`;
+- active `orchestration-plan.md` from Project Memory;
 - accepted Delivery Estimate when available.
 
 If the active Brief has no numbered `AC<n>` entries (created before this Runtime existed), number them now from the existing Acceptance Criteria list in reading order and record that renumbering in the Brief reference — do not rewrite the Brief's prose, only add the ID.
+
+If a legacy or bounded workflow has no orchestration plan, use the capability's compact `single-model` bootstrap without restarting the lifecycle. A material change to the accepted execution strategy belongs to Architecture.
 
 ---
 
@@ -97,6 +109,7 @@ Task Decomposition must determine:
 - the task list with IDs, titles, and estimates;
 - the `Satisfies` mapping from every task to at least one `AC<n>`;
 - dependencies between tasks;
+- execution owner, file or interface ownership, model assignment, bounded context inputs, and verification evidence for each task;
 - coverage: every `AC<n>` in the active scope is satisfied by at least one task, or is explicitly deferred with a reason.
 
 ---
@@ -110,6 +123,16 @@ Each task must be:
 - traceable to at least one `AC<n>`.
 
 A task that cannot be traced to an Acceptance Criterion is a sign of scope invented during decomposition — remove it or route the underlying need back to Briefing as a Scope Change.
+
+---
+
+# Execution Assignments
+
+Apply the active orchestration plan to the task list. For each `T<n>` or `T<iteration>.<n>`, record the coordinator or subagent role, owned files or interfaces, dependencies, expected evidence, and definition of done. Serialize overlapping write ownership and dependent changes; a subagent assignment does not grant ownership of unrelated changes.
+
+Use only model choices supported and allowed by current host evidence. Record a confirmed model ID or `default/inherited`, its evidence source, and `Unknown` where identity cannot be verified. Keep the main conversation model unchanged. Distinguish `same-model-delegation` from `multi-model`; neither is required for every task.
+
+Prepare a minimal context packet with accepted scope, `AC<n>` and task IDs, relevant instructions and source evidence, ownership, dependencies, verification, and stop conditions. Do not copy the full conversation or secrets. Keep global limits and recovery policy in the active plan, link assignments by task ID, and hand execution to Development.
 
 ---
 
@@ -139,6 +162,7 @@ Task Decomposition must not:
 
 - choose stack, library, or architecture beyond what Architecture already accepted;
 - write code;
+- launch subagents or treat an assignment as completed execution;
 - define line-level implementation steps;
 - change accepted Acceptance Criteria, Roadmap, or Architecture;
 - merge unrelated Acceptance Criteria into one task to avoid decomposition;
@@ -161,7 +185,8 @@ Document structure:
 
 - Goal
 - Traceability Legend
-- Task List (one block per task: ID, Title, Satisfies, Estimate, Dependencies, Definition Of Done)
+- Orchestration Plan (active plan reference and execution mode)
+- Task List (one block per task: ID, Title, Satisfies, Estimate, Dependencies, Execution Owner, Change Ownership, Model Assignment and source, Context Inputs, Verification Evidence, Definition Of Done)
 - Coverage Check (`AC<n>` -> covering task IDs, or Deferred with reason)
 - Deferred
 - Development Handoff
@@ -175,6 +200,7 @@ Use `templates/tasks.md` as the output structure.
 Update `.studio/active-context.md` with:
 
 - reference to the active `tasks.md` path;
+- reference to the active orchestration plan with assignments linked by task ID;
 - task count and ceiling used;
 - any deferred `AC<n>` and why;
 - inputs for Development.
@@ -203,6 +229,7 @@ Pass to Development:
 
 - task list with IDs, estimates, and `Satisfies` mapping;
 - dependencies and suggested order;
+- execution assignments, bounded context inputs, verification evidence, and active orchestration plan;
 - deferred `AC<n>` and reasons;
 - reference to Architecture and Delivery Estimate.
 
@@ -215,6 +242,7 @@ Task Decomposition is complete when:
 - every task is at or under the ceiling;
 - every task traces to at least one `AC<n>`;
 - every in-scope `AC<n>` is covered or explicitly deferred with a reason;
+- each execution assignment has bounded ownership, dependency order, a permitted model or coordinator choice, and verification evidence;
 - `tasks.md` created;
 - Project Memory updated;
 - Development inputs are clear.

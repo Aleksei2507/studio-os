@@ -87,6 +87,16 @@ classification rules are documented in
 
 ---
 
+# Native Subagent Orchestration
+
+Architecture now records an execution plan in `orchestration-plan.md` alongside the active architecture artifact. It uses the current host's actual capabilities to decide which work stays with the leading model and which bounded tasks suit subagents. When the host supports and permits per-subagent model selection, the plan can assign different models without switching the main conversation model.
+
+Task Decomposition defines ownership, dependencies, context, and acceptance checks. Development launches native subagents, verifies their results, and integrates changes. Default limits are two concurrent subagents, two total attempts per task, and one delegation level; stricter host or user limits take precedence. Shared writes are serialized, and unfinished jobs are checked before relaunching after a session interruption.
+
+Hosts without model selection can use default/inherited subagents; hosts without subagents retain ordinary single-model execution. Studio OS does not add an API service or require a particular model provider. Unknown identities, prices, or usage remain unknown. Token savings and quality improvements require measured evidence, not the mere presence of multiple agents.
+
+For example: “Use Studio OS for this feature. Plan bounded subagent assignments and choose models only from this host's permitted options.” Product scope, stage order, and quality gates still apply. See the [orchestration contract](skill/capabilities/model-orchestration.md) and [plan template](templates/orchestration-plan.md).
+
 # Project Types
 
 Studio OS supports two project entry points.

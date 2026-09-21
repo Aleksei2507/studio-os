@@ -43,7 +43,7 @@ The ZIP must include:
 - `templates/`;
 - the changelog, license, and explicitly allowlisted public documentation.
 
-The ZIP intentionally excludes `.studio/`, self-hosting lifecycle artifacts, `.github/`, `.gitattributes`, `.gitignore`, `package.json`, `package-lock.json`, `scripts/`, `tests/`, generated test results, the website, and source-only example or module placeholders. Use a Git clone for development and repository validation.
+The ZIP intentionally excludes `.studio/`, self-hosting lifecycle artifacts, `.github/`, `.gitattributes`, `.gitignore`, `package.json`, `package-lock.json`, development scripts, `tests/`, generated test results, the website, and source-only example or module placeholders. The dependency-free `scripts/admin-panel/` tool is included intentionally. Use a Git clone for development and repository validation.
 
 `.gitattributes` remains a secondary defense for source archives, not the package definition. It must not remove an allowlisted runtime file; the post-build ZIP comparison catches that drift.
 
@@ -87,7 +87,7 @@ After GitHub finishes the release workflow:
 
 1. Confirm that both `studio-os-v<version>.zip` and its `.sha256` file are attached.
 2. Confirm that an unauthenticated browser can open the repository when the release is intended for public use.
-3. Verify the checksum and inspect the extracted archive for `.codex-plugin/`, `.claude-plugin/`, `skills/`, `skill/`, `templates/`, and `adapters/universal/BOOTSTRAP.md`. Confirm that `.studio/`, `scripts/`, `tests/`, `website/`, package metadata, and self-hosting lifecycle artifacts are absent.
+3. Verify the checksum and inspect the extracted archive for `.codex-plugin/`, `.claude-plugin/`, `skills/`, `skill/`, `templates/`, `scripts/admin-panel/`, and `adapters/universal/BOOTSTRAP.md`. Confirm that `.studio/`, development scripts, `tests/`, `website/`, package metadata, and self-hosting lifecycle artifacts are absent.
 4. Install through the Codex GitHub marketplace from outside this repository.
 5. Install through the Claude Code GitHub marketplace from outside this repository.
 6. Start fresh Codex and Claude Code sessions and run the Tetris activation scenario from `docs/MANUAL_TESTING.md`.

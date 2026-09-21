@@ -57,6 +57,8 @@ Then read only what the current request requires:
 9. `skill/standards/registry.json`, direct standards declared by the active Runtime, and applicable standards listed in the loaded profiles only when the stage uses them.
 10. Optional Runtime references only when the Runtime says they are needed.
 
+Load the active `orchestration-plan.md` only for Architecture, Task Decomposition, Development, or later verification when its evidence matters. Resolve it within the active Work Item or lifecycle scope through Project Memory; do not load model catalogs or orchestration instructions during Interview/Briefing merely because they exist. Resume through the active Runtime, which refreshes host capabilities and reconciles unfinished subagents before dispatch.
+
 Do not load README, user documentation, every workflow, or every Runtime at startup.
 
 ## Feedback Check

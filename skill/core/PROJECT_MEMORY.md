@@ -201,6 +201,14 @@ While a Work Item is active:
 - merge an accepted Work Item Design System Profile after successful Release when the implemented interface system changed;
 - clear `Active Work Item` only after completion or explicit cancellation.
 
+## Orchestration Plan
+
+Architecture creates `docs/orchestration-plan.md` for lifecycle work or `work-items/<id>/orchestration-plan.md` for an active Work Item. Reference the active plan from Active Context and Latest Artifacts; never substitute another Work Item's plan. Keep task/agent IDs, requested versus observed model identities, attempts, states, and evidence in the plan's ledger, not copied into Active Context.
+
+Host/model evidence is session-dependent. On resume, Development verifies the environment and unfinished subagent status before relaunching work. A new host does not invalidate accepted product decisions, but old model availability is not proof of current availability.
+
+Legacy or bounded work without a plan may bootstrap a compact `single-model` plan during Development from accepted scope. Do not restart onboarding or mark orchestration blocked solely because multi-model tools are absent. Orchestration cannot change workflow order, scope, readiness, permissions, or existing confirmation requirements.
+
 ## Interaction State
 
 Do not store a permanent user classification.

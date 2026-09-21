@@ -2,6 +2,26 @@
 
 ## Unreleased
 
+## 0.7.0 — 2026-09-21
+
+- Added native subagent orchestration: Architecture plans bounded assignments
+  and selects permitted per-subagent models from current host evidence while
+  keeping the leading model as coordinator.
+- Added a scoped orchestration plan, task ownership, dependency ordering,
+  bounded context packets, execution evidence, and coordinator verification
+  across Architecture, Task Decomposition, and Development.
+- Added single-model and inherited-model fallbacks, concurrency and retry
+  limits, hard-budget handling, and reconciliation of unfinished jobs on resume.
+- Kept model identities, prices, and usage explicitly unknown when the host
+  does not expose them; savings require a measured comparable baseline.
+- Fixed Architecture and Interface Design handoffs to preserve required
+  Task Decomposition before Development.
+- Added five structural checks and eight Runtime scenarios for subagent
+  planning, execution, unavailable capabilities, budgets, failures, and resume.
+
+Cross-model cost savings and installed-host behavioral compatibility have not
+been established by the deterministic checks in this release.
+
 ## 0.6.0
 
 - Added a `task-decomposition` Runtime between Architecture and Development

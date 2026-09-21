@@ -30,7 +30,7 @@ Updates:
 - `.studio/project-state.md`;
 - `.studio/active-context.md`.
 
-Next Stage: Development
+Next Stage: Task Decomposition when required by the selected workflow, otherwise Development
 
 ## Goal
 
@@ -229,7 +229,7 @@ The Markdown artifact is canonical. Do not generate an HTML review representatio
 
 Reference the accepted Interface Design artifact and applicable Design System Profile, and record only decisions Development and QA must preserve.
 
-Set Development as the current stage with `Waiting Confirmation`. Preserve Mode, Workflow, Work Type, Active Work Item, and Project Language.
+Set Task Decomposition as the current stage when required by the selected workflow; otherwise set Development. Use `Waiting Confirmation` when confirmation is required. Preserve Mode, Workflow, Work Type, Active Work Item, and Project Language.
 
 Do not overwrite canonical Interface Design during an intermediate Work Item stage.
 
@@ -237,7 +237,7 @@ Do not overwrite the canonical Project Design System Profile with unimplemented 
 
 ## Handoff
 
-Pass to Development and QA:
+Pass through Task Decomposition when selected, then to Development and QA:
 
 - accepted flows, surfaces, and state matrix;
 - platform and responsive behavior;
@@ -281,4 +281,4 @@ Interface Design must not:
 
 ## Stop Condition
 
-Stop after Interface Design is accepted, Project Memory is updated, and Development is recommended. Wait for confirmation.
+Stop after Interface Design is accepted, Project Memory is updated, and the next selected Runtime (Task Decomposition or Development) is recommended. Wait when confirmation is required.

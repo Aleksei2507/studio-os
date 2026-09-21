@@ -1,6 +1,9 @@
 {
   "version": 1,
   "capabilities": {
+    "model-orchestration": {
+      "path": "skill/capabilities/model-orchestration.md"
+    },
     "external-research": {
       "path": "skill/capabilities/external-research.md"
     },

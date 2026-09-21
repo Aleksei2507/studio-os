@@ -14,6 +14,8 @@ Safely edit the project, execute development commands, and produce a working inc
 6. Run focused checks during implementation.
 7. Preserve unrelated user changes.
 
+When Development uses `model-orchestration`, follow `skill/capabilities/model-orchestration.md` and the active orchestration plan. Execute bounded assignments through available native subagent tools only; keep the main conversation model unchanged. A worker owns only its assigned files or interfaces and must accommodate other contributors' changes. The coordinator inspects results, verifies relevant checks, and integrates in dependency order before claiming implementation evidence. Missing delegation support retains `single-model` execution; selected Task Decomposition and quality gates still apply.
+
 ## Evidence
 
 - Changed file list.
@@ -22,6 +24,7 @@ Safely edit the project, execute development commands, and produce a working inc
 - Accepted Interface Design conformance when applicable.
 - Applicable standards satisfied or approved deviations recorded.
 - Known limitations and validation handoff.
+- Actual orchestration mode, assignments, job outcomes, and integration evidence when orchestration is used; report tool-provided usage or `Unknown`, without unsupported savings claims.
 
 ## Unavailable Behavior
 

@@ -30,6 +30,10 @@
 
 ## Testing Strategy
 
+## Model Orchestration Plan
+
+Reference the active orchestration-plan.md; record execution mode and why native subagents or single-model execution fit this scope.
+
 ## Applied Standards And Quality Gates
 
 ## Architecture Decisions And ADRs
