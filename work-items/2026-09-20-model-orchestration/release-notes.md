@@ -32,4 +32,10 @@ product-outcome-report.md: PASS ограниченного Work Item. Родит
 
 ## Authorization And Result
 
-Пользователь 2026-09-21 явно поручил обновить версию и выполнить push. Цель: main и новый annotated tag v0.7.0 в Aleksei2507/studio-os; tag запускает штатный GitHub Release workflow. Публикация на момент подготовки еще не выполнена.
+Пользователь 2026-09-21 явно поручил обновить версию и выполнить push. Коммит `bfd09f6bff9bd2db1cb80c003cebff9d6c40cfad` и новый annotated tag `v0.7.0` отправлены атомарно в Aleksei2507/studio-os.
+
+Публикация выполнена: https://github.com/Aleksei2507/studio-os/releases/tag/v0.7.0. Workflow https://github.com/Aleksei2507/studio-os/actions/runs/35563376347 завершился `success`.
+
+Архив проверен сначала из чистого локального checkout тега, затем скачан из опубликованного Release вместе с checksum. В опубликованном ZIP 159 файлов; capability `model-orchestration` и шаблон плана присутствуют, манифесты содержат 0.7.0, внутренние .studio/work-items/tests/website отсутствуют. SHA-256 опубликованного ZIP: `1d5faa4c114d6846c8cb1fca20ed285eefcd3247e53df277ffc2c2c508ed16fd`.
+
+Новые installed-host сессии Codex/Claude/Universal не запускались; это отдельная post-release behavioral проверка с собственным разрешением на model execution по docs/MANUAL_TESTING.md. Публикация подтверждена; полный статус installed-host smoke не заявляется. Пользовательская установленная копия плагина автоматически в этой задаче не обновлялась.
