@@ -65,6 +65,7 @@ function selectFlow(flowId) {
       return item;
     }),
   );
+  document.dispatchEvent(new Event("studio:layout"));
 }
 
 for (const button of flowButtons) {
@@ -94,6 +95,7 @@ function selectInstallTab(tabId) {
   for (const panel of installPanels) {
     panel.hidden = panel.dataset.installPanel !== tabId;
   }
+  document.dispatchEvent(new Event("studio:layout"));
 }
 
 for (const tab of installTabs) {
@@ -112,8 +114,12 @@ for (const tab of installTabs) {
 
 async function copyText(value) {
   if (navigator.clipboard && window.isSecureContext) {
-    await navigator.clipboard.writeText(value);
-    return;
+    try {
+      await navigator.clipboard.writeText(value);
+      return;
+    } catch {
+      // Some embedded hosts deny Clipboard API access but allow a copy gesture.
+    }
   }
 
   const textarea = document.createElement("textarea");
@@ -123,8 +129,11 @@ async function copyText(value) {
   textarea.style.opacity = "0";
   document.body.append(textarea);
   textarea.select();
-  document.execCommand("copy");
-  textarea.remove();
+  try {
+    if (!document.execCommand("copy")) throw new Error("Copy unavailable");
+  } finally {
+    textarea.remove();
+  }
 }
 
 for (const button of document.querySelectorAll("[data-copy-target]")) {
@@ -136,11 +145,18 @@ for (const button of document.querySelectorAll("[data-copy-target]")) {
     try {
       await copyText(target.textContent.trim());
       button.textContent = "Copied";
+      document.querySelector("#copy-status").textContent = "Copied to clipboard.";
       window.setTimeout(() => {
         button.textContent = "Copy";
       }, 1600);
     } catch {
-      button.textContent = "Select";
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(target);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      button.textContent = "Copy manually";
+      document.querySelector("#copy-status").textContent = "Command selected. Use your browser’s copy command.";
       window.setTimeout(() => {
         button.textContent = "Copy";
       }, 1600);
@@ -150,3 +166,38 @@ for (const button of document.querySelectorAll("[data-copy-target]")) {
 
 const year = document.querySelector("#current-year");
 if (year) year.textContent = String(new Date().getFullYear());
+
+const artifactTabs = Array.from(document.querySelectorAll("[data-artifact]"));
+function selectArtifact(tab) {
+  for (const candidate of artifactTabs) {
+    const selected = candidate === tab;
+    candidate.setAttribute("aria-selected", String(selected));
+    candidate.tabIndex = selected ? 0 : -1;
+    document.getElementById(candidate.getAttribute("aria-controls")).hidden = !selected;
+  }
+  document.dispatchEvent(new CustomEvent("studio:artifact", {
+    detail: document.getElementById(tab.getAttribute("aria-controls")),
+  }));
+}
+for (const tab of artifactTabs) {
+  tab.addEventListener("click", () => {
+    if (tab.getAttribute("aria-selected") !== "true") selectArtifact(tab);
+  });
+  tab.addEventListener("keydown", (event) => {
+    const index = artifactTabs.indexOf(tab);
+    const targetIndex = {
+      ArrowRight: (index + 1) % artifactTabs.length,
+      ArrowLeft: (index - 1 + artifactTabs.length) % artifactTabs.length,
+      Home: 0,
+      End: artifactTabs.length - 1,
+    }[event.key];
+    if (targetIndex === undefined) return;
+    event.preventDefault();
+    const next = artifactTabs[targetIndex];
+    next.focus();
+    selectArtifact(next);
+  });
+}
+
+// Synchronize initial keyboard focus with the selected installation panel.
+selectInstallTab("codex");

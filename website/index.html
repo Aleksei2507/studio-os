@@ -3,591 +3,144 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Studio OS | A development studio for AI agents</title>
-    <meta
-      name="description"
-      content="Bring an idea or an existing product. Studio OS guides filesystem-capable AI agents through discovery, design, development, validation, and release."
-    >
-    <meta name="theme-color" content="#eef2f2">
+    <title>Studio OS | Your idea. A studio to see it through.</title>
+    <meta name="description" content="Give your AI coding agent a product workflow. Studio OS connects discovery, briefing, architecture, development, and verified delivery. Free and open source.">
+    <meta name="theme-color" content="#f3f6f5">
     <link rel="canonical" href="https://aleksei2507.github.io/studio-os/">
+    <link rel="icon" type="image/png" href="./assets/studio-os-logo.png">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Studio OS">
-    <meta
-      property="og:description"
-      content="Bring an idea. Get a development studio that carries the work from discovery to validated release."
-    >
+    <meta property="og:title" content="Studio OS — Your idea. A studio to see it through.">
+    <meta property="og:description" content="A product workflow for your AI coding agent. From the first question to a verified release. Free and open source.">
     <meta property="og:url" content="https://aleksei2507.github.io/studio-os/">
-    <meta
-      property="og:image"
-      content="https://aleksei2507.github.io/studio-os/assets/studio-workbench.jpg"
-    >
+    <meta property="og:image" content="https://aleksei2507.github.io/studio-os/assets/studio-os-cover.png">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="./styles.css">
-    <script src="./script.js" defer></script>
+    <link rel="preload" href="./assets/fonts/manrope-variable.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="stylesheet" href="./styles.css?v=2026101902">
+    <noscript><style>.install-panel[hidden] { display: block !important; }.install-tabs, .command-row button, .artifact-tabs, .segmented { display: none; }</style></noscript>
+    <script src="./vendor/gsap.min.js" defer></script>
+    <script src="./vendor/ScrollTrigger.min.js" defer></script>
+    <script src="./script.js?v=2026101902" defer></script>
+    <script src="./motion.js?v=2026101902" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
-
-    <header class="site-header">
+    <header class="site-header shell">
       <a class="wordmark" href="#top" aria-label="Studio OS home">
-        <span class="wordmark-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>Studio OS</span>
-        <small>alpha</small>
+        <img src="./assets/studio-os-logo.png" alt="" width="44" height="44">
+        <span>Studio OS</span><small>alpha</small>
       </a>
-
       <nav class="site-nav" aria-label="Primary navigation">
+        <a class="nav-wide" href="#process">How it works</a>
         <a class="nav-wide" href="#case-study">Example</a>
-        <a class="nav-wide" href="#process">Process</a>
-        <a href="#install">Install</a>
-        <a
-          class="nav-github"
-          href="https://github.com/Aleksei2507/studio-os"
-          target="_blank"
-          rel="noreferrer"
-        >GitHub</a>
+        <a class="nav-github" href="https://github.com/Aleksei2507/studio-os" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <a class="nav-install" href="#install">Get Studio OS</a>
       </nav>
     </header>
-
     <main id="main-content">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <img
-          class="hero-media"
-          src="./assets/studio-workbench.jpg"
-          alt="A structured product studio workbench with a physical delivery rail"
-          width="1672"
-          height="941"
-          fetchpriority="high"
-        >
-        <div class="hero-content shell">
-          <p class="eyebrow"><span aria-hidden="true"></span>Open source / Alpha</p>
-          <h1 id="hero-title">Studio OS</h1>
-          <p class="hero-deck">Bring an idea. Get a product studio.</p>
-          <p class="hero-copy">
-            Studio OS turns a filesystem-capable AI agent into a development studio
-            that questions the idea, researches the problem, makes product decisions,
-            designs, builds, verifies, and ships.
-          </p>
+      <section class="hero shell" id="top" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <p class="release-note"><span class="status-dot" aria-hidden="true"></span>Free &amp; open source <span class="release-version">v0.7.0</span></p>
+          <h1 id="hero-title"><span>Your idea.</span><span>A studio to</span><span>see it through.</span></h1>
+          <p class="hero-copy">Give your AI agent a way to think, plan, and build. From the first good question to a product you can put to work.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#case-study">See a project run</a>
-            <a class="button button-secondary" href="#install">Install Studio OS</a>
+            <a class="button button-primary" href="#install">Add to your agent <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href="#process">Explore the workflow <span aria-hidden="true">↓</span></a>
           </div>
-          <p class="hero-note">One request, one accountable path, project-local decisions.</p>
+          <p class="hero-note">Your tools. Your code. A shared direction.</p>
         </div>
-
-        <div class="hero-route" aria-label="Studio OS product route">
-          <div class="shell route-layout">
-            <p>One studio route</p>
-            <ol>
-              <li><span>Understand</span></li>
-              <li><span>Research</span></li>
-              <li><span>Decide</span></li>
-              <li><span>Design</span></li>
-              <li><span>Build</span></li>
-              <li><span>Deploy</span></li>
-            </ol>
+        <div class="studio-scene" aria-label="Illustrative Studio OS project workflow">
+          <div class="scene-topline"><span><i aria-hidden="true"></i> Product workspace</span><span>Illustrative example</span></div>
+          <div class="scene-path" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="artifact-stack">
+            <div class="back-sheet sheet-plan" aria-hidden="true"><span>Architecture</span><div class="mini-nodes"><i></i><i></i><i></i></div></div>
+            <div class="back-sheet sheet-checks" aria-hidden="true"><span>Verification</span><p>✓ User scenarios</p><p>✓ Project checks</p><p>✓ Release evidence</p></div>
+            <article class="artifact" id="artifact-brief" role="tabpanel" aria-labelledby="artifact-tab-brief" tabindex="0">
+              <div class="artifact-top"><span class="document-icon" aria-hidden="true">▤</span><span>Project brief</span><span class="artifact-number">01</span></div>
+              <h2>Start with the<br>right problem.</h2>
+              <p>A feedback tracker for freelance designers.</p>
+              <div class="artifact-rule"></div>
+              <dl><div><dt>Who it helps</dt><dd>Independent designers</dd></div><div><dt>First milestone</dt><dd>One clear revision queue</dd></div></dl>
+              <div class="artifact-footer"><span class="status-dot" aria-hidden="true"></span>Scope before solutions</div>
+            </article>
+            <article class="artifact" id="artifact-plan" role="tabpanel" aria-labelledby="artifact-tab-plan" tabindex="0" hidden>
+              <div class="artifact-top"><span class="document-icon" aria-hidden="true">⌘</span><span>Delivery plan</span><span class="artifact-number">02</span></div>
+              <h2>Give every task<br>a clear owner.</h2>
+              <p>Make decisions once. Carry them into the build.</p>
+              <div class="artifact-rule"></div>
+              <dl><div><dt>Architecture</dt><dd>Boundaries &amp; decisions</dd></div><div><dt>Subagents, when available</dt><dd>Bounded tasks. Reviewed results.</dd></div></dl>
+              <div class="artifact-footer"><span class="status-dot" aria-hidden="true"></span>Plan before implementation</div>
+            </article>
+            <article class="artifact" id="artifact-evidence" role="tabpanel" aria-labelledby="artifact-tab-evidence" tabindex="0" hidden>
+              <div class="artifact-top"><span class="document-icon" aria-hidden="true">✓</span><span>Outcome report</span><span class="artifact-number">03</span></div>
+              <h2>Know what’s<br>actually ready.</h2>
+              <p>Check the product against the problem it set out to solve.</p>
+              <div class="artifact-rule"></div>
+              <dl><div><dt>Validation</dt><dd>Reproducible technical checks</dd></div><div><dt>Product outcome</dt><dd>Evidence against accepted scope</dd></div></dl>
+              <div class="artifact-footer"><span class="status-dot" aria-hidden="true"></span>Evidence before release</div>
+            </article>
           </div>
-        </div>
-      </section>
-
-      <section class="section definition" id="about" aria-labelledby="about-title">
-        <div class="shell section-layout">
-          <p class="section-label">The studio model</p>
-          <div>
-            <h2 id="about-title">You bring the intent. The studio owns the path.</h2>
-            <p class="section-lead">
-              You do not need to arrive with a stack, roadmap, or complete
-              specification. Studio OS turns goals and constraints into accepted
-              decisions, working increments, and evidence of what is actually ready.
-            </p>
-
-            <div class="definition-grid">
-              <div>
-                <span>01</span>
-                <h3>Start anywhere</h3>
-                <p>
-                  Bring a rough idea, an existing codebase, a feature, a bug, or a
-                  research question. Studio OS detects the kind of work before acting.
-                </p>
-              </div>
-              <div>
-                <span>02</span>
-                <h3>Work like a studio</h3>
-                <p>
-                  Product discovery, research, planning, architecture, interface
-                  design, development, and verification stay connected by one project
-                  state.
-                </p>
-              </div>
-              <div>
-                <span>03</span>
-                <h3>Finish with evidence</h3>
-                <p>
-                  A passing build is not called a finished product. Validation, QA,
-                  Product Outcome, and Release make readiness explicit before the
-                  studio claims completion.
-                </p>
-              </div>
-            </div>
+          <div class="scene-caption"><span class="scene-arrow" aria-hidden="true">↳</span><p>Less starting over.<br>More moving forward.</p></div>
+          <div class="artifact-tabs" role="tablist" aria-label="Explore project artifacts">
+            <button id="artifact-tab-brief" type="button" role="tab" aria-selected="true" aria-controls="artifact-brief" data-artifact="brief">01 <span>Brief</span></button>
+            <button id="artifact-tab-plan" type="button" role="tab" aria-selected="false" aria-controls="artifact-plan" tabindex="-1" data-artifact="plan">02 <span>Plan</span></button>
+            <button id="artifact-tab-evidence" type="button" role="tab" aria-selected="false" aria-controls="artifact-evidence" tabindex="-1" data-artifact="evidence">03 <span>Evidence</span></button>
           </div>
         </div>
       </section>
-
-      <section class="section case-study" id="case-study" aria-labelledby="case-title">
-        <div class="shell">
-          <div class="section-layout case-heading">
-            <p class="section-label">One project, end to end</p>
-            <div>
-              <h2 id="case-title">From a rough idea to a deployed product.</h2>
-              <p class="section-lead">
-                A shortened fictional run shows what changes at each stage. The
-                conversation stays practical: request, recommendation, accepted
-                decision, then evidence.
-              </p>
-            </div>
-          </div>
-
-          <div class="case-file" aria-label="Spoke fictional project">
-            <div>
-              <span class="case-file-mark" aria-hidden="true"></span>
-              <strong>Spoke</strong>
-              <p>Mobile bicycle repair operations</p>
-            </div>
-            <dl>
-              <div>
-                <dt>Project</dt>
-                <dd>Greenfield</dd>
-              </div>
-              <div>
-                <dt>First milestone</dt>
-                <dd>Dispatch loop</dd>
-              </div>
-              <div>
-                <dt>Outcome</dt>
-                <dd>Deployed</dd>
-              </div>
-            </dl>
-          </div>
-
-          <ol class="case-timeline">
-            <li class="case-step">
-              <div class="case-stage">
-                <span>01</span>
-                <p>Idea / Interview</p>
-              </div>
-              <div class="case-exchange">
-                <div class="message message-user">
-                  <p class="message-author">You</p>
-                  <p>
-                    I need a web app for a mobile bicycle repair team. Customers
-                    request service, dispatch assigns jobs, and technicians update
-                    status. No payments in the first release.
-                  </p>
-                </div>
-                <div class="message message-studio">
-                  <p class="message-author">Studio OS</p>
-                  <p>
-                    I will treat this as a new product. First I need to confirm who
-                    books the work, how dispatch operates today, and what outcome
-                    would make the first milestone useful. I will not choose a stack
-                    or start implementation yet.
-                  </p>
-                </div>
-              </div>
-            </li>
-
-            <li class="case-step">
-              <div class="case-stage">
-                <span>02</span>
-                <p>Discovery / Briefing</p>
-              </div>
-              <div class="case-exchange">
-                <div class="message message-user">
-                  <p class="message-author">You</p>
-                  <p>
-                    Most requests arrive by phone. One dispatcher coordinates two
-                    technicians. The main problem is not knowing what is scheduled,
-                    active, or ready.
-                  </p>
-                </div>
-                <div class="message message-studio">
-                  <p class="message-author">Studio OS</p>
-                  <p>
-                    The first milestone should prove one complete loop: create a
-                    request, schedule it, assign a technician, and update its status.
-                    Customer self-service, route optimization, and payments remain
-                    outside this milestone.
-                  </p>
-                  <ul class="case-output" aria-label="Discovery outputs">
-                    <li>Problem evidence</li>
-                    <li>Market alternatives</li>
-                    <li>Accepted scope</li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-
-            <li class="case-step">
-              <div class="case-stage">
-                <span>03</span>
-                <p>Planning / Design</p>
-              </div>
-              <div class="case-exchange">
-                <div class="message message-user">
-                  <p class="message-author">You</p>
-                  <p>
-                    Keep it fast on a tablet. We will probably add customer booking
-                    later, so the first release should not block that path.
-                  </p>
-                </div>
-                <div class="message message-studio">
-                  <p class="message-author">Studio OS</p>
-                  <p>
-                    Recommended: a responsive operations-first web app with today's
-                    route, job details, and explicit status transitions. The roadmap,
-                    interface flows, architecture decision, and quality constraints
-                    now preserve the later booking path without building it early.
-                  </p>
-                  <ul class="case-output" aria-label="Planning and design outputs">
-                    <li>Milestone plan</li>
-                    <li>Interface contract</li>
-                    <li>Architecture decision</li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-
-            <li class="case-step">
-              <div class="case-stage">
-                <span>04</span>
-                <p>Development / QA</p>
-              </div>
-              <div class="case-exchange">
-                <div class="message message-user">
-                  <p class="message-author">You</p>
-                  <p>Proceed with the accepted dispatch milestone.</p>
-                </div>
-                <div class="message message-studio">
-                  <p class="message-author">Studio OS</p>
-                  <p>
-                    The increment is implemented and automated checks pass. The
-                    product is still marked Not Ready until the dispatcher workflow
-                    is verified on desktop and tablet, and Product Outcome confirms
-                    that the visibility problem is actually solved.
-                  </p>
-                  <ul class="case-output" aria-label="Development and QA outputs">
-                    <li>Working increment</li>
-                    <li>Test evidence</li>
-                    <li>Explicit readiness state</li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-
-            <li class="case-step">
-              <div class="case-stage">
-                <span>05</span>
-                <p>Outcome / Release</p>
-              </div>
-              <div class="case-exchange">
-                <div class="message message-user">
-                  <p class="message-author">You</p>
-                  <p>
-                    The dispatcher completed the route and status workflow on both
-                    target devices. The milestone solves the original visibility
-                    problem.
-                  </p>
-                </div>
-                <div class="message message-studio">
-                  <p class="message-author">Studio OS</p>
-                  <p>
-                    Product Outcome is accepted and release checks pass. Spoke is
-                    deployed. The repository retains the decisions, verification
-                    evidence, current product state, and the next-milestone backlog.
-                  </p>
-                  <ul class="case-output" aria-label="Release outputs">
-                    <li>Accepted outcome</li>
-                    <li>Release evidence</li>
-                    <li>Next milestone</li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-          </ol>
-
-          <figure class="deployed-product" id="deployed-result">
-            <div class="deployment-bar">
-              <div>
-                <span aria-hidden="true"></span>
-                <strong>Production</strong>
-              </div>
-              <p>First milestone / Dispatch loop</p>
-              <small>Deployed</small>
-            </div>
-            <img
-              src="./assets/spoke-deployed.jpg"
-              alt="The deployed Spoke operations dashboard showing today's bicycle repair jobs, weekly workload, and selected job details"
-              width="1568"
-              height="1003"
-              loading="lazy"
-            >
-            <figcaption>
-              The finish signal is not “code generated.” It is a verified product
-              outcome with release evidence.
-            </figcaption>
-          </figure>
+      <div class="agent-strip shell" aria-label="Agent compatibility">
+        <p>Built to work inside<br>the agent you use.</p>
+        <span>Codex</span><span>Claude Code</span><span>Cursor</span><span class="other-agents">Other filesystem-capable agents</span>
+      </div>
+      <section class="section intention shell" id="about" aria-labelledby="about-title">
+        <div class="intention-heading"><p class="section-label">A little more studio. A lot more direction.</p><h2 id="about-title">A good build starts<br>before the first line.</h2><p>You don’t need a perfect specification. Bring a goal, an existing project, or a change you want to make. Studio OS helps turn it into a clear path forward.</p><a class="text-link" href="#process">Find your starting point <span aria-hidden="true">↓</span></a></div>
+        <div class="benefit-list">
+          <article><span class="benefit-symbol" aria-hidden="true">↳</span><div><h3>Understand before building</h3><p>Explore the problem, agree on the scope, and make product decisions before choosing a solution.</p></div></article>
+          <article><span class="benefit-symbol" aria-hidden="true">▤</span><div><h3>Keep the project’s memory</h3><p>Briefs, decisions, and progress live in your repository. Pick up the work without reconstructing the conversation.</p></div></article>
+          <article><span class="benefit-symbol" aria-hidden="true">✓</span><div><h3>Finish with something verifiable</h3><p>Technical checks, user scenarios, and product outcomes each get their own evidence.</p></div></article>
         </div>
       </section>
-
-      <section class="section comparison" id="difference" aria-labelledby="difference-title">
-        <div class="shell section-layout">
-          <p class="section-label">Where it fits</p>
-          <div>
-            <h2 id="difference-title">Different tools keep different responsibilities.</h2>
-            <p class="section-lead">
-              These approaches can be combined. The meaningful difference is not the
-              number of agents or documents, but how long the system remains
-              accountable for the project.
-            </p>
-
-            <div class="comparison-wrap">
-              <table>
-                <caption>Typical emphasis; individual tools and configurations vary.</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Approach</th>
-                    <th scope="col">Usually starts with</th>
-                    <th scope="col">Primary responsibility</th>
-                    <th scope="col">Typical finish signal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">One-off prompt</th>
-                    <td>An instruction</td>
-                    <td>Return an answer or artifact</td>
-                    <td>The response is delivered</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Coding agent</th>
-                    <td>A bounded repository task</td>
-                    <td>Implement and verify code changes</td>
-                    <td>The requested task passes its checks</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Product workflow framework</th>
-                    <td>An initiative or change</td>
-                    <td>Structure roles and repeatable delivery workflows</td>
-                    <td>The configured workflow completes</td>
-                  </tr>
-                  <tr class="comparison-studio">
-                    <th scope="row">Studio OS</th>
-                    <td>A product request or current product state</td>
-                    <td>Carry routed studio work and preserve accepted decisions</td>
-                    <td>Product Outcome and Release satisfy separate gates</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="section process" id="process" aria-labelledby="process-title">
         <div class="shell">
-          <div class="section-layout process-heading">
-            <p class="section-label">Entry paths</p>
-            <div>
-              <h2 id="process-title">Start with an idea or an existing codebase.</h2>
-              <p class="section-lead">
-                Studio OS detects the project mode, then composes the right workflow
-                for the product and the current work item.
-              </p>
-            </div>
+          <div class="process-heading"><div><p class="section-label">A connected way of working</p><h2 id="process-title">One project.<br>A considered next step.</h2></div><p class="section-lead">Start fresh or work with what exists. The workflow adapts to the project and loads the context needed for the current stage.</p></div>
+          <div class="journey" aria-label="Three phases of product work">
+            <div class="journey-progress" aria-hidden="true"><span></span></div>
+            <article class="journey-step"><span class="journey-index">01</span><h3>Find the right thing</h3><p>Discuss the idea, research what matters, and agree on a brief.</p><span class="journey-output">Problem → Accepted scope</span></article>
+            <article class="journey-step"><span class="journey-index">02</span><h3>Make it work</h3><p>Design the experience, plan the architecture, and build in increments.</p><span class="journey-output">Decisions → Working product</span></article>
+            <article class="journey-step"><span class="journey-index">03</span><h3>Prove it’s ready</h3><p>Verify the behavior, review the outcome, and prepare the release.</p><span class="journey-output">Evidence → Release decision</span></article>
           </div>
-
-          <div class="flow-control">
-            <div class="segmented" role="tablist" aria-label="Project entry path">
-              <button
-                id="flow-tab-greenfield"
-                type="button"
-                role="tab"
-                aria-selected="true"
-                aria-controls="flow-panel"
-                data-flow="greenfield"
-              >Greenfield</button>
-              <button
-                id="flow-tab-brownfield"
-                type="button"
-                role="tab"
-                aria-selected="false"
-                aria-controls="flow-panel"
-                data-flow="brownfield"
-              >Brownfield</button>
-            </div>
-            <p class="flow-summary" id="flow-summary">
-              A new product moves from problem understanding to verified outcome.
-            </p>
-          </div>
-
-          <div
-            class="flow-panel"
-            id="flow-panel"
-            role="tabpanel"
-            aria-labelledby="flow-tab-greenfield"
-          >
-            <ol class="stage-track" id="stage-track" aria-label="Greenfield workflow">
-              <li><span>Interview</span></li>
-              <li><span>Discovery</span></li>
-              <li><span>Briefing</span></li>
-              <li><span>Planning</span></li>
-              <li><span>Architecture</span></li>
-              <li><span>Interface Design</span></li>
-              <li><span>Task Decomposition</span></li>
-              <li><span>Development</span></li>
-              <li><span>Validation</span></li>
-              <li><span>QA</span></li>
-              <li><span>Product Outcome</span></li>
-              <li><span>Release</span></li>
-              <li><span>Retrospective</span></li>
-            </ol>
-          </div>
-
-          <div class="work-types" aria-label="Supported work types">
-            <p>Once the project exists, work routes independently:</p>
-            <ul>
-              <li>Feature</li>
-              <li>Bugfix</li>
-              <li>Research</li>
-              <li>Refactor</li>
-            </ul>
+          <div class="workflow-detail">
+            <div class="flow-control"><div class="segmented" role="tablist" aria-label="Project entry path">
+              <button id="flow-tab-greenfield" type="button" role="tab" aria-selected="true" aria-controls="flow-panel" data-flow="greenfield">New idea</button>
+              <button id="flow-tab-brownfield" type="button" role="tab" aria-selected="false" aria-controls="flow-panel" data-flow="brownfield" tabindex="-1">Existing product</button>
+            </div><p class="flow-summary" id="flow-summary">A new product moves from problem understanding to verified outcome.</p></div>
+            <div class="flow-panel" id="flow-panel" role="tabpanel" aria-labelledby="flow-tab-greenfield" tabindex="0"><ol class="stage-track" id="stage-track" aria-label="Greenfield workflow">
+              <li><span>Interview</span></li><li><span>Discovery</span></li><li><span>Briefing</span></li><li><span>Planning</span></li><li><span>Architecture</span></li><li><span>Interface Design</span></li><li><span>Task Decomposition</span></li><li><span>Development</span></li><li><span>Validation</span></li><li><span>QA</span></li><li><span>Product Outcome</span></li><li><span>Release</span></li><li><span>Retrospective</span></li>
+            </ol></div>
+            <p class="workflow-note">The route is adapted to the work. Research and design stages are selected when needed; new features, bugs, and refactors get their own paths.</p>
           </div>
         </div>
       </section>
-
-      <section class="section interaction" aria-labelledby="interaction-title">
-        <div class="shell section-layout">
-          <p class="section-label">Interaction layer</p>
-          <div>
-            <h2 id="interaction-title">It adapts to how you work, not who you are.</h2>
-            <p class="section-lead">
-              The strategy is inferred from observable behavior and can change as
-              the conversation changes. You never have to configure a mode.
-            </p>
-
-            <div class="strategy-grid">
-              <article>
-                <span>Delegated decisions</span>
-                <h3>Advisor</h3>
-                <p>Recommends a clear approach, explains briefly, and reduces decision load.</p>
-              </article>
-              <article>
-                <span>Compared options</span>
-                <h3>Collaborator</h3>
-                <p>Makes trade-offs visible and treats challenges as part of the decision.</p>
-              </article>
-              <article>
-                <span>Bounded instruction</span>
-                <h3>Executor</h3>
-                <p>Implements the accepted change directly and keeps discussion focused.</p>
-              </article>
-            </div>
-          </div>
+      <section class="section orchestration shell" aria-labelledby="orchestration-title">
+        <div class="delegation-visual" aria-label="The lead agent delegates bounded tasks and reviews the results">
+          <div class="lead-agent"><img src="./assets/studio-os-logo.png" width="44" height="44" alt=""><div><strong>One accountable lead</strong><span>Context · decisions · review</span></div></div>
+          <div class="delegation-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="agent-jobs"><div><span aria-hidden="true">⌘</span><strong>Implement</strong><small>Bounded scope</small></div><div><span aria-hidden="true">⌕</span><strong>Investigate</strong><small>Focused context</small></div><div><span aria-hidden="true">✓</span><strong>Verify</strong><small>Review evidence</small></div></div>
+          <p>Native subagents, when your host supports them.</p>
+        </div>
+        <div><p class="section-label">The right help, at the right moment</p><h2 id="orchestration-title">More hands.<br>One shared direction.</h2><p class="section-lead">The lead agent can delegate focused tasks to available models, then review their results against the same plan.</p><p class="subtle">No subagents available? The workflow continues with one agent. Model choice, cost, and token savings depend on your host and task.</p></div>
+      </section>
+      <section class="section case-study" id="case-study" aria-labelledby="case-title">
+        <div class="shell">
+          <div class="case-heading"><div><p class="section-label">Meet a possible outcome</p><h2 id="case-title">From a rough idea to a deployed product.</h2></div><p class="section-lead">Spoke, a mobile bicycle repair workspace. A fictional walkthrough of a first milestone, from a dispatch problem to a useful operations tool.</p></div>
+          <figure class="deployed-product"><div class="deployment-bar"><span class="spoke-brand"><i aria-hidden="true">✳</i> Spoke</span><span>Illustrative product concept</span><span class="concept-tag">Dispatch workspace</span></div><img src="./assets/spoke-deployed.jpg" alt="Illustrative Spoke dashboard showing bicycle repair jobs, workload, and job details" width="1568" height="1003" loading="lazy"><figcaption>Fictional example, not a customer result or a recorded deployment.</figcaption></figure>
+          <div class="case-outcomes"><article><span>The request</span><p>“Help our dispatcher see what’s scheduled, active, and ready.”</p></article><article><span>The first milestone</span><p>Create a request, assign a technician, and track the job.</p></article><article><span>The finish signal</span><p>Verify that loop on the target devices, then review release readiness.</p></article></div>
         </div>
       </section>
-
-      <section class="section standards" aria-labelledby="standards-title">
-        <div class="shell section-layout">
-          <p class="section-label">Delivery standards</p>
-          <div>
-            <h2 id="standards-title">Flexible stack. Fixed quality floor.</h2>
-            <p class="section-lead">
-              Architecture chooses technology for product fit and long-term delivery.
-              Brownfield projects preserve evidence from the existing stack and design
-              system. Quality gates still apply across every platform.
-            </p>
-
-            <div class="standards-rail">
-              <div>
-                <span>01</span>
-                <h3>Read the product</h3>
-                <p>Goals, constraints, current code, operations, and interface evidence.</p>
-              </div>
-              <div>
-                <span>02</span>
-                <h3>Select what applies</h3>
-                <p>Architecture, security, accessibility, testing, platform, and stack rules.</p>
-              </div>
-              <div>
-                <span>03</span>
-                <h3>Verify the outcome</h3>
-                <p>Implementation evidence remains separate from product readiness.</p>
-              </div>
-            </div>
-
-            <ul class="platform-list" aria-label="Product platforms">
-              <li>Web</li>
-              <li>Backend</li>
-              <li>iOS</li>
-              <li>Android</li>
-              <li>Cross-platform</li>
-              <li>Desktop</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="section principles" id="principles" aria-labelledby="principles-title">
-        <div class="shell section-layout">
-          <p class="section-label">Under the hood</p>
-          <div>
-            <h2 id="principles-title">Only the context needed for the current decision.</h2>
-            <p class="section-lead">
-              The Loader selects one workflow and one active Runtime. Relevant
-              standards and project memory join only when the stage needs them.
-            </p>
-
-            <div class="runtime-composition" aria-label="Runtime composition model">
-              <div><small>Project mode</small><strong>Greenfield / Brownfield</strong></div>
-              <span aria-hidden="true">+</span>
-              <div><small>Work type</small><strong>Product / Feature / Bugfix</strong></div>
-              <span aria-hidden="true">+</span>
-              <div><small>Interaction</small><strong>Adaptive strategy</strong></div>
-              <span aria-hidden="true">=</span>
-              <div class="runtime-result"><small>Loaded now</small><strong>Active Runtime</strong></div>
-            </div>
-
-            <div class="principle-list">
-              <article>
-                <h3>Progressive loading</h3>
-                <p>
-                  The agent reads the core contract, project memory, selected
-                  workflow, active Runtime, and only the standards that apply.
-                </p>
-              </article>
-              <article>
-                <h3>Durable decisions</h3>
-                <p>
-                  Accepted scope, architecture, design-system evidence, status, and
-                  quality reports stay in project-local Markdown artifacts.
-                </p>
-              </article>
-              <article>
-                <h3>Honest readiness</h3>
-                <p>
-                  Passing implementation tests is not enough to call an MVP ready.
-                  Validation, QA, Product Outcome, and Release have separate gates.
-                </p>
-              </article>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="section install" id="install" aria-labelledby="install-title">
         <div class="shell section-layout">
-          <p class="section-label">Install</p>
+          <p class="section-label">Make it yours</p>
           <div>
-            <h2 id="install-title">Add the studio to your agent.</h2>
+            <h2 id="install-title">Your next project starts here.</h2>
             <p class="section-lead">
               Install the packaged plugin for Codex or Claude Code, or use the
               universal Bootstrap with another filesystem-capable agent.
@@ -719,6 +272,7 @@ I want to build...</code>
               <a href="https://github.com/Aleksei2507/studio-os/releases">Download latest release</a>
               <a href="https://github.com/Aleksei2507/studio-os#installation">Read installation details</a>
             </div>
+            <p id="copy-status" class="sr-only" role="status" aria-live="polite"></p>
           </div>
         </div>
       </section>
@@ -729,6 +283,14 @@ I want to build...</code>
           <div>
             <h2 id="faq-title">Before you install.</h2>
             <div class="faq-list">
+              <details>
+                <summary>Is Studio OS free?</summary>
+                <p>Yes. Studio OS is open source under the MIT license. Your host agent and model usage are separate.</p>
+              </details>
+              <details>
+                <summary>Can it delegate work to other models?</summary>
+                <p>When your host supports it, Studio OS plans bounded subagent tasks, selects from available models, and reviews their results. It uses a single agent when delegation is unavailable. Model choice and token savings depend on the host and the task.</p>
+              </details>
               <details>
                 <summary>Does Studio OS write the product?</summary>
                 <p>
@@ -782,20 +344,6 @@ I want to build...</code>
         </div>
       </section>
     </main>
-
-    <footer class="site-footer">
-      <div class="shell footer-layout">
-        <div>
-          <strong>Studio OS</strong>
-          <p>A development studio workflow for AI agents.</p>
-        </div>
-        <div class="footer-links">
-          <a href="https://github.com/Aleksei2507/studio-os">GitHub</a>
-          <a href="https://github.com/Aleksei2507/studio-os/releases">Releases</a>
-          <a href="https://github.com/Aleksei2507/studio-os/blob/main/LICENSE">MIT License</a>
-        </div>
-        <p class="copyright">&copy; <span id="current-year">2026</span> Studio OS</p>
-      </div>
-    </footer>
+    <footer class="site-footer"><div class="shell footer-layout"><a class="wordmark" href="#top"><img src="./assets/studio-os-logo.png" width="40" height="40" alt=""><span>Studio OS</span></a><p>Good ideas deserve a clear path.</p><div class="footer-links"><a href="https://github.com/Aleksei2507/studio-os">GitHub</a><a href="https://github.com/Aleksei2507/studio-os/releases">Releases</a><a href="https://github.com/Aleksei2507/studio-os/blob/main/LICENSE">MIT License</a></div><p class="copyright">© <span id="current-year">2026</span> Studio OS</p></div></footer>
   </body>
 </html>

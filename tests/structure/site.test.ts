@@ -13,6 +13,12 @@ describe("Studio OS public site", () => {
       "website/index.html",
       "website/styles.css",
       "website/script.js",
+      "website/motion.js",
+      "website/vendor/gsap.min.js",
+      "website/vendor/ScrollTrigger.min.js",
+      "website/assets/studio-os-logo.png",
+      "website/assets/studio-os-cover.png",
+      "website/assets/fonts/manrope-variable.ttf",
       "website/assets/studio-workbench.jpg",
       "website/assets/spoke-deployed.jpg",
     ]) {
@@ -33,8 +39,8 @@ describe("Studio OS public site", () => {
     assert.match(html, /From a rough idea to a deployed product\./);
     assert.match(html, /src="\.\/assets\/spoke-deployed\.jpg"/);
     assert.match(html, /How is Studio OS different from BMAD\?/);
-    assert.match(html, /href="\.\/styles\.css"/);
-    assert.match(html, /src="\.\/script\.js"/);
+    assert.match(html, /href="\.\/styles\.css(?:\?v=\d+)?"/);
+    assert.match(html, /src="\.\/script\.js(?:\?v=\d+)?"/);
     assert.doesNotMatch(html, /<script[^>]+src="https?:\/\//);
     assert.doesNotMatch(html, /<link[^>]+href="https?:\/\/[^\"]+\.css/);
 
